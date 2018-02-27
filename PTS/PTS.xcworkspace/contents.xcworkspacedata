@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:PTS/Models/XCModels/User+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/User+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/User+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/User+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
+      location = "group:PTS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>
