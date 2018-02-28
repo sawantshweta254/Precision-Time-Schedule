@@ -34,12 +34,6 @@
         
     }];
     
-    [[PTSManager sharedInstance] fetchPTSList:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
-        if (fetchComplete) {
-//            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-            [self.tableView reloadData];
-        }
-    }];
 }
 
 - (void)didReceiveMemoryWarning {

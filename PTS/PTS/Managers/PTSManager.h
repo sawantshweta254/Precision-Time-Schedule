@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User+CoreDataClass.h"
 
 @interface PTSManager : NSObject
 +(instancetype) sharedInstance;
--(void) fetchPTSList:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler;
+-(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler;
 @end

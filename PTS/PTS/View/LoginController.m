@@ -37,10 +37,19 @@
 }
 */
 - (IBAction)loginUser:(id)sender {
-    [[LoginManager sharedInstance] loginUser:self.textfieldUsername.text withPassword:self.textfieldPassword.text completionHandler:^(BOOL didLogin) {
-        [self dismissViewControllerAnimated:YES completion:^{
-        
-        }];
+    
+    [[LoginManager sharedInstance] loginUser:self.textfieldUsername.text withPassword:self.textfieldPassword.text completionHandler:^(BOOL didLogin, User *user, NSString *errorMessage) {
+        if (didLogin) {
+            [[PTSManager sharedInstance] fetchPTSListForUser:user completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+                [self dismissViewControllerAnimated:YES completion:^{
+                    if (fetchComplete) {
+                        
+                    }
+                }];
+            }];
+        }else{
+            NSLog(@"Login Error : %@", errorMessage);
+        }
     }];
 }
 

@@ -12,8 +12,6 @@
 #import "Login.h"
 #include <sys/sysctl.h>
 #import <UIKit/UIKit.h>
-#import "User+CoreDataClass.h"
-#import "User+CoreDataProperties.h"
 
 @implementation LoginManager
 
@@ -27,13 +25,22 @@ static LoginManager *sharedInstance;
     return sharedInstance;
 }
 
--(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin))loginCompletionHandler{
+-(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin, User *user, NSString *errorMessage))loginCompletionHandler{
     Login *loginObj = [[Login alloc] init];
     loginObj.userName = username;
     loginObj.password = password;
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataForLogin:loginObj] completionHandler:^(BOOL requestSuccessfull, id responseData) {
-        [self parseLoginResponse:responseData];
-        loginCompletionHandler(requestSuccessfull);
+        if (requestSuccessfull) {
+            if ([[responseData objectForKey:@"api_status"] integerValue] == 1) {
+                loginCompletionHandler(requestSuccessfull,[self parseUserLoginResponse:responseData], nil);
+            }else{
+                NSString *failureMessage = [responseData objectForKey:@"message"];
+                loginCompletionHandler(FALSE,nil, failureMessage);
+            }
+        }else{
+            loginCompletionHandler(FALSE,nil, @"Login failed.");
+        }
+        
     }];
 }
 
@@ -81,9 +88,10 @@ static LoginManager *sharedInstance;
 }
 
 #pragma mark DB methods
--(void)parseLoginResponse:(NSDictionary *)responseDictionary{
+
+-(User *)parseUserLoginResponse:(NSDictionary *)responseDictionary{
     double apiStatus = [[responseDictionary objectForKey:@"api_status"] doubleValue];
-    double userId = [[responseDictionary objectForKey:@"user_id"] doubleValue];
+    double userId = [[responseDictionary objectForKey:@"userid"] doubleValue];
     double airportId = [[responseDictionary objectForKey:@"airport_id"] doubleValue];
     NSString *userName = [responseDictionary objectForKey:@"username"];
     NSInteger port = [[responseDictionary objectForKey:@"port"] integerValue];
@@ -122,6 +130,8 @@ static LoginManager *sharedInstance;
             NSLog(@"User airport %f", userf.airportId);
         }
     }
+    
+    return user;
     
 }
 

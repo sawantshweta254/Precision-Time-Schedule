@@ -25,24 +25,24 @@ static PTSManager *sharedInstance;
     return sharedInstance;
 }
 
--(void) fetchPTSList:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
+-(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
     
-    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSList] completionHandler:^(BOOL requestSuccessfull, id responseData) {
+    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSList:user] completionHandler:^(BOOL requestSuccessfull, id responseData) {
         fetchPTSCompletionHandler(requestSuccessfull, responseData, nil);
     }];
     
 }
 
--(ApiRequestData *) getRequestDataToFetchPTSList{
+-(ApiRequestData *) getRequestDataToFetchPTSList:(User *)user{
     ApiRequestData *requestData = [[ApiRequestData alloc] init];
 
     requestData.baseURL = @"http://techdew.co.in/pts/webapi/getmyappdata.php?cmd=";
-    requestData.postData = [self getDataRequest];
+    requestData.postData = [self getDataRequest:user];
     
     return requestData;
 }
 
--(NSDictionary *) getDataRequest{
+-(NSDictionary *) getDataRequest:(User *)user{
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     
     
@@ -65,9 +65,9 @@ static PTSManager *sharedInstance;
     UIDevice *device = [UIDevice currentDevice];
     NSString  *currentDeviceId = [[device identifierForVendor]UUIDString];
     [getListData setObject:currentDeviceId forKey:@"deviceid"];
-    [getListData setObject:[NSNumber numberWithInt:25] forKey:@"userid"];
-    [getListData setObject:[NSNumber numberWithInteger:3] forKey:@"emp_type"];
-    [getListData setObject:[NSNumber numberWithInteger:3] forKey:@"tbl_airport_id"];
+    [getListData setObject:[NSNumber numberWithDouble:user.userId] forKey:@"userid"];
+    [getListData setObject:[NSNumber numberWithDouble:user.empType] forKey:@"emp_type"];
+    [getListData setObject:[NSNumber numberWithDouble:user.airportId] forKey:@"tbl_airport_id"];
     
     return getListData;
 }

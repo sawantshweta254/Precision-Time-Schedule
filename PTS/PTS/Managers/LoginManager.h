@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User+CoreDataClass.h"
 
 @interface LoginManager : NSObject
 +(instancetype) sharedInstance;
--(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin))loginCompletionHandler;
+-(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin, User *user, NSString *errorMessage))loginCompletionHandler;
 @end

@@ -25,34 +25,24 @@ static WebApiManager *sharedInstance;
 }
 
 -(void) initiatePost:(ApiRequestData *) requestData completionHandler:(void (^)(BOOL requestSuccessfull, id responseData))requestCompletionHandler{
-//    [self initiatePost1:requestData];
-    
 
-//    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"3.4.0",@"appVer",@"ms2user2@shweta.netsferedev.org", @"email", nil];
-    NSData *conversationKeysJsonData = [NSJSONSerialization dataWithJSONObject:requestData.postData
-                                                                       options:NSJSONWritingPrettyPrinted
-                                                                         error:nil];
-    NSString *conversationKeysJsonString = [[NSString alloc] initWithData:conversationKeysJsonData encoding:NSUTF8StringEncoding];
-    
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:requestData.postData
+    NSData *postJsonData = [NSJSONSerialization dataWithJSONObject:requestData.postData
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&error];
     
-    NSString *jsonString;
-    if (! jsonData) {
+    NSString *postJsonString;
+    if (!postJsonData) {
         NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
     } else {
-        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        postJsonString = [[NSString alloc] initWithData:postJsonData encoding:NSUTF8StringEncoding];
     }
-    
 
-    NSString *finalUrl = [requestData.baseURL stringByAppendingString:jsonString];
+    NSString *finalUrl = [requestData.baseURL stringByAppendingString:postJsonString];
     NSString *encoded = [finalUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", nil];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-//    [manager.requestSerializer setHTTPMethodsEncodingParametersInURI:];
     
     [manager POST:encoded parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData){
         
@@ -65,7 +55,6 @@ static WebApiManager *sharedInstance;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         requestCompletionHandler(FALSE, error);
     }];
-
 }
 
 @end
