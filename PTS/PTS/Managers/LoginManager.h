@@ -11,5 +11,6 @@
 
 @interface LoginManager : NSObject
 +(instancetype) sharedInstance;
+-(User *) getLoggedInUser;
 -(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin, User *user, NSString *errorMessage))loginCompletionHandler;
 @end

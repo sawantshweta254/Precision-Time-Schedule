@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17B1003" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="PTSItem" representedClassName="PTSItem" syncable="YES" codeGenerationType="class">
+        <attribute name="airlineName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dutyManagerId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="dutyManagerName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flightDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="flightNo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flightTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="jsonData" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ptsId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ptsName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ptsSubTaskId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ptsType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="redCapId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="redCapName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remarks" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="supervisorId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="supervisorName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeWindow" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="airportId" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="apiStatus" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -7,10 +26,11 @@
         <attribute name="flightPTSInfo" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="userId" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="userId" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="165"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="163"/>
+        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="298"/>
     </elements>
 </model>

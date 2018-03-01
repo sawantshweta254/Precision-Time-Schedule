@@ -25,6 +25,20 @@ static LoginManager *sharedInstance;
     return sharedInstance;
 }
 
+-(User *) getLoggedInUser{
+    
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSError *error;
+    NSArray *userArray = [moc executeFetchRequest:fetchRequest error:&error];
+    User *loggedInUser;
+    if (userArray.count >0) {
+        loggedInUser = [userArray objectAtIndex:0];
+    }
+    
+    return loggedInUser;
+}
+
 -(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin, User *user, NSString *errorMessage))loginCompletionHandler{
     Login *loginObj = [[Login alloc] init];
     loginObj.userName = username;
@@ -118,19 +132,6 @@ static LoginManager *sharedInstance;
     if (error) {
         
     }
-    
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    NSArray *userArray = [moc executeFetchRequest:fetchRequest error:&error];
-    
-    if (userArray.count >0) {
-        User *userf = [userArray objectAtIndex:0];
-        if (userf) {
-            NSLog(@"User name %@", userf.userName);
-            NSLog(@"User id %f", userf.userId);
-            NSLog(@"User airport %f", userf.airportId);
-        }
-    }
-    
     return user;
     
 }

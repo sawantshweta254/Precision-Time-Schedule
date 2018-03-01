@@ -10,7 +10,6 @@
 		A50D89A2CDF1A62CEE0916F4 /* libPods-PTS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B96B572BFFEC0676EA4E030 /* libPods-PTS.a */; };
 		B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C84203C649200AEBF5A /* PTSListViewController.m */; };
 		B6377C89203C69C700AEBF5A /* PTSListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C88203C69C700AEBF5A /* PTSListViewCell.m */; };
-		B6377C8C203C6B0700AEBF5A /* PTSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C8B203C6B0700AEBF5A /* PTSItem.m */; };
 		B6377C92203C6C9C00AEBF5A /* PTSTask.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C91203C6C9C00AEBF5A /* PTSTask.m */; };
 		B6377C95203C6EF300AEBF5A /* PTSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C94203C6EF300AEBF5A /* PTSManager.m */; };
 		B6411AC92034AA0900DE8BD8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6411AC82034AA0900DE8BD8 /* AppDelegate.m */; };
@@ -33,8 +32,6 @@
 		B6377C85203C649300AEBF5A /* PTSListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTSListViewController.h; sourceTree = "<group>"; };
 		B6377C87203C69C700AEBF5A /* PTSListViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSListViewCell.h; sourceTree = "<group>"; };
 		B6377C88203C69C700AEBF5A /* PTSListViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSListViewCell.m; sourceTree = "<group>"; };
-		B6377C8A203C6B0700AEBF5A /* PTSItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSItem.h; sourceTree = "<group>"; };
-		B6377C8B203C6B0700AEBF5A /* PTSItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSItem.m; sourceTree = "<group>"; };
 		B6377C90203C6C9C00AEBF5A /* PTSTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSTask.h; sourceTree = "<group>"; };
 		B6377C91203C6C9C00AEBF5A /* PTSTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSTask.m; sourceTree = "<group>"; };
 		B6377C93203C6EF300AEBF5A /* PTSManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSManager.h; sourceTree = "<group>"; };
@@ -170,8 +167,6 @@
 			children = (
 				B694B01A2045B410003BA653 /* XCModels */,
 				B694B0092045ADC4003BA653 /* API */,
-				B6377C8A203C6B0700AEBF5A /* PTSItem.h */,
-				B6377C8B203C6B0700AEBF5A /* PTSItem.m */,
 				B6377C90203C6C9C00AEBF5A /* PTSTask.h */,
 				B6377C91203C6C9C00AEBF5A /* PTSTask.m */,
 			);
@@ -323,7 +318,6 @@
 				B6AD9EE720371A7B0039C023 /* Login.m in Sources */,
 				B6411AD22034AA0900DE8BD8 /* PTS.xcdatamodeld in Sources */,
 				B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */,
-				B6377C8C203C6B0700AEBF5A /* PTSItem.m in Sources */,
 				B6377C95203C6EF300AEBF5A /* PTSManager.m in Sources */,
 				B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */,
 				B6377C92203C6C9C00AEBF5A /* PTSTask.m in Sources */,

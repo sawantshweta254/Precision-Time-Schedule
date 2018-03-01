@@ -9,8 +9,11 @@
 #import "PTSListViewController.h"
 #import "LoginController.h"
 #import "PTSListViewCell.h"
-#import "PTSItem.h"
+#import "PTSItem+CoreDataProperties.h"
 #import "PTSManager.h"
+#import "User+CoreDataProperties.h"
+
+#import "LoginManager.h"
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
@@ -27,12 +30,18 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     
-    [self.navigationController presentViewController:loginView animated:F_TEST completion:^{
-        
-    }];
+    if (!loggedInUser) {
+        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
+        [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
+    }else{
+        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+            [self.tableView reloadData];
+        }];
+    }
     
 }
 

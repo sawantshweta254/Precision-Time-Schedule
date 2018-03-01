@@ -40,12 +40,7 @@
     
     [[LoginManager sharedInstance] loginUser:self.textfieldUsername.text withPassword:self.textfieldPassword.text completionHandler:^(BOOL didLogin, User *user, NSString *errorMessage) {
         if (didLogin) {
-            [[PTSManager sharedInstance] fetchPTSListForUser:user completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
-                [self dismissViewControllerAnimated:YES completion:^{
-                    if (fetchComplete) {
-                        
-                    }
-                }];
+            [self dismissViewControllerAnimated:YES completion:^{
             }];
         }else{
             NSLog(@"Login Error : %@", errorMessage);

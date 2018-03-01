@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PTSItem.h"
+#import "PTSItem+CoreDataProperties.h"
 
 @interface PTSListViewCell : UITableViewCell
 

@@ -24,10 +24,10 @@
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
-    self.labelFlightName.text = ptsItem.flightName;
-    self.labelFlightArrivalTime.text = [ptsItem flightArrivalDateInString];
-    self.labelPTSDay.text = [ptsItem flightArrivalDateInString];
-    self.labelPTSTime.text = [ptsItem ptsDurationInString];
+    self.labelFlightName.text = ptsItem.flightNo;
+//    self.labelFlightArrivalTime.text = [ptsItem flightArrivalDateInString];
+//    self.labelPTSDay.text = [ptsItem flightArrivalDateInString];
+//    self.labelPTSTime.text = [ptsItem ptsDurationInString];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
