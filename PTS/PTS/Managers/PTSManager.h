@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "User+CoreDataClass.h"
+#import "PTSItem+CoreDataProperties.h"
 
 @interface PTSManager : NSObject
 +(instancetype) sharedInstance;
 -(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler;
+-(void) fetchPTSSubItemsListPTS:(int)ptsItemId completionHandler:(void(^)(BOOL fetchComplete, PTSItem *ptsItem, NSError *error))fetchPTSCompletionHandler;
+
 @end

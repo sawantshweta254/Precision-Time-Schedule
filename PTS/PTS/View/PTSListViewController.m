@@ -9,6 +9,7 @@
 #import "PTSListViewController.h"
 #import "LoginController.h"
 #import "PTSListViewCell.h"
+#import "PTSDetailListController.h"
 #import "PTSItem+CoreDataProperties.h"
 #import "PTSManager.h"
 #import "User+CoreDataProperties.h"
@@ -17,6 +18,7 @@
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
+@property (nonatomic) int selectedIndex;
 @end
 
 @implementation PTSListViewController
@@ -67,7 +69,10 @@
     return ptsCell;
 }
 
-
+#pragma mark TableView Delegate Method
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.selectedIndex = indexPath.row;
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -102,14 +107,11 @@
 }
 */
 
-/*
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    PTSDetailListController *ptsDetailView = segue.destinationViewController;
+    ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:self.selectedIndex];
 }
-*/
 
 @end

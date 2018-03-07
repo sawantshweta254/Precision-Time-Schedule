@@ -2,16 +2,28 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS/Models/XCModels/PTSItem+CoreDataClass.h">
    </FileRef>
    <FileRef
       location = "group:PTS/Models/XCModels/PTSItem+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS/Models/XCModels/User+CoreDataProperties.h">

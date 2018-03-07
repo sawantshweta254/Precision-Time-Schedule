@@ -20,6 +20,8 @@
 		B6411ADA2034AA0900DE8BD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6411AD92034AA0900DE8BD8 /* main.m */; };
 		B65343102035CC8B003159AA /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = B653430F2035CC8B003159AA /* LoginController.m */; };
 		B65343142035CCED003159AA /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B65343132035CCED003159AA /* LoginManager.m */; };
+		B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */ = {isa = PBXBuildFile; fileRef = B679F074204BB56F0002360A /* PTSDetailListController.m */; };
+		B679F078204BB5FC0002360A /* PTSDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B679F077204BB5FC0002360A /* PTSDetailCell.m */; };
 		B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EDF20370ED70039C023 /* WebApiManager.m */; };
 		B6AD9EE4203711550039C023 /* ApiRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EE3203711550039C023 /* ApiRequestData.m */; };
 		B6AD9EE720371A7B0039C023 /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EE620371A7B0039C023 /* Login.m */; };
@@ -49,6 +51,10 @@
 		B653430F2035CC8B003159AA /* LoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
 		B65343122035CCED003159AA /* LoginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		B65343132035CCED003159AA /* LoginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
+		B679F073204BB56F0002360A /* PTSDetailListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSDetailListController.h; sourceTree = "<group>"; };
+		B679F074204BB56F0002360A /* PTSDetailListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSDetailListController.m; sourceTree = "<group>"; };
+		B679F076204BB5FC0002360A /* PTSDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSDetailCell.h; sourceTree = "<group>"; };
+		B679F077204BB5FC0002360A /* PTSDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSDetailCell.m; sourceTree = "<group>"; };
 		B694B01D2045B67B003BA653 /* PTS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PTS-Prefix.pch"; sourceTree = "<group>"; };
 		B6A83B1B20446C7800E1FD33 /* PTS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PTS.entitlements; sourceTree = "<group>"; };
 		B6AD9EDE20370ED70039C023 /* WebApiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebApiManager.h; sourceTree = "<group>"; };
@@ -89,6 +95,10 @@
 				B653430F2035CC8B003159AA /* LoginController.m */,
 				B6377C87203C69C700AEBF5A /* PTSListViewCell.h */,
 				B6377C88203C69C700AEBF5A /* PTSListViewCell.m */,
+				B679F073204BB56F0002360A /* PTSDetailListController.h */,
+				B679F074204BB56F0002360A /* PTSDetailListController.m */,
+				B679F076204BB5FC0002360A /* PTSDetailCell.h */,
+				B679F077204BB5FC0002360A /* PTSDetailCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -314,6 +324,7 @@
 			files = (
 				B6411AC92034AA0900DE8BD8 /* AppDelegate.m in Sources */,
 				B6AD9EE4203711550039C023 /* ApiRequestData.m in Sources */,
+				B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */,
 				B6411ADA2034AA0900DE8BD8 /* main.m in Sources */,
 				B6AD9EE720371A7B0039C023 /* Login.m in Sources */,
 				B6411AD22034AA0900DE8BD8 /* PTS.xcdatamodeld in Sources */,
@@ -321,6 +332,7 @@
 				B6377C95203C6EF300AEBF5A /* PTSManager.m in Sources */,
 				B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */,
 				B6377C92203C6C9C00AEBF5A /* PTSTask.m in Sources */,
+				B679F078204BB5FC0002360A /* PTSDetailCell.m in Sources */,
 				B65343102035CC8B003159AA /* LoginController.m in Sources */,
 				B6377C89203C69C700AEBF5A /* PTSListViewCell.m in Sources */,
 				B65343142035CCED003159AA /* LoginManager.m in Sources */,
@@ -459,7 +471,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3S6H92TC99;
+				DEVELOPMENT_TEAM = 2NBDVAZT58;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -476,7 +488,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3S6H92TC99;
+				DEVELOPMENT_TEAM = 2NBDVAZT58;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

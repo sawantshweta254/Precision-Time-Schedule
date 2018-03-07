@@ -25,7 +25,7 @@
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
     self.labelFlightName.text = ptsItem.flightNo;
-//    self.labelFlightArrivalTime.text = [ptsItem flightArrivalDateInString];
+    self.labelFlightArrivalTime.text = ptsItem.flightTime;
 //    self.labelPTSDay.text = [ptsItem flightArrivalDateInString];
 //    self.labelPTSTime.text = [ptsItem ptsDurationInString];
 }

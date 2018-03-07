@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 01/03/18.
+//  Created by Shweta Sawant on 07/03/18.
 //
 //
 
@@ -18,30 +18,20 @@
 @dynamic dutyManagerId;
 @dynamic dutyManagerName;
 @dynamic flightDate;
-@dynamic flightTime;
 @dynamic flightNo;
-@dynamic ptsId;
+@dynamic flightTime;
 @dynamic jsonData;
-@dynamic ptsSubTaskId;
+@dynamic ptsId;
 @dynamic ptsName;
+@dynamic ptsSubTaskId;
+@dynamic ptsType;
 @dynamic redCapId;
 @dynamic redCapName;
 @dynamic remarks;
 @dynamic supervisorId;
 @dynamic supervisorName;
 @dynamic timeWindow;
-@dynamic ptsType;
-
--(NSString *) flightArrivalDateInString{
-    return @"";
-}
-
--(NSString *) flightArrivalTimeInString{
-    return @"";
-}
-
--(NSString *) ptsDurationInString{
-    return @"";
-}
+@dynamic aboveWingActivities;
+@dynamic belowWingActivities;
 
 @end
