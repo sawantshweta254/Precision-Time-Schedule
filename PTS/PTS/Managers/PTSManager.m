@@ -110,10 +110,10 @@ static PTSManager *sharedInstance;
 }
 
 #pragma mark PTS Sub Item Call
--(void) fetchPTSSubItemsListPTS:(int)ptsItemId  completionHandler:(void(^)(BOOL fetchComplete, PTSItem *ptsItem, NSError *error))fetchPTSCompletionHandler{
-    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSSubItemList:ptsItemId] completionHandler:^(BOOL requestSuccessfull, id responseData) {
-        PTSItem *ptsItemTpReturn = [self insertSubTaskForPTS:ptsItemId subTasks:[self parsePTSSubItemList:responseData]];
-        fetchPTSCompletionHandler(requestSuccessfull, ptsItemTpReturn, nil);
+-(void) fetchPTSSubItemsListPTS:(PTSItem *)ptsItem completionHandler:(void(^)(BOOL fetchComplete, PTSItem *ptsItem, NSError *error))fetchPTSCompletionHandler{
+    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSSubItemList:ptsItem.ptsSubTaskId] completionHandler:^(BOOL requestSuccessfull, id responseData) {
+        PTSItem *ptsItemToReturn = [self insertSubTaskForPTS:ptsItem.ptsId subTasks:[self parsePTSSubItemList:responseData]];
+        fetchPTSCompletionHandler(requestSuccessfull, ptsItemToReturn, nil);
     }];
 }
 
