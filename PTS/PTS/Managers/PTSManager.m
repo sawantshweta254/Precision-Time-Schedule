@@ -28,7 +28,12 @@ static PTSManager *sharedInstance;
 -(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
     
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSList:user] completionHandler:^(BOOL requestSuccessfull, id responseData) {
-        fetchPTSCompletionHandler(requestSuccessfull, [self parsePTSList:responseData], nil);
+        if (requestSuccessfull) {
+            fetchPTSCompletionHandler(requestSuccessfull, [self parsePTSList:responseData], nil);
+        }else{
+            fetchPTSCompletionHandler(requestSuccessfull, nil, nil);
+
+        }
     }];
     
 }
@@ -86,7 +91,7 @@ static PTSManager *sharedInstance;
         pts.flightDate = [ptsItem objectForKey:@"flight_date"];
         pts.flightNo = [ptsItem objectForKey:@"flight_no"];
         pts.flightTime = [ptsItem objectForKey:@"flight_time"];
-        pts.ptsId = [[ptsItem objectForKey:@"id"] intValue];
+        pts.ptsId = [[ptsItem objectForKey:@"id"] intValue];//pts id
         pts.jsonData = [ptsItem objectForKey:@"json_data"];
         pts.ptsSubTaskId = [[ptsItem objectForKey:@"m_pts_id"] intValue];
         pts.ptsName = [ptsItem objectForKey:@"pts_name"];
@@ -96,7 +101,7 @@ static PTSManager *sharedInstance;
         pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
         pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
         pts.timeWindow = [[ptsItem objectForKey:@"time_window"] intValue];
-        pts.ptsType = [[ptsItem objectForKey:@"type"] intValue];
+        pts.ptsType = [[ptsItem objectForKey:@"type"] intValue];//flighttype
         
         NSError *error;
         [moc save:&error];
@@ -112,7 +117,7 @@ static PTSManager *sharedInstance;
 #pragma mark PTS Sub Item Call
 -(void) fetchPTSSubItemsListPTS:(PTSItem *)ptsItem completionHandler:(void(^)(BOOL fetchComplete, PTSItem *ptsItem, NSError *error))fetchPTSCompletionHandler{
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSSubItemList:ptsItem.ptsSubTaskId] completionHandler:^(BOOL requestSuccessfull, id responseData) {
-        PTSItem *ptsItemToReturn = [self insertSubTaskForPTS:ptsItem.ptsId subTasks:[self parsePTSSubItemList:responseData]];
+        PTSItem *ptsItemToReturn = [self insertSubTaskForPTS:ptsItem.ptsId subTasks:[self parsePTSSubItemList:responseData subTaskId:ptsItem.ptsSubTaskId]];
         fetchPTSCompletionHandler(requestSuccessfull, ptsItemToReturn, nil);
     }];
 }
@@ -132,14 +137,15 @@ static PTSManager *sharedInstance;
     return getListData;
 }
 
--(NSArray *) parsePTSSubItemList:(NSDictionary *)responseData{
+-(NSArray *) parsePTSSubItemList:(NSDictionary *)responseData subTaskId:(int)taskId{
     
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSEntityDescription *ptsSubTaskEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSSubTask class]) inManagedObjectContext:moc];
 
     
     NSMutableArray *ptsSubListToReturn = [[NSMutableArray alloc] init];
-    NSArray *ptsListSubTasks = [responseData objectForKey:@"pts_1"];
+    NSString *ptsKey = [NSString stringWithFormat:@"pts_%d",taskId];
+    NSArray *ptsListSubTasks = [responseData objectForKey:ptsKey];
     for (NSDictionary *tasksDic in ptsListSubTasks) {
         if ([[tasksDic objectForKey:@"type"] isEqualToString:@"ABOVE THE WING ACTIVITY"]) {
             NSArray *aboveWingTaskList = [tasksDic objectForKey:@"sub_act_array"];

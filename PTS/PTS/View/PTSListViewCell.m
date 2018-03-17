@@ -24,11 +24,29 @@
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
-    self.labelFlightName.text = ptsItem.flightNo;
-    self.labelFlightArrivalTime.text = ptsItem.flightTime;
-//    self.labelPTSDay.text = [ptsItem flightArrivalDateInString];
-//    self.labelPTSTime.text = [ptsItem ptsDurationInString];
+    self.labelFlightName.text = ptsItem.flightNo;    
+    self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", ptsItem.flightTime];
+    self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
+    self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
 }
+
+-(NSString *) getTimeInStringFormat:(NSString *) flightDate{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *flightDateInDateFormat = [dateFormatter dateFromString:flightDate];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    if ([calendar isDateInToday:flightDateInDateFormat]) {
+        return @"Today";
+    }else if ([calendar isDateInYesterday:flightDateInDateFormat]){
+        return @"Yesterday";
+    }else if ([calendar isDateInTomorrow:flightDateInDateFormat]){
+        return @"Tomorrow";
+    }else{
+        [dateFormatter setDateFormat:@"dd MMM"];
+        return [dateFormatter stringFromDate:flightDateInDateFormat];
+    }
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

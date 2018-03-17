@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A50D89A2CDF1A62CEE0916F4 /* libPods-PTS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B96B572BFFEC0676EA4E030 /* libPods-PTS.a */; };
+		B604F43F20553E930082D71B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B604F43E20553E930082D71B /* Assets.xcassets */; };
+		B6356DE820561B0E0051ADDB /* TaskTimeUpdatesClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B6356DE720561B0E0051ADDB /* TaskTimeUpdatesClient.m */; };
+		B6356DEB205637550051ADDB /* WebsocketMessageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = B6356DEA205637540051ADDB /* WebsocketMessageFactory.m */; };
 		B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C84203C649200AEBF5A /* PTSListViewController.m */; };
 		B6377C89203C69C700AEBF5A /* PTSListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C88203C69C700AEBF5A /* PTSListViewCell.m */; };
 		B6377C92203C6C9C00AEBF5A /* PTSTask.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C91203C6C9C00AEBF5A /* PTSTask.m */; };
@@ -15,7 +18,6 @@
 		B6411AC92034AA0900DE8BD8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6411AC82034AA0900DE8BD8 /* AppDelegate.m */; };
 		B6411ACF2034AA0900DE8BD8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6411ACD2034AA0900DE8BD8 /* Main.storyboard */; };
 		B6411AD22034AA0900DE8BD8 /* PTS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B6411AD02034AA0900DE8BD8 /* PTS.xcdatamodeld */; };
-		B6411AD42034AA0900DE8BD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6411AD32034AA0900DE8BD8 /* Assets.xcassets */; };
 		B6411AD72034AA0900DE8BD8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6411AD52034AA0900DE8BD8 /* LaunchScreen.storyboard */; };
 		B6411ADA2034AA0900DE8BD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6411AD92034AA0900DE8BD8 /* main.m */; };
 		B65343102035CC8B003159AA /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = B653430F2035CC8B003159AA /* LoginController.m */; };
@@ -30,6 +32,11 @@
 /* Begin PBXFileReference section */
 		0B96B572BFFEC0676EA4E030 /* libPods-PTS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PTS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92EA64825710CF3CC73BE377 /* Pods-PTS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PTS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PTS/Pods-PTS.debug.xcconfig"; sourceTree = "<group>"; };
+		B604F43E20553E930082D71B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B6356DE620561B0E0051ADDB /* TaskTimeUpdatesClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaskTimeUpdatesClient.h; sourceTree = "<group>"; };
+		B6356DE720561B0E0051ADDB /* TaskTimeUpdatesClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskTimeUpdatesClient.m; sourceTree = "<group>"; };
+		B6356DE9205637540051ADDB /* WebsocketMessageFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebsocketMessageFactory.h; sourceTree = "<group>"; };
+		B6356DEA205637540051ADDB /* WebsocketMessageFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebsocketMessageFactory.m; sourceTree = "<group>"; };
 		B6377C84203C649200AEBF5A /* PTSListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTSListViewController.m; sourceTree = "<group>"; };
 		B6377C85203C649300AEBF5A /* PTSListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTSListViewController.h; sourceTree = "<group>"; };
 		B6377C87203C69C700AEBF5A /* PTSListViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSListViewCell.h; sourceTree = "<group>"; };
@@ -43,7 +50,6 @@
 		B6411AC82034AA0900DE8BD8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B6411ACE2034AA0900DE8BD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B6411AD12034AA0900DE8BD8 /* PTS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PTS.xcdatamodel; sourceTree = "<group>"; };
-		B6411AD32034AA0900DE8BD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B6411AD62034AA0900DE8BD8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B6411AD82034AA0900DE8BD8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6411AD92034AA0900DE8BD8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -124,6 +130,7 @@
 		B6411AC62034AA0900DE8BD8 /* PTS */ = {
 			isa = PBXGroup;
 			children = (
+				B604F43E20553E930082D71B /* Assets.xcassets */,
 				B6A83B1B20446C7800E1FD33 /* PTS.entitlements */,
 				B6377C96203C756F00AEBF5A /* View */,
 				B6AD9EE12037113D0039C023 /* Models */,
@@ -131,7 +138,6 @@
 				B6411AC72034AA0900DE8BD8 /* AppDelegate.h */,
 				B6411AC82034AA0900DE8BD8 /* AppDelegate.m */,
 				B6411ACD2034AA0900DE8BD8 /* Main.storyboard */,
-				B6411AD32034AA0900DE8BD8 /* Assets.xcassets */,
 				B6411AD52034AA0900DE8BD8 /* LaunchScreen.storyboard */,
 				B6411AD82034AA0900DE8BD8 /* Info.plist */,
 				B6411AD92034AA0900DE8BD8 /* main.m */,
@@ -150,6 +156,10 @@
 				B65343132035CCED003159AA /* LoginManager.m */,
 				B6377C93203C6EF300AEBF5A /* PTSManager.h */,
 				B6377C94203C6EF300AEBF5A /* PTSManager.m */,
+				B6356DE620561B0E0051ADDB /* TaskTimeUpdatesClient.h */,
+				B6356DE720561B0E0051ADDB /* TaskTimeUpdatesClient.m */,
+				B6356DE9205637540051ADDB /* WebsocketMessageFactory.h */,
+				B6356DEA205637540051ADDB /* WebsocketMessageFactory.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -259,7 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6411AD72034AA0900DE8BD8 /* LaunchScreen.storyboard in Resources */,
-				B6411AD42034AA0900DE8BD8 /* Assets.xcassets in Resources */,
+				B604F43F20553E930082D71B /* Assets.xcassets in Resources */,
 				B6411ACF2034AA0900DE8BD8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,11 +334,13 @@
 			files = (
 				B6411AC92034AA0900DE8BD8 /* AppDelegate.m in Sources */,
 				B6AD9EE4203711550039C023 /* ApiRequestData.m in Sources */,
+				B6356DE820561B0E0051ADDB /* TaskTimeUpdatesClient.m in Sources */,
 				B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */,
 				B6411ADA2034AA0900DE8BD8 /* main.m in Sources */,
 				B6AD9EE720371A7B0039C023 /* Login.m in Sources */,
 				B6411AD22034AA0900DE8BD8 /* PTS.xcdatamodeld in Sources */,
 				B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */,
+				B6356DEB205637550051ADDB /* WebsocketMessageFactory.m in Sources */,
 				B6377C95203C6EF300AEBF5A /* PTSManager.m in Sources */,
 				B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */,
 				B6377C92203C6C9C00AEBF5A /* PTSTask.m in Sources */,

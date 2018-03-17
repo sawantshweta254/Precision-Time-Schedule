@@ -15,10 +15,13 @@
 #import "User+CoreDataProperties.h"
 
 #import "LoginManager.h"
+#import "TaskTimeUpdatesClient.h"
 
 @interface PTSListViewController ()
+@property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
 @property (nonatomic) int selectedIndex;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *leftBarButtonItem;
 @end
 
 @implementation PTSListViewController
@@ -45,6 +48,12 @@
         }];
     }
     
+    if (self.taskUpdateClient == nil) {
+        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+    }
+    [self.taskUpdateClient connectToWebSocket];
+
+    [self.leftBarButtonItem setCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red"]]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,6 +115,10 @@
     return YES;
 }
 */
+#pragma mark Button Actions
+- (IBAction)reloadTaskList:(id)sender {
+
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation

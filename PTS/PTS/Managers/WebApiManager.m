@@ -33,7 +33,7 @@ static WebApiManager *sharedInstance;
     
     NSString *postJsonString;
     if (!postJsonData) {
-        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+//        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
     } else {
         postJsonString = [[NSString alloc] initWithData:postJsonData encoding:NSUTF8StringEncoding];
     }
@@ -49,7 +49,7 @@ static WebApiManager *sharedInstance;
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@", responseObject);
+//        NSLog(@"%@", responseObject);
         requestCompletionHandler(TRUE, responseObject);
 
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

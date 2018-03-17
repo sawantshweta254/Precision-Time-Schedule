@@ -19,7 +19,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.textfieldUsername.leftViewMode = UITextFieldViewModeAlways;
+    self.textfieldUsername.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user_name"]];
+    self.textfieldPassword.leftViewMode = UITextFieldViewModeAlways;
+    self.textfieldPassword.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pwd"]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,7 +47,7 @@
             [self dismissViewControllerAnimated:YES completion:^{
             }];
         }else{
-            NSLog(@"Login Error : %@", errorMessage);
+//            NSLog(@"Login Error : %@", errorMessage);
         }
     }];
 }
