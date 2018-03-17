@@ -10,7 +10,6 @@
 #import "PTSSubTask+CoreDataProperties.h"
 
 @interface PTSDetailCell : UICollectionViewCell
-
 -(void) setCellData:(PTSSubTask *) subTask;
 
 @end

@@ -21,6 +21,7 @@
 -(void) setCellData:(PTSSubTask *) subTask{
 //    self.taskNumLabel.text = subTask.
     self.taskNameLabel.text = subTask.subactivity;
+    self.taskNumLabel.text = [NSString stringWithFormat:@"%d",subTask.subTaskId ];
 }
 
 - (IBAction)timerTapped:(id)sender {

@@ -48,6 +48,9 @@
             NSSet *wingBTaskSet = ptsItem.belowWingActivities;
             self.ptsBWingSubItemList = [wingBTaskSet allObjects];
         }
+        
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"subTaskId" ascending:YES];
+        self.ptsAWingSubItemList = [self.ptsAWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         [self.ptsSubTasksCollectionView reloadData];
     }];
     
@@ -100,6 +103,7 @@
         subTask = [self.ptsBWingSubItemList objectAtIndex:indexPath.row];
     }
     [detailCell setCellData:subTask];
+    
     return detailCell;
 }
 
