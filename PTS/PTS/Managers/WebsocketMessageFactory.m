@@ -35,9 +35,9 @@
 //    [messageDict setValue:ptsItem.ptsStartTime forKey:@"pts_start_time"];
 //    [messageDict setValue:ptsItem.ptsEndTime forKey:@"pts_end_time"];
     [messageDict setValue:currentDeviceId forKey:@"device_id"];
-    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.ptsId] forKey:@"flight_id"];
+    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.flightId] forKey:@"flight_id"];
     [messageDict setValue:ptsItem.flightNo forKey:@"flight_num"];
-    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.ptsType] forKey:@"flight_type"];
+    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.flightType] forKey:@"flight_type"];
     [messageDict setValue:ptsItem.flightTime forKey:@"arr_dep_type"];
     [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
     
@@ -75,7 +75,7 @@
 
 -(NSDictionary *) getSubTaskUpdateDictionaryFor:(PTSSubTask *)ptsSubTask forPTS:(PTSItem *)pts{
     NSDictionary *subTaskDictionary = [[NSDictionary alloc] init];
-    [subTaskDictionary setValue:[NSNumber numberWithInteger:pts.ptsType] forKey:@"type_id"];
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:pts.flightType] forKey:@"type_id"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subTaskId] forKey:@"sub_activity_id"];
     [subTaskDictionary setValue:ptsSubTask.subactivity forKey:@"sub_activity_name"];
 //    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"start_time"];

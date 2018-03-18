@@ -5,13 +5,13 @@
         <attribute name="dutyManagerId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="dutyManagerName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="flightDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flightId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="flightNo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="flightTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flightType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="jsonData" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="ptsId" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="ptsName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="ptsSubTaskId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="ptsType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="redCapId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="redCapName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remarks" optional="YES" attributeType="String" syncable="YES"/>
@@ -43,7 +43,7 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="330"/>
+        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="30"/>
         <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="178"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>

@@ -20,7 +20,7 @@
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
-@property (nonatomic) int selectedIndex;
+@property (nonatomic) NSInteger selectedIndex;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *leftBarButtonItem;
 @end
 
@@ -35,6 +35,16 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    if (self.taskUpdateClient == nil) {
+        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+    }
+    [self.taskUpdateClient connectToWebSocket];
+
+    [self.leftBarButtonItem setCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red"]]];
+}
+
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     
     if (!loggedInUser) {
@@ -47,15 +57,7 @@
             [self.tableView reloadData];
         }];
     }
-    
-    if (self.taskUpdateClient == nil) {
-        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-    }
-    [self.taskUpdateClient connectToWebSocket];
-
-    [self.leftBarButtonItem setCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red"]]];
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

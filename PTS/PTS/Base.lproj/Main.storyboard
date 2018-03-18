@@ -86,6 +86,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="flightTypeIcon" destination="zQQ-BR-78E" id="VEn-Rz-wEn"/>
                                     <outlet property="labelFlightArrivalTime" destination="uJx-Hj-OJZ" id="YIR-bo-fAu"/>
                                     <outlet property="labelFlightName" destination="UdW-Fk-jhT" id="MVd-Ji-FIT"/>
                                     <outlet property="labelPTSDay" destination="jP3-T5-FXR" id="fT6-IR-7jU"/>
@@ -328,6 +329,7 @@
                     </view>
                     <connections>
                         <outlet property="buttonPtsTimer" destination="6El-F1-Nzd" id="XHj-Sj-XdY"/>
+                        <outlet property="flightTypeIcon" destination="J6h-7x-TNG" id="BPr-xo-Ttd"/>
                         <outlet property="labelArrivalTime" destination="zU5-7l-yyy" id="k8P-4M-tbM"/>
                         <outlet property="labelFlightName" destination="BA4-o2-R00" id="78o-6E-i9G"/>
                         <outlet property="labelPtsTime" destination="wSi-yY-hXm" id="H7q-mC-xpV"/>

@@ -109,7 +109,7 @@ static LoginManager *sharedInstance;
     double airportId = [[responseDictionary objectForKey:@"airport_id"] doubleValue];
     NSString *userName = [responseDictionary objectForKey:@"username"];
     NSInteger port = [[responseDictionary objectForKey:@"port"] integerValue];
-    NSString *message = [responseDictionary objectForKey:@"message"];
+    NSString *message = [responseDictionary objectForKey:@"msg"];
     NSArray *flightPTSInfo = [responseDictionary objectForKey:@"flight_pts_info"];
     NSInteger empType = [[responseDictionary objectForKey:@"emptype"] integerValue];
     

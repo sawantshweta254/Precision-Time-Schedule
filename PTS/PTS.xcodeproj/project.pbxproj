@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A50D89A2CDF1A62CEE0916F4 /* libPods-PTS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B96B572BFFEC0676EA4E030 /* libPods-PTS.a */; };
 		B604F43F20553E930082D71B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B604F43E20553E930082D71B /* Assets.xcassets */; };
+		B61BD16E205E9E0500324E8C /* AppUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = B61BD16D205E9E0500324E8C /* AppUtility.m */; };
 		B6356DE820561B0E0051ADDB /* TaskTimeUpdatesClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B6356DE720561B0E0051ADDB /* TaskTimeUpdatesClient.m */; };
 		B6356DEB205637550051ADDB /* WebsocketMessageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = B6356DEA205637540051ADDB /* WebsocketMessageFactory.m */; };
 		B6377C86203C649300AEBF5A /* PTSListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6377C84203C649200AEBF5A /* PTSListViewController.m */; };
@@ -33,6 +34,8 @@
 		0B96B572BFFEC0676EA4E030 /* libPods-PTS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PTS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92EA64825710CF3CC73BE377 /* Pods-PTS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PTS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PTS/Pods-PTS.debug.xcconfig"; sourceTree = "<group>"; };
 		B604F43E20553E930082D71B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B61BD16C205E9E0500324E8C /* AppUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppUtility.h; sourceTree = "<group>"; };
+		B61BD16D205E9E0500324E8C /* AppUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppUtility.m; sourceTree = "<group>"; };
 		B6356DE620561B0E0051ADDB /* TaskTimeUpdatesClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaskTimeUpdatesClient.h; sourceTree = "<group>"; };
 		B6356DE720561B0E0051ADDB /* TaskTimeUpdatesClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskTimeUpdatesClient.m; sourceTree = "<group>"; };
 		B6356DE9205637540051ADDB /* WebsocketMessageFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebsocketMessageFactory.h; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				B6411AD92034AA0900DE8BD8 /* main.m */,
 				B6411AD02034AA0900DE8BD8 /* PTS.xcdatamodeld */,
 				B694B01D2045B67B003BA653 /* PTS-Prefix.pch */,
+				B61BD16C205E9E0500324E8C /* AppUtility.h */,
+				B61BD16D205E9E0500324E8C /* AppUtility.m */,
 			);
 			path = PTS;
 			sourceTree = "<group>";
@@ -334,6 +339,7 @@
 			files = (
 				B6411AC92034AA0900DE8BD8 /* AppDelegate.m in Sources */,
 				B6AD9EE4203711550039C023 /* ApiRequestData.m in Sources */,
+				B61BD16E205E9E0500324E8C /* AppUtility.m in Sources */,
 				B6356DE820561B0E0051ADDB /* TaskTimeUpdatesClient.m in Sources */,
 				B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */,
 				B6411ADA2034AA0900DE8BD8 /* main.m in Sources */,

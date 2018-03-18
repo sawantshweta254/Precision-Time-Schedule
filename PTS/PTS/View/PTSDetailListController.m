@@ -10,6 +10,7 @@
 #import "PTSDetailCell.h"
 #import "PTSManager.h"
 #import "TaskTimeUpdatesClient.h"
+#import "AppUtility.h"
 
 @interface PTSDetailListController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelArrivalTime;
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelFlightName;
 @property (weak, nonatomic) IBOutlet UILabel *labelPtsTime;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPtsTimer;
+@property (weak, nonatomic) IBOutlet UIImageView *flightTypeIcon;
 
 @property (nonatomic, retain) NSArray *ptsAWingSubItemList;
 @property (nonatomic, retain) NSArray *ptsBWingSubItemList;
@@ -64,9 +66,18 @@
 
 
 -(void) setFlightDetails{
+    
     self.labelFlightName.text = self.ptsTask.flightNo;
-    self.labelArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", self.ptsTask.flightTime];
     self.labelPtsTime.text = [NSString stringWithFormat:@"PTS Time %d", self.ptsTask.timeWindow];
+    
+    if (self.ptsTask.flightType == ArrivalType) {
+        self.labelArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", self.ptsTask.flightTime];
+        [self.flightTypeIcon setImage:[UIImage imageNamed:@"arrival_flight"]];
+    }else{
+        self.labelArrivalTime.text = [NSString stringWithFormat:@"Departure at %@", self.ptsTask.flightTime];
+        [self.flightTypeIcon setImage:[UIImage imageNamed:@"departure_flight"]];
+    }
+    
 }
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {

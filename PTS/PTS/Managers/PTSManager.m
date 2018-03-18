@@ -91,7 +91,7 @@ static PTSManager *sharedInstance;
         pts.flightDate = [ptsItem objectForKey:@"flight_date"];
         pts.flightNo = [ptsItem objectForKey:@"flight_no"];
         pts.flightTime = [ptsItem objectForKey:@"flight_time"];
-        pts.ptsId = [[ptsItem objectForKey:@"id"] intValue];//pts id
+        pts.flightId = [[ptsItem objectForKey:@"id"] intValue];//pts id
         pts.jsonData = [ptsItem objectForKey:@"json_data"];
         pts.ptsSubTaskId = [[ptsItem objectForKey:@"m_pts_id"] intValue];
         pts.ptsName = [ptsItem objectForKey:@"pts_name"];
@@ -101,7 +101,7 @@ static PTSManager *sharedInstance;
         pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
         pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
         pts.timeWindow = [[ptsItem objectForKey:@"time_window"] intValue];
-        pts.ptsType = [[ptsItem objectForKey:@"type"] intValue];//flighttype
+        pts.flightType = [[ptsItem objectForKey:@"type"] intValue];
         
         NSError *error;
         [moc save:&error];
@@ -117,7 +117,7 @@ static PTSManager *sharedInstance;
 #pragma mark PTS Sub Item Call
 -(void) fetchPTSSubItemsListPTS:(PTSItem *)ptsItem completionHandler:(void(^)(BOOL fetchComplete, PTSItem *ptsItem, NSError *error))fetchPTSCompletionHandler{
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSSubItemList:ptsItem.ptsSubTaskId] completionHandler:^(BOOL requestSuccessfull, id responseData) {
-        PTSItem *ptsItemToReturn = [self insertSubTaskForPTS:ptsItem.ptsId subTasks:[self parsePTSSubItemList:responseData subTaskId:ptsItem.ptsSubTaskId]];
+        PTSItem *ptsItemToReturn = [self insertSubTaskForPTS:ptsItem.flightId subTasks:[self parsePTSSubItemList:responseData subTaskId:ptsItem.ptsSubTaskId]];
         fetchPTSCompletionHandler(requestSuccessfull, ptsItemToReturn, nil);
     }];
 }
@@ -191,7 +191,7 @@ static PTSManager *sharedInstance;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([PTSItem class])];
     NSError *error;
     NSArray *ptsItemList = [moc executeFetchRequest:fetchRequest error:&error];
-    NSPredicate *predicateForPTSWithId = [NSPredicate predicateWithFormat:@"ptsId = %d", ptsId];
+    NSPredicate *predicateForPTSWithId = [NSPredicate predicateWithFormat:@"flightId = %d", ptsId];
     NSArray *ptsListForPTSId = [ptsItemList filteredArrayUsingPredicate:predicateForPTSWithId];
 
     PTSItem *ptsItemToReturn;

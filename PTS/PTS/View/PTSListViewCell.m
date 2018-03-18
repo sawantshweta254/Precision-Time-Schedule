@@ -7,8 +7,10 @@
 //
 
 #import "PTSListViewCell.h"
+#import "AppUtility.h"
 
 @interface PTSListViewCell()
+@property (weak, nonatomic) IBOutlet UIImageView *flightTypeIcon;
 @property (weak, nonatomic) IBOutlet UILabel *labelFlightName;
 @property (weak, nonatomic) IBOutlet UILabel *labelFlightArrivalTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSTime;
@@ -24,8 +26,16 @@
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
-    self.labelFlightName.text = ptsItem.flightNo;    
-    self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", ptsItem.flightTime];
+    self.labelFlightName.text = ptsItem.flightNo;
+    
+    if (ptsItem.flightType == ArrivalType) {
+        self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", ptsItem.flightTime];
+        [self.flightTypeIcon setImage:[UIImage imageNamed:@"arrival_flight"]];
+    }else{
+        self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Departure at %@", ptsItem.flightTime];
+        [self.flightTypeIcon setImage:[UIImage imageNamed:@"departure_flight"]];
+    }
+    
     self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
     self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
 }
