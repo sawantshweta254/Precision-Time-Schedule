@@ -165,8 +165,8 @@ static PTSManager *sharedInstance;
             }
             
         }else{
-            NSArray *aboveWingTaskList = [tasksDic objectForKey:@"sub_act_array"];
-            for (NSDictionary *ptsSubItem in aboveWingTaskList) {
+            NSArray *belowWingTaskList = [tasksDic objectForKey:@"sub_act_array"];
+            for (NSDictionary *ptsSubItem in belowWingTaskList) {
                 PTSSubTask *ptsSubTask = (PTSSubTask*)[[NSManagedObject alloc] initWithEntity:ptsSubTaskEntity insertIntoManagedObjectContext:moc];
                 
                 ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"id"] intValue];
@@ -203,7 +203,7 @@ static PTSManager *sharedInstance;
     NSArray *wingATasks = [subTasks filteredArrayUsingPredicate:predicateForAWing];
     ptsItemToReturn.aboveWingActivities = [NSSet setWithArray:wingATasks];
 
-    NSPredicate *predicateForBWing = [NSPredicate predicateWithFormat:@"subTaskId = %d", 2];
+    NSPredicate *predicateForBWing = [NSPredicate predicateWithFormat:@"ptsWing = %d", 2];
     NSArray *wingBTasks = [subTasks filteredArrayUsingPredicate:predicateForBWing];
     ptsItemToReturn.belowWingActivities = [NSSet setWithArray:wingBTasks];
 

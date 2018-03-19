@@ -17,8 +17,9 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *labelFlightName;
 @property (weak, nonatomic) IBOutlet UILabel *labelPtsTime;
-@property (weak, nonatomic) IBOutlet UIButton *buttonPtsTimer;
+//@property (weak, nonatomic) IBOutlet UIButton *buttonPtsTimer;
 @property (weak, nonatomic) IBOutlet UIImageView *flightTypeIcon;
+@property (weak, nonatomic) IBOutlet UILabel *labelPtsTimer;
 
 @property (nonatomic, retain) NSArray *ptsAWingSubItemList;
 @property (nonatomic, retain) NSArray *ptsBWingSubItemList;
@@ -31,6 +32,8 @@
 
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 
+@property (nonatomic, strong) NSTimer *ptsTaskTimer;
+
 @end
 
 @implementation PTSDetailListController
@@ -41,10 +44,10 @@
     [self setFlightDetails];
     
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    [self.buttonPtsTimer addGestureRecognizer:longPressGestureRecognizer];
+    [self.labelPtsTime addGestureRecognizer:longPressGestureRecognizer];
     
     [[PTSManager sharedInstance] fetchPTSSubItemsListPTS:self.ptsTask completionHandler:^(BOOL fetchComplete, PTSItem *ptsItem, NSError *error) {
-        if (ptsItem.belowWingActivities.count > 0 && ptsItem.belowWingActivities.count > 0  ) {
+        if (ptsItem.aboveWingActivities.count > 0 && ptsItem.belowWingActivities.count > 0  ) {
             NSSet *wingATaskSet = ptsItem.aboveWingActivities;
             self.ptsAWingSubItemList = [wingATaskSet allObjects];
             NSSet *wingBTaskSet = ptsItem.belowWingActivities;
@@ -53,6 +56,8 @@
         
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"subTaskId" ascending:YES];
         self.ptsAWingSubItemList = [self.ptsAWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        self.ptsBWingSubItemList = [self.ptsBWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        
         [self.ptsSubTasksCollectionView reloadData];
     }];
     
@@ -84,7 +89,7 @@
     if ( gesture.state == UIGestureRecognizerStateEnded ) {
         UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
+            [self startPTSTimer];
         }];
         
         UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
@@ -163,5 +168,28 @@
 
 -(void) updateTaskTimeForFlight{
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
+}
+
+#pragma mark Utility Methods
+-(void) startPTSTimer
+{
+    self.ptsTask.ptsStartTime = [NSDate date];
+    [self.ptsTaskTimer invalidate];
+    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    
+}
+
+-(void) setCallTime{
+    NSTimeInterval timeInterval = fabs([self.ptsTask.ptsStartTime timeIntervalSinceNow]);
+    int duration = (int)timeInterval;
+    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    if (duration > 3600) {
+        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }else{
+        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }
+    
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
 }
 @end

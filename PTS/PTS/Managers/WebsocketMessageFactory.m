@@ -8,6 +8,7 @@
 
 #import "WebsocketMessageFactory.h"
 #import "LoginManager.h"
+#import "AppUtility.h"
 
 @implementation WebsocketMessageFactory
 
@@ -20,20 +21,20 @@
     [messageDict setValue:loggedInUser.userName forKey:@"user_name"];
     [messageDict setValue:[NSNumber numberWithInteger:loggedInUser.empType] forKey:@"user_type"];
     [messageDict setValue:[NSNumber numberWithInteger:flightID] forKey:@"flight_id"];
+    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"MsgType"];
     
     return [self translateToString:messageDict];
 }
 
 -(NSString *) createUpdateMessageForFlight:(PTSItem *)ptsItem{
-    //
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     UIDevice *device = [UIDevice currentDevice];
     NSString  *currentDeviceId = [[device identifierForVendor]UUIDString];
     
     NSMutableDictionary *messageDict = [NSMutableDictionary dictionary];
     [messageDict setValue:[NSNumber numberWithDouble:loggedInUser.userId] forKey:@"userid"];
-//    [messageDict setValue:ptsItem.ptsStartTime forKey:@"pts_start_time"];
-//    [messageDict setValue:ptsItem.ptsEndTime forKey:@"pts_end_time"];
+    [messageDict setValue:[self ptsTimesInString:ptsItem.ptsStartTime] forKey:@"pts_start_time"];
+    [messageDict setValue:[self ptsTimesInString:ptsItem.ptsEndTime] forKey:@"pts_end_time"];
     [messageDict setValue:currentDeviceId forKey:@"device_id"];
     [messageDict setValue:[NSNumber numberWithInteger:ptsItem.flightId] forKey:@"flight_id"];
     [messageDict setValue:ptsItem.flightNo forKey:@"flight_num"];
@@ -41,17 +42,22 @@
     [messageDict setValue:ptsItem.flightTime forKey:@"arr_dep_type"];
     [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
     
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
+    [messageDict setValue:ptsItem.ptsName forKey:@"pts_name"];
+    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.timeWindow] forKey:@"pts_time"];
+    [messageDict setValue:ptsItem.flightDate forKey:@"flight_date"];
+    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.ptsSubTaskId] forKey:@"m_pts_id"];
+    [messageDict setValue:ptsItem.airlineName forKey:@"airline_name"];
+    
+    [messageDict setValue:ptsItem.executionTime forKey:@"execute_time"];
+    [messageDict setValue:[self ptsTimesInString:ptsItem.currentTime] forKey:@"current_time"];
+    [messageDict setValue:[self ptsTimesInString:ptsItem.timerStopTime] forKey:@"timer_stop_time"];
+    
+    if (loggedInUser.empType == UserTypeRedCap) {
+        [messageDict setValue:[NSNumber numberWithInteger:2] forKey:@"MsgType"];
+    }
+    
+    [messageDict setValue:loggedInUser.userName forKey:@"user_name"];
+    [messageDict setValue:[NSNumber numberWithInteger:loggedInUser.empType] forKey:@"user_type"];
     
     [messageDict setValue:[self getWingTaskDicForPTS:ptsItem from:[ptsItem.aboveWingActivities allObjects]] forKey:@"above_list"];
     [messageDict setValue:[self getWingTaskDicForPTS:ptsItem from:[ptsItem.belowWingActivities allObjects]] forKey:@"below_list"];
@@ -59,13 +65,22 @@
     return [self translateToString:messageDict];
 }
 
+-(NSString *) ptsTimesInString:(NSDate *) ptsDate{
+    if (ptsDate == nil) {
+        return @"0";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"YYYY-mm-dd hh:mm:ss";
+    return [dateFormatter stringFromDate:ptsDate];
+}
+
 -(NSString *) getWingTaskDicForPTS:(PTSItem *)pts from:(NSArray *) wingTasks{
-    NSMutableArray *aboveWingSubTasks = [[NSMutableArray alloc] init];
+    NSMutableArray *wingSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in wingTasks) {
-        [aboveWingSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:pts]];
+        [wingSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:pts]];
     }
     NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:aboveWingSubTasks options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:wingSubTasks options:NSJSONWritingPrettyPrinted error:&error];
     if(error != nil)
         return Nil;
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -78,22 +93,24 @@
     [subTaskDictionary setValue:[NSNumber numberWithInteger:pts.flightType] forKey:@"type_id"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subTaskId] forKey:@"sub_activity_id"];
     [subTaskDictionary setValue:ptsSubTask.subactivity forKey:@"sub_activity_name"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"start_time"];
-    [subTaskDictionary setValue:ptsSubTask.referenceTime forKey:@"pts_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"end_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.] forKey:@"subactivity_type"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:[NSDate date]] forKey:@"current_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"time_execute_time"];
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.start] forKey:@"start_time"];
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.end] forKey:@"end_time"];
+    [subTaskDictionary setValue:ptsSubTask.referenceTime forKey:@"pts_time"]; //// total time
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subActivityType] forKey:@"subactivity_type"];// 2mins or more mins
+    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.current_time] forKey:@"current_time"];
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isRunning] forKey:@"is_running"];
+    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerExecutedTime] forKey:@"time_execute_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.start] forKey:@"subactivity_start_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.end] forKey:@"subactivity_end_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:1] forKey:@"is_complete"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:] forKey:@"user_start_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"user_end_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"notations"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"timer_stop_time"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"user_subact_feedback"];
-//    [subTaskDictionary setValue:[NSNumber numberWithInteger:flightID] forKey:@"negativeData_SendServer"];
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isComplete] forKey:@"is_complete"];
+    
+    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.userStartTime] forKey:@"user_start_time"];
+    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.userEndTime] forKey:@"user_end_time"];
+    
+    [subTaskDictionary setValue:ptsSubTask.notations forKey:@"notations"];
+    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerStopTime] forKey:@"timer_stop_time"];
+    [subTaskDictionary setValue:ptsSubTask.userSubActFeedback forKey:@"user_subact_feedback"];
+    [subTaskDictionary setValue:ptsSubTask.negativeDataSendServer forKey:@"negativeData_SendServer"];
     
     return subTaskDictionary;
 }

@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 07/03/18.
+//  Created by Shweta Sawant on 19/03/18.
 //
 //
 
@@ -19,19 +19,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t dutyManagerId;
 @property (nullable, nonatomic, copy) NSString *dutyManagerName;
 @property (nullable, nonatomic, copy) NSString *flightDate;
+@property (nonatomic) int16_t flightId;
 @property (nullable, nonatomic, copy) NSString *flightNo;
 @property (nullable, nonatomic, copy) NSString *flightTime;
+@property (nonatomic) int16_t flightType;
 @property (nullable, nonatomic, copy) NSString *jsonData;
-@property (nonatomic) int16_t ptsId;
 @property (nullable, nonatomic, copy) NSString *ptsName;
+@property (nullable, nonatomic, copy) NSDate *ptsStartTime;
 @property (nonatomic) int16_t ptsSubTaskId;
-@property (nonatomic) int16_t ptsType;
 @property (nonatomic) int16_t redCapId;
 @property (nullable, nonatomic, copy) NSString *redCapName;
 @property (nullable, nonatomic, copy) NSString *remarks;
 @property (nonatomic) int16_t supervisorId;
 @property (nullable, nonatomic, copy) NSString *supervisorName;
 @property (nonatomic) int16_t timeWindow;
+@property (nullable, nonatomic, copy) NSDate *ptsEndTime;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *aboveWingActivities;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *belowWingActivities;
 

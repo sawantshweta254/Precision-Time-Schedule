@@ -19,7 +19,7 @@
 @dynamic isComplete;
 @dynamic isRunning;
 @dynamic mRefereceTimeId;
-@dynamic negativeDataSendServer;
+@dynamic negativeData_SendServer;
 @dynamic notations;
 @dynamic ptsDetailsId;
 @dynamic ptsTotalTime;
@@ -27,14 +27,14 @@
 @dynamic referenceTime;
 @dynamic start;
 @dynamic subactivity;
-@dynamic subactivityEndTime;
-@dynamic subactivityStartTime;
+@dynamic subactivity_end_time;
+@dynamic subactivity_start_time;
 @dynamic subActivityType;
 @dynamic subTaskId;
-@dynamic timerExecutedTime;
-@dynamic timerStopTime;
-@dynamic userEndTime;
-@dynamic userStartTime;
+@dynamic timer_executed_time;
+@dynamic timer_stop_time;
+@dynamic user_end_time;
+@dynamic user_start_time;
 @dynamic userSubActFeedback;
 
 @end

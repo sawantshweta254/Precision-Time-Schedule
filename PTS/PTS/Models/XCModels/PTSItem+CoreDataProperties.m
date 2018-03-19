@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 07/03/18.
+//  Created by Shweta Sawant on 19/03/18.
 //
 //
 
@@ -18,19 +18,21 @@
 @dynamic dutyManagerId;
 @dynamic dutyManagerName;
 @dynamic flightDate;
+@dynamic flightId;
 @dynamic flightNo;
 @dynamic flightTime;
+@dynamic flightType;
 @dynamic jsonData;
-@dynamic ptsId;
 @dynamic ptsName;
+@dynamic ptsStartTime;
 @dynamic ptsSubTaskId;
-@dynamic ptsType;
 @dynamic redCapId;
 @dynamic redCapName;
 @dynamic remarks;
 @dynamic supervisorId;
 @dynamic supervisorName;
 @dynamic timeWindow;
+@dynamic ptsEndTime;
 @dynamic aboveWingActivities;
 @dynamic belowWingActivities;
 

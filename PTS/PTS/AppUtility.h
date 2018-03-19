@@ -13,6 +13,12 @@ typedef NS_ENUM(NSInteger, FlightType) {
     ArrivalType = 2
 };
 
+typedef NS_ENUM(NSInteger, UserType) {
+    UserTypeAdmin = 1,
+    UserTypeSupervisor = 2,
+    UserTypeRedCap = 3
+};
+
 @interface AppUtility : NSObject
 
 @end
