@@ -88,21 +88,6 @@
     self.labelPtsTimer.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:self.ptsTask.timeWindow * 60]];
 }
 
-- (void)longPress:(UILongPressGestureRecognizer*)gesture {
-    if ( gesture.state == UIGestureRecognizerStateEnded ) {
-        UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self startPTSTimer];
-        }];
-        
-        UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
-        
-        [updateTimerAlert addAction:actionYes];
-        [updateTimerAlert addAction:actionNo];
-        
-        [self presentViewController:updateTimerAlert animated:YES completion:nil];
-    }
-}
 /*
 #pragma mark - Navigation
 
@@ -157,8 +142,21 @@
     self.selectedWingIndex = self.wingSegmentCOntroller.selectedSegmentIndex;
     [self.ptsSubTasksCollectionView reloadData];
 }
-- (IBAction)startOrEndPTSTimer:(id)sender {
-    
+
+- (IBAction)updatePTSItemTimer:(id)sender {
+    if (((UILongPressGestureRecognizer*)sender).state == UIGestureRecognizerStateEnded ) {
+        UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self startPTSTimer];
+        }];
+        
+        UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
+        
+        [updateTimerAlert addAction:actionYes];
+        [updateTimerAlert addAction:actionNo];
+        
+        [self presentViewController:updateTimerAlert animated:YES completion:nil];
+    }
 }
 
 #pragma mark Websocket method
@@ -176,7 +174,10 @@
 #pragma mark Utility Methods
 -(void) startPTSTimer
 {
-    self.ptsTask.ptsStartTime = [NSDate date];
+    if (self.ptsTask.ptsStartTime == nil) {
+        self.ptsTask.ptsStartTime = [NSDate date];
+        [self.taskUpdateClient updateUserForFlight:self.ptsTask.flightId];
+    }
     [self.ptsTaskTimer invalidate];
     self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     
