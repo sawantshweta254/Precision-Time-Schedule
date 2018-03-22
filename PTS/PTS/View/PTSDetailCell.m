@@ -32,18 +32,19 @@
         [self.taskTimerButton setHidden:NO];
     }else{
         [self.taskTimerButton setHidden:YES];
-        UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-        [self.labelSubTaskTimer addGestureRecognizer:longPressGestureRecognizer];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updatePtsSubTaskTimer:)];
+        [self.labelSubTaskTimer addGestureRecognizer:tapGestureRecognizer];
         
         self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: subTask.calculatedPTSFinalTime]];
         
         [self.labelSubTaskTimer setHidden:NO];
+        self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
     self.subTask = subTask;
 }
 
-- (void)longPress:(UILongPressGestureRecognizer*)gesture {
+- (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
     [self.ptsTaskTimer invalidate];
     if (self.subTask.subactivityStartTime == nil) {
         self.subTask.subactivityStartTime = [NSDate date];
@@ -53,7 +54,7 @@
 
 -(void) setCallTime{
     NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
-    int ptsTaskTimeWindow = self.subTask.timeWindow * 60;
+    int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
     int duration = (int)timeInterval;
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
     timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
