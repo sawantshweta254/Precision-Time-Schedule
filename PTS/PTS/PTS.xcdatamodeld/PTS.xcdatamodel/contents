@@ -28,6 +28,7 @@
         <relationship name="belowWingActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PTSSubTask" syncable="YES"/>
     </entity>
     <entity name="PTSSubTask" representedClassName="PTSSubTask" syncable="YES" codeGenerationType="class">
+        <attribute name="calculatedPTSFinalTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="current_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="end" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isComplete" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -63,7 +64,7 @@
     </entity>
     <elements>
         <element name="PTSItem" positionX="-54" positionY="54" width="128" height="420"/>
-        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="375"/>
+        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="390"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>
 </model>

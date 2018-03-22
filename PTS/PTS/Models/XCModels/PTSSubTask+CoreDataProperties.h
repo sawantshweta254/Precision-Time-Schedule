@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 19/03/18.
+//  Created by Shweta Sawant on 21/03/18.
 //
 //
 
@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSDate *userEndTime;
 @property (nullable, nonatomic, copy) NSDate *userStartTime;
 @property (nullable, nonatomic, copy) NSString *userSubActFeedback;
+@property (nonatomic) int16_t calculatedPTSFinalTime;
 
 @end
 

@@ -18,11 +18,16 @@
 
     NSMutableDictionary *messageDict = [NSMutableDictionary dictionary];
     [messageDict setValue:[NSNumber numberWithDouble:loggedInUser.userId] forKey:@"userid"];
+    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"MsgType"];
     [messageDict setValue:loggedInUser.userName forKey:@"user_name"];
     [messageDict setValue:[NSNumber numberWithInteger:loggedInUser.empType] forKey:@"user_type"];
-    [messageDict setValue:[NSNumber numberWithInteger:flightID] forKey:@"flight_id"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"MsgType"];
     
+    if (loggedInUser.empType == 1 || loggedInUser.empType == 2 || loggedInUser.empType == 4) {
+//        [messageDict setValue:[NSArray arrayWithObjects:[NSNumber numberWithInteger:607],[NSNumber numberWithInteger:608], nil] forKey:@"flights_id"];
+    }else{
+        [messageDict setValue:[NSNumber numberWithInteger:flightID] forKey:@"flight_id"];
+
+    }
     return [self translateToString:messageDict];
 }
 
@@ -88,8 +93,8 @@
     return jsonString;
 }
 
--(NSDictionary *) getSubTaskUpdateDictionaryFor:(PTSSubTask *)ptsSubTask forPTS:(PTSItem *)pts{
-    NSDictionary *subTaskDictionary = [[NSDictionary alloc] init];
+-(NSMutableDictionary *) getSubTaskUpdateDictionaryFor:(PTSSubTask *)ptsSubTask forPTS:(PTSItem *)pts{
+    NSMutableDictionary *subTaskDictionary = [[NSMutableDictionary alloc] init];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:pts.flightType] forKey:@"type_id"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subTaskId] forKey:@"sub_activity_id"];
     [subTaskDictionary setValue:ptsSubTask.subactivity forKey:@"sub_activity_name"];

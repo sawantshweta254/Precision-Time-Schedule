@@ -161,6 +161,7 @@ static PTSManager *sharedInstance;
                 ptsSubTask.referenceTime = [ptsSubItem objectForKey:@"ref_time"];
                 ptsSubTask.ptsDetailsId = [[ptsSubItem objectForKey:@"pts_details_id"] intValue];
                 ptsSubTask.ptsWing = 1;
+                ptsSubTask.calculatedPTSFinalTime = abs(ptsSubTask.start - ptsSubTask.end) + 1;
                 [ptsSubListToReturn addObject:ptsSubTask];
             }
             
@@ -178,6 +179,7 @@ static PTSManager *sharedInstance;
                 ptsSubTask.referenceTime = [ptsSubItem objectForKey:@"ref_time"];
                 ptsSubTask.ptsDetailsId = [[ptsSubItem objectForKey:@"pts_details_id"] intValue];
                 ptsSubTask.ptsWing = 2;
+                ptsSubTask.calculatedPTSFinalTime = abs(ptsSubTask.start - ptsSubTask.end) + 1;
                 [ptsSubListToReturn addObject:ptsSubTask];
             }
         }

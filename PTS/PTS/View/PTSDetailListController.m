@@ -10,7 +10,6 @@
 #import "PTSDetailCell.h"
 #import "PTSManager.h"
 #import "TaskTimeUpdatesClient.h"
-#import "AppUtility.h"
 
 @interface PTSDetailListController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelArrivalTime;
@@ -33,7 +32,6 @@
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
-
 @end
 
 @implementation PTSDetailListController
@@ -83,6 +81,11 @@
         [self.flightTypeIcon setImage:[UIImage imageNamed:@"departure_flight"]];
     }
     
+    
+    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+    self.labelPtsTimer.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:self.ptsTask.timeWindow * 60]];
 }
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {
@@ -181,6 +184,7 @@
 
 -(void) setCallTime{
     NSTimeInterval timeInterval = fabs([self.ptsTask.ptsStartTime timeIntervalSinceNow]);
+    int ptsTaskTimeWindow = self.ptsTask.timeWindow * 60;
     int duration = (int)timeInterval;
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
     timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
@@ -190,6 +194,8 @@
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
     }
     
-    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+    int timeElapsed = ptsTaskTimeWindow - duration;
+    
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
 }
 @end

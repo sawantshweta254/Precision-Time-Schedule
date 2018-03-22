@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 19/03/18.
+//  Created by Shweta Sawant on 21/03/18.
 //
 //
 
@@ -36,5 +36,6 @@
 @dynamic userEndTime;
 @dynamic userStartTime;
 @dynamic userSubActFeedback;
+@dynamic calculatedPTSFinalTime;
 
 @end

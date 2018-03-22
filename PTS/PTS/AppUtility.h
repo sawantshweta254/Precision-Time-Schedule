@@ -21,4 +21,5 @@ typedef NS_ENUM(NSInteger, UserType) {
 
 @interface AppUtility : NSObject
 
++(NSString *) getFormattedPTSTime:(int) timeInMinutes;
 @end

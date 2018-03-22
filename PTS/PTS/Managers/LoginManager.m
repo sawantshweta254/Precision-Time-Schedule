@@ -82,7 +82,6 @@ static LoginManager *sharedInstance;
     [loginDataDic setObject:currentDeviceId forKey:@"deviceid"];
     [loginDataDic setObject:@"1.0" forKey:@"appversion"];
     [loginDataDic setObject:loginObject.userName forKey:@"email"];
-    [loginDataDic setObject:@"3" forKey:@"emp_type"];
     [loginDataDic setObject:loginObject.password forKey:@"pword"];
     [loginDataDic setObject:[self getModel] forKey:@"phonemodel"];
     [loginDataDic setObject:@"Apple" forKey:@"phonemanuf"];

@@ -27,7 +27,7 @@
 
 - (void)connectToWebSocket
 {
-    if (self.webSocketClient.readyState == SR_CLOSED) {
+    if (self.webSocketClient == nil || self.webSocketClient.readyState == SR_CLOSED) {
         NSURL *clientURL = [NSURL URLWithString:[@"ws://172.104.182.245:10001" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
         self.webSocketClient = [[SRWebSocket alloc] initWithURL:clientURL];
         self.webSocketClient.delegate = self;

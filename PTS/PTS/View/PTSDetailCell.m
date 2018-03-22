@@ -7,6 +7,7 @@
 //
 
 #import "PTSDetailCell.h"
+
 @interface PTSDetailCell()
 @property (weak, nonatomic) IBOutlet UILabel *taskNumLabel;
 @property (weak, nonatomic) IBOutlet UILabel *taskNameLabel;
@@ -33,6 +34,9 @@
         [self.taskTimerButton setHidden:YES];
         UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
         [self.labelSubTaskTimer addGestureRecognizer:longPressGestureRecognizer];
+        
+        self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: subTask.calculatedPTSFinalTime]];
+        
         [self.labelSubTaskTimer setHidden:NO];
     }
     
@@ -41,22 +45,29 @@
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {
     [self.ptsTaskTimer invalidate];
+    if (self.subTask.subactivityStartTime == nil) {
+        self.subTask.subactivityStartTime = [NSDate date];
+    }
     self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
 }
 
 -(void) setCallTime{
-////    NSTimeInterval timeInterval = fabs([self.subTask.start timeIntervalSinceNow]);
-//    int duration = (int)timeInterval;
-//    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
-//    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
-//    if (duration > 3600) {
-//        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
-//    }else{
-//        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
-//    }
-//    
-//    [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+    NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
+    int ptsTaskTimeWindow = self.subTask.timeWindow * 60;
+    int duration = (int)timeInterval;
+    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    if (duration > 3600) {
+        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }else{
+        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }
+    
+    int timeElapsed = ptsTaskTimeWindow - duration;
+    
+    [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
 }
+
 - (IBAction)timerTapped:(id)sender {
     self.backgroundColor = [UIColor lightGrayColor];
 }
