@@ -40,24 +40,45 @@
     [super viewDidLoad];
 
     [self setFlightDetails];
-    
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    [self.labelPtsTime addGestureRecognizer:longPressGestureRecognizer];
-    
-    [[PTSManager sharedInstance] fetchPTSSubItemsListPTS:self.ptsTask completionHandler:^(BOOL fetchComplete, PTSItem *ptsItem, NSError *error) {
-        if (ptsItem.aboveWingActivities.count > 0 && ptsItem.belowWingActivities.count > 0  ) {
-            NSSet *wingATaskSet = ptsItem.aboveWingActivities;
-            self.ptsAWingSubItemList = [wingATaskSet allObjects];
-            NSSet *wingBTaskSet = ptsItem.belowWingActivities;
-            self.ptsBWingSubItemList = [wingBTaskSet allObjects];
-        }
-        
+
+    self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+    [self.taskUpdateClient updateUserForFlight:self.ptsTask.flightId];
+
+    if (self.ptsTask.ptsStartTime == nil) {
+        self.ptsSubTasksCollectionView.userInteractionEnabled = NO;
+    }else{
+        [self setCallTime];
+        [self startPTSTimer];
+        self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
+    }
+
+    if (self.ptsTask.aboveWingActivities != nil && self.ptsTask.belowWingActivities != nil) {
+        self.ptsAWingSubItemList = [self.ptsTask.aboveWingActivities allObjects];
+        self.ptsBWingSubItemList = [self.ptsTask.belowWingActivities allObjects];
+
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"subTaskId" ascending:YES];
         self.ptsAWingSubItemList = [self.ptsAWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         self.ptsBWingSubItemList = [self.ptsBWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-        
-        [self.ptsSubTasksCollectionView reloadData];
-    }];
+    }else{
+        [[PTSManager sharedInstance] fetchPTSSubItemsListPTS:self.ptsTask completionHandler:^(BOOL fetchComplete, PTSItem *ptsItem, NSError *error) {
+            if (ptsItem.aboveWingActivities.count > 0 && ptsItem.belowWingActivities.count > 0  ) {
+                NSSet *wingATaskSet = ptsItem.aboveWingActivities;
+                self.ptsAWingSubItemList = [wingATaskSet allObjects];
+                NSSet *wingBTaskSet = ptsItem.belowWingActivities;
+                self.ptsBWingSubItemList = [wingBTaskSet allObjects];
+                self.ptsTask.aboveWingActivities = [NSSet setWithArray:self.ptsAWingSubItemList];
+                self.ptsTask.belowWingActivities = [NSSet setWithArray:self.ptsBWingSubItemList];
+            }
+            
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"subTaskId" ascending:YES];
+            self.ptsAWingSubItemList = [self.ptsAWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            self.ptsBWingSubItemList = [self.ptsBWingSubItemList sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            
+            [self.ptsSubTasksCollectionView reloadData];
+        }];
+    }
+    
+    
     
     [self registerForSocket];
 }
@@ -106,8 +127,9 @@
     }else{
         subTask = [self.ptsBWingSubItemList objectAtIndex:indexPath.row];
     }
-    [detailCell setCellData:subTask];
-    
+    detailCell.cellIndex = indexPath.row;
+    [detailCell setCellData:subTask forFlight:self.ptsTask.flightId];
+
     return detailCell;
 }
 
@@ -176,10 +198,25 @@
 {
     if (self.ptsTask.ptsStartTime == nil) {
         self.ptsTask.ptsStartTime = [NSDate date];
-        [self.taskUpdateClient updateUserForFlight:self.ptsTask.flightId];
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
+        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+        self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    }else{
+        self.ptsTask.ptsEndTime = [NSDate date];
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
+        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+        self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }
-    [self.ptsTaskTimer invalidate];
-    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    
+    
     
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "PTSDetailCell.h"
+#import "TaskTimeUpdatesClient.h"
 
 @interface PTSDetailCell()
 @property (weak, nonatomic) IBOutlet UILabel *taskNumLabel;
@@ -18,14 +19,16 @@
 
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
-
+@property (nonatomic) NSInteger flightId;
 @end
 
 @implementation PTSDetailCell
 
--(void) setCellData:(PTSSubTask *) subTask{
+-(void) setCellData:(PTSSubTask *) subTask forFlight:(int)flightId{
+    
+    self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
-    self.taskNumLabel.text = [NSString stringWithFormat:@"%d",subTask.subTaskId ];
+    self.taskNumLabel.text = [NSString stringWithFormat:@"%ld",self.cellIndex + 1];
     
     if (subTask.start - subTask.end == 0) {
         [self.labelSubTaskTimer setHidden:YES];
@@ -41,6 +44,11 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
+    if (self.subTask.subactivityStartTime != nil) {
+        [self setCallTime];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+
+    }
     self.subTask = subTask;
 }
 
@@ -48,8 +56,21 @@
     [self.ptsTaskTimer invalidate];
     if (self.subTask.subactivityStartTime == nil) {
         self.subTask.subactivityStartTime = [NSDate date];
+        self.subTask.isRunning = 1;
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    }else{
+        [self.ptsTaskTimer invalidate];
+        self.subTask.subactivityEndTime = [NSDate date];
+        self.subTask.isRunning = 2;
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
     }
-    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    
+    [[[TaskTimeUpdatesClient alloc] init] updateUserForFlight:self.flightId];
 }
 
 -(void) setCallTime{

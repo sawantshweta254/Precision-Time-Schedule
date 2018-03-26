@@ -64,8 +64,17 @@
     [messageDict setValue:loggedInUser.userName forKey:@"user_name"];
     [messageDict setValue:[NSNumber numberWithInteger:loggedInUser.empType] forKey:@"user_type"];
     
-    [messageDict setValue:[self getWingTaskDicForPTS:ptsItem from:[ptsItem.aboveWingActivities allObjects]] forKey:@"above_list"];
-    [messageDict setValue:[self getWingTaskDicForPTS:ptsItem from:[ptsItem.belowWingActivities allObjects]] forKey:@"below_list"];
+    NSMutableArray *wingSubTasks = [[NSMutableArray alloc] init];
+    for (PTSSubTask *subTaskInAboveWing in ptsItem.aboveWingActivities) {
+        [wingSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
+    }
+    
+    NSMutableArray *wingBSubTasks = [[NSMutableArray alloc] init];
+    for (PTSSubTask *subTaskInAboveWing in ptsItem.belowWingActivities) {
+        [wingBSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
+    }
+    [messageDict setValue:wingSubTasks forKey:@"above_list"];
+    [messageDict setValue:wingBSubTasks forKey:@"below_list"];
     
     return [self translateToString:messageDict];
 }

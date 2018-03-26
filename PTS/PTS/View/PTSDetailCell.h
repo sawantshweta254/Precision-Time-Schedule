@@ -10,6 +10,7 @@
 #import "PTSSubTask+CoreDataProperties.h"
 
 @interface PTSDetailCell : UICollectionViewCell
--(void) setCellData:(PTSSubTask *) subTask;
+@property(nonatomic) NSInteger cellIndex;
+-(void) setCellData:(PTSSubTask *) subTask forFlight:(int)flightId;
 
 @end
