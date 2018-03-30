@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *remarkButton;
 @property (weak, nonatomic) IBOutlet UIButton *taskTimerButton;
 @property (weak, nonatomic) IBOutlet UILabel *labelSubTaskTimer;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
@@ -43,33 +44,43 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    if (self.subTask.subactivityStartTime != nil) {
+    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
         [self setCallTime];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
 
     }
+    
+    
+    [self setContainerViewBackground];
+    
     self.subTask = subTask;
 }
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
-    [self.ptsTaskTimer invalidate];
-    if (self.subTask.subactivityStartTime == nil) {
-        self.subTask.subactivityStartTime = [NSDate date];
-        self.subTask.isRunning = 1;
-        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-        NSError *error;
-        [moc save:&error];
-        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
-    }else{
-        [self.ptsTaskTimer invalidate];
-        self.subTask.subactivityEndTime = [NSDate date];
-        self.subTask.isRunning = 2;
-        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-        NSError *error;
-        [moc save:&error];
+    if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
+        if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
+            self.subTask.subactivityStartTime = [NSDate date];
+            self.subTask.isRunning = 1;
+            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+            NSError *error;
+            [moc save:&error];
+            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+        }else if(self.subTask.isRunning == 1){
+            [self.ptsTaskTimer invalidate];
+            self.ptsTaskTimer = nil;
+            self.subTask.subactivityEndTime = [NSDate date];
+            self.subTask.isRunning = 2;
+            self.subTask.isComplete = 1;
+            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+            NSError *error;
+            [moc save:&error];
+        }
+        
+        [self.delegate updateFlightPTS];
     }
     
-    [self.delegate updateFlightPTS];
+    [self setContainerViewBackground];
+    
 }
 
 -(void) setCallTime{
@@ -86,11 +97,27 @@
     
     int timeElapsed = ptsTaskTimeWindow - duration;
     
-    [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+    });
 }
 
+-(void) setContainerViewBackground
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.subTask.isRunning == 1) {
+            self.containerView.backgroundColor = [UIColor yellowColor];
+        }else if(self.subTask.isComplete){
+            self.containerView.backgroundColor = [UIColor greenColor];
+        }else{
+            self.containerView.backgroundColor = [UIColor whiteColor];
+        }
+    });
+}
+
+#pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
-    self.backgroundColor = [UIColor greenColor];
+     self.containerView.backgroundColor = [UIColor greenColor];
     self.subTask.subactivityStartTime = [NSDate date];
     self.subTask.isRunning = 0;
     self.subTask.isComplete = 1;

@@ -15,7 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelFlightArrivalTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSDay;
-
+@property (weak, nonatomic) IBOutlet UILabel *labelPtsTimer;
+@property (strong, nonatomic) PTSItem *ptsItem;
+@property (nonatomic, strong) NSTimer *ptsTaskTimer;
 @end
 
 @implementation PTSListViewCell
@@ -26,6 +28,7 @@
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
+    self.ptsItem = ptsItem;
     self.labelFlightName.text = ptsItem.flightNo;
     
     if (ptsItem.flightType == ArrivalType) {
@@ -38,6 +41,25 @@
     
     self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
     self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
+    
+    if (self.ptsItem.ptsStartTime != nil) {
+        [self setCallTime];
+        [self startPTSTimer];
+    }else{
+        NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+        timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+        self.labelPtsTimer.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:ptsItem.timeWindow * 60]];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (ptsItem.isRunning == 1) {
+            [self startPTSTimer];
+        }else if(ptsItem.isRunning == 2){
+            [self.ptsTaskTimer invalidate];
+            self.ptsTaskTimer = nil;
+        }
+    });
 }
 
 -(NSString *) getTimeInStringFormat:(NSString *) flightDate{
@@ -62,6 +84,29 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+-(void) startPTSTimer
+{
+    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    
+}
+
+-(void) setCallTime{
+    NSTimeInterval timeInterval = fabs([self.ptsItem.ptsStartTime timeIntervalSinceNow]);
+    int ptsTaskTimeWindow = self.ptsItem.timeWindow * 60;
+    int duration = (int)timeInterval;
+    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    if (duration > 3600) {
+        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }else{
+        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }
+    
+    int timeElapsed = ptsTaskTimeWindow - duration;
+    
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
 }
 
 @end
