@@ -7,9 +7,7 @@
 //
 
 #import "PTSDetailListController.h"
-#import "PTSDetailCell.h"
 #import "PTSManager.h"
-#import "TaskTimeUpdatesClient.h"
 
 @interface PTSDetailListController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelArrivalTime;
@@ -29,8 +27,6 @@
 @property (nonatomic) NSInteger selectedWingIndex;
 @property (nonatomic) NSInteger selectedListTypeIndex;
 
-@property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
-
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
 @end
 
@@ -41,18 +37,12 @@
 
     [self setFlightDetails];
 
-    self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-    [self.taskUpdateClient updateUserForFlight:self.ptsTask.flightId];
-
-    if (self.ptsTask.ptsStartTime == nil) {
-        self.ptsSubTasksCollectionView.userInteractionEnabled = NO;
-    }else{
+    if (self.ptsTask.ptsStartTime != nil) {
         [self setCallTime];
         [self startPTSTimer];
-        self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
     }
-
-    if (self.ptsTask.aboveWingActivities != nil && self.ptsTask.belowWingActivities != nil) {
+    
+    if (self.ptsTask.aboveWingActivities.count != 0 && self.ptsTask.belowWingActivities.count != 0) {
         self.ptsAWingSubItemList = [self.ptsTask.aboveWingActivities allObjects];
         self.ptsBWingSubItemList = [self.ptsTask.belowWingActivities allObjects];
 
@@ -77,10 +67,6 @@
             [self.ptsSubTasksCollectionView reloadData];
         }];
     }
-    
-    
-    
-    [self registerForSocket];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,6 +114,8 @@
         subTask = [self.ptsBWingSubItemList objectAtIndex:indexPath.row];
     }
     detailCell.cellIndex = indexPath.row;
+    detailCell.ptsItem = self.ptsTask;
+    detailCell.delegate = self;
     [detailCell setCellData:subTask forFlight:self.ptsTask.flightId];
 
     return detailCell;
@@ -181,23 +169,12 @@
     }
 }
 
-#pragma mark Websocket method
--(void) registerForSocket{
-    if (self.taskUpdateClient == nil) {
-        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-        [self.taskUpdateClient connectToWebSocket];
-    }
-}
-
--(void) updateTaskTimeForFlight{
-    [self.taskUpdateClient updateFlightTask:self.ptsTask];
-}
-
 #pragma mark Utility Methods
 -(void) startPTSTimer
 {
     if (self.ptsTask.ptsStartTime == nil) {
         self.ptsTask.ptsStartTime = [NSDate date];
+        self.ptsTask.isRunning = 1;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
@@ -210,13 +187,12 @@
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
-        [self.taskUpdateClient updateFlightTask:self.ptsTask];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }
     
-    
+    [self.taskUpdateClient updateFlightTask:self.ptsTask];
     
 }
 
@@ -236,4 +212,10 @@
     
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
 }
+
+#pragma mark Cell Delegate methods
+-(void) updateFlightPTS{
+    [self.taskUpdateClient updateFlightTask:self.ptsTask];
+}
+
 @end

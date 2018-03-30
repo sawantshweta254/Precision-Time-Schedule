@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PTSItem+CoreDataProperties.h"
+#import "TaskTimeUpdatesClient.h"
+#import "PTSDetailCell.h"
 
-@interface PTSDetailListController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate>
+@interface PTSDetailListController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, PTSDetailCellDelegate>
 
 @property(nonatomic, strong) PTSItem *ptsTask;
+@property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 
 @end

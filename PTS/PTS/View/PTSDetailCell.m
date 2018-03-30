@@ -7,7 +7,6 @@
 //
 
 #import "PTSDetailCell.h"
-#import "TaskTimeUpdatesClient.h"
 
 @interface PTSDetailCell()
 @property (weak, nonatomic) IBOutlet UILabel *taskNumLabel;
@@ -35,7 +34,7 @@
         [self.taskTimerButton setHidden:NO];
     }else{
         [self.taskTimerButton setHidden:YES];
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updatePtsSubTaskTimer:)];
+        UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(updatePtsSubTaskTimer:)];
         [self.labelSubTaskTimer addGestureRecognizer:tapGestureRecognizer];
         
         self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: subTask.calculatedPTSFinalTime]];
@@ -70,7 +69,7 @@
         [moc save:&error];
     }
     
-    [[[TaskTimeUpdatesClient alloc] init] updateUserForFlight:self.flightId];
+    [self.delegate updateFlightPTS];
 }
 
 -(void) setCallTime{
@@ -91,7 +90,15 @@
 }
 
 - (IBAction)timerTapped:(id)sender {
-    self.backgroundColor = [UIColor lightGrayColor];
+    self.backgroundColor = [UIColor greenColor];
+    self.subTask.subactivityStartTime = [NSDate date];
+    self.subTask.isRunning = 0;
+    self.subTask.isComplete = 1;
+    self.subTask.subactivityEndTime = [NSDate date];
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+    NSError *error;
+    [moc save:&error];
+    [self.delegate updateFlightPTS];
 }
 
 - (IBAction)addRemark:(id)sender {

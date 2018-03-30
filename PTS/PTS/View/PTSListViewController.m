@@ -20,7 +20,6 @@
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
-@property (nonatomic) NSInteger selectedIndex;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *leftBarButtonItem;
 @end
 
@@ -37,8 +36,8 @@
     
     if (self.taskUpdateClient == nil) {
         self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+        [self.taskUpdateClient connectToWebSocket];
     }
-    [self.taskUpdateClient connectToWebSocket];
 
     [self.leftBarButtonItem setCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red"]]];
 }
@@ -80,10 +79,6 @@
     return ptsCell;
 }
 
-#pragma mark TableView Delegate Method
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    self.selectedIndex = indexPath.row;
-}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -125,8 +120,11 @@
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UITableViewCell *selectedCell = (UITableViewCell*)sender;
+    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
     PTSDetailListController *ptsDetailView = segue.destinationViewController;
-    ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:self.selectedIndex];
+    ptsDetailView.taskUpdateClient = self.taskUpdateClient;
+    ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:selectedIndex];
 }
 
 @end

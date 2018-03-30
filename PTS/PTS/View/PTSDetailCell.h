@@ -8,9 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "PTSSubTask+CoreDataProperties.h"
+#import "PTSItem+CoreDataProperties.h"
+
+@protocol PTSDetailCellDelegate
+-(void) updateFlightPTS;
+@end
 
 @interface PTSDetailCell : UICollectionViewCell
 @property(nonatomic) NSInteger cellIndex;
+@property (nonatomic, retain) PTSItem *ptsItem;
+@property (nonatomic, weak) id <PTSDetailCellDelegate> delegate;
 -(void) setCellData:(PTSSubTask *) subTask forFlight:(int)flightId;
 
 @end

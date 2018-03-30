@@ -38,6 +38,7 @@
 
 -(void) webSocketDidOpen:(SRWebSocket *)webSocket{
     NSLog(@"Did Open");
+    self.webSocketClient = webSocket;
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
@@ -52,14 +53,18 @@
     
 }
 
-- (void) updateUserForFlight:(NSInteger)flightId{
-    WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
-    [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:flightId]];
+- (void) updateUserForFlight:(PTSItem *)pts{
+    if (self.webSocketClient.readyState == SR_OPEN) {
+        WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
+        [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:pts]];
+    }
 }
 
 - (void) updateFlightTask:(PTSItem *)pts{
-     WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
-    [self.webSocketClient send:[messageFactory createUpdateMessageForFlight:pts]];
+    if (self.webSocketClient.readyState == SR_OPEN) {
+        WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
+        [self.webSocketClient send:[messageFactory createUpdateMessageForFlight:pts]];
+    }
 }
 
 
