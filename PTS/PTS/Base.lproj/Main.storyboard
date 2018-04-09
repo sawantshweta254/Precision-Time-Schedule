@@ -282,6 +282,7 @@
                                                                     <state key="normal" image="remark"/>
                                                                     <connections>
                                                                         <action selector="addRemark:" destination="QFb-aP-jFb" eventType="touchUpInside" id="cE9-dS-w4C"/>
+                                                                        <segue destination="ecu-rB-XVf" kind="presentation" identifier="AddRemarkSegue" id="FXj-Aw-PXk"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -383,6 +384,107 @@
                 </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="316" y="62.518740629685162"/>
+        </scene>
+        <!--Add Remark View Controller-->
+        <scene sceneID="OlX-Ig-CWx">
+            <objects>
+                <viewController storyboardIdentifier="AddRemarkViewController" id="ecu-rB-XVf" customClass="AddRemarkViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OSe-Tx-3uo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="myo-FM-Zg3">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3c-HW-bMP">
+                                <rect key="frame" x="20" y="106.5" width="335" height="274"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="mbp-fy-BNo">
+                                        <rect key="frame" x="10" y="40.5" width="315" height="183.5"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="maskToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="ecu-rB-XVf" id="kRP-9G-aBI"/>
+                                        </connections>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bik-b9-jUj">
+                                        <rect key="frame" x="50" y="234" width="234.5" height="30"/>
+                                        <color key="backgroundColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Submit">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="submitRemark:" destination="ecu-rB-XVf" eventType="touchUpInside" id="mL6-yb-IYJ"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Message Here...." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BAy-u6-lC4">
+                                        <rect key="frame" x="81" y="126.5" width="173.5" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Yc-Nd-wv9">
+                                        <rect key="frame" x="10" y="10" width="315" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="bik-b9-jUj" firstAttribute="width" secondItem="f3c-HW-bMP" secondAttribute="width" multiplier="0.7" id="20x-Ql-GBb"/>
+                                    <constraint firstItem="mbp-fy-BNo" firstAttribute="top" secondItem="6Yc-Nd-wv9" secondAttribute="bottom" constant="10" id="2Fj-Wj-cuW"/>
+                                    <constraint firstItem="BAy-u6-lC4" firstAttribute="centerX" secondItem="f3c-HW-bMP" secondAttribute="centerX" id="ArS-ec-kR6"/>
+                                    <constraint firstItem="bik-b9-jUj" firstAttribute="centerX" secondItem="f3c-HW-bMP" secondAttribute="centerX" id="Dn6-py-6mJ"/>
+                                    <constraint firstAttribute="height" constant="274" id="L1A-by-Z5K"/>
+                                    <constraint firstItem="BAy-u6-lC4" firstAttribute="centerY" secondItem="f3c-HW-bMP" secondAttribute="centerY" id="S81-kJ-RTK"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Yc-Nd-wv9" secondAttribute="trailing" constant="10" id="Zvz-kk-306"/>
+                                    <constraint firstAttribute="trailing" secondItem="mbp-fy-BNo" secondAttribute="trailing" constant="10" id="gEH-pM-raS"/>
+                                    <constraint firstAttribute="bottom" secondItem="bik-b9-jUj" secondAttribute="bottom" constant="10" id="hF6-J7-odB"/>
+                                    <constraint firstItem="6Yc-Nd-wv9" firstAttribute="leading" secondItem="f3c-HW-bMP" secondAttribute="leading" constant="10" id="sDn-RZ-WNO"/>
+                                    <constraint firstItem="6Yc-Nd-wv9" firstAttribute="top" secondItem="f3c-HW-bMP" secondAttribute="top" constant="10" id="uEA-J6-tHW"/>
+                                    <constraint firstItem="bik-b9-jUj" firstAttribute="top" secondItem="mbp-fy-BNo" secondAttribute="bottom" constant="10" id="wGF-nl-CLh"/>
+                                    <constraint firstItem="mbp-fy-BNo" firstAttribute="leading" secondItem="f3c-HW-bMP" secondAttribute="leading" constant="10" id="xQj-HX-DOk"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="f3c-HW-bMP" firstAttribute="centerY" secondItem="ltQ-Fb-Yln" secondAttribute="centerY" constant="-100" id="C0W-67-kqW"/>
+                            <constraint firstItem="f3c-HW-bMP" firstAttribute="leading" secondItem="ltQ-Fb-Yln" secondAttribute="leading" constant="20" id="X12-Jb-JO9"/>
+                            <constraint firstItem="myo-FM-Zg3" firstAttribute="leading" secondItem="ltQ-Fb-Yln" secondAttribute="leading" id="cDx-cr-Ab7"/>
+                            <constraint firstItem="ltQ-Fb-Yln" firstAttribute="trailing" secondItem="f3c-HW-bMP" secondAttribute="trailing" constant="20" id="idB-gY-6f7"/>
+                            <constraint firstItem="myo-FM-Zg3" firstAttribute="top" secondItem="OSe-Tx-3uo" secondAttribute="top" id="inX-u8-vBM"/>
+                            <constraint firstItem="myo-FM-Zg3" firstAttribute="bottom" secondItem="ltQ-Fb-Yln" secondAttribute="bottom" id="j0t-Ll-p3F"/>
+                            <constraint firstItem="myo-FM-Zg3" firstAttribute="trailing" secondItem="ltQ-Fb-Yln" secondAttribute="trailing" id="rvY-Tc-pzE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ltQ-Fb-Yln"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="NSQ-QF-p4Y" appends="YES" id="boC-Eo-B6y"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="remarkTextView" destination="mbp-fy-BNo" id="xRL-Va-ZSh"/>
+                        <outlet property="submitButton" destination="bik-b9-jUj" id="bAN-qE-gyP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O2p-Wq-ngz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="NSQ-QF-p4Y">
+                    <connections>
+                        <action selector="dismissAddRemarkView:" destination="ecu-rB-XVf" id="jZt-yh-2W3"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1021.6" y="62.518740629685162"/>
         </scene>
         <!--Login Controller-->
         <scene sceneID="3j1-xB-B6f">

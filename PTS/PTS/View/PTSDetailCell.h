@@ -11,6 +11,7 @@
 #import "PTSItem+CoreDataProperties.h"
 
 @protocol PTSDetailCellDelegate
+-(void) updateRemarkForSubtask:(PTSSubTask *)subTask;
 -(void) updateFlightPTS;
 @end
 

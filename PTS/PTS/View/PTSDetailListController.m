@@ -8,6 +8,7 @@
 
 #import "PTSDetailListController.h"
 #import "PTSManager.h"
+#import "AddRemarkViewController.h"
 
 @interface PTSDetailListController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelArrivalTime;
@@ -37,9 +38,11 @@
 
     [self setFlightDetails];
 
-    if (self.ptsTask.ptsStartTime != nil) {
+    if (self.ptsTask.isRunning == 1) {
         [self setCallTime];
         [self startPTSTimer];
+    }else if (self.ptsTask.ptsStartTime != nil){
+        [self setCallTime];  //// Calculate differece between start and end and print
     }
     
     if (self.ptsTask.aboveWingActivities.count != 0 && self.ptsTask.belowWingActivities.count != 0) {
@@ -95,15 +98,23 @@
     self.labelPtsTimer.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:self.ptsTask.timeWindow * 60]];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
+    NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
+    AddRemarkViewController *addRemarkViewController = segue.destinationViewController;
+    addRemarkViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    addRemarkViewController.flightId = self.ptsTask.flightId;
+    if (self.selectedWingIndex == 0) {
+        addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+    }else{
+        addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+    }
 }
-*/
+
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     PTSDetailCell *detailCell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([PTSDetailCell class]) forIndexPath:indexPath];
@@ -155,24 +166,40 @@
 
 - (IBAction)updatePTSItemTimer:(id)sender {
     if (((UILongPressGestureRecognizer*)sender).state == UIGestureRecognizerStateEnded ) {
-        UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self startPTSTimer];
-        }];
         
-        UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
+        if (self.ptsTask.isRunning == 0) {
+            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self startPTSTimer];
+            }];
+            
+            UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
+            
+            [updateTimerAlert addAction:actionYes];
+            [updateTimerAlert addAction:actionNo];
+            
+            [self presentViewController:updateTimerAlert animated:YES completion:nil];
+        }else  if (self.ptsTask.isRunning == 1){
+            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to end the tasks?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self startPTSTimer];
+            }];
+            
+            UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleCancel handler:nil];
+            
+            [updateTimerAlert addAction:actionYes];
+            [updateTimerAlert addAction:actionNo];
+            
+            [self presentViewController:updateTimerAlert animated:YES completion:nil];
+        }
         
-        [updateTimerAlert addAction:actionYes];
-        [updateTimerAlert addAction:actionNo];
-        
-        [self presentViewController:updateTimerAlert animated:YES completion:nil];
     }
 }
 
 #pragma mark Utility Methods
 -(void) startPTSTimer
 {
-    if (self.ptsTask.ptsStartTime == nil) {
+    if (self.ptsTask.isRunning == 0) {
         self.ptsTask.ptsStartTime = [NSDate date];
         self.ptsTask.isRunning = 1;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -182,8 +209,9 @@
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
-    }else{
+    }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
+        self.ptsTask.isRunning = 2;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
@@ -216,6 +244,10 @@
 #pragma mark Cell Delegate methods
 -(void) updateFlightPTS{
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
+}
+
+-(void) updateRemarkForSubtask:(PTSSubTask *)subTask{
+    
 }
 
 @end

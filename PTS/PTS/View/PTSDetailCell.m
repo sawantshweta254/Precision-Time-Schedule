@@ -28,7 +28,7 @@
     
     self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
-    self.taskNumLabel.text = [NSString stringWithFormat:@"%ld",self.cellIndex + 1];
+    self.taskNumLabel.text = subTask.notations;
     
     if (subTask.start - subTask.end == 0) {
         [self.labelSubTaskTimer setHidden:YES];
@@ -45,8 +45,8 @@
     }
     
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
-        [self setCallTime];
-        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+        [self setTaskTime];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
 
     }
     
@@ -60,15 +60,17 @@
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
             self.subTask.subactivityStartTime = [NSDate date];
+            self.subTask.userStartTime = self.subTask.subactivityStartTime;
             self.subTask.isRunning = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;
             [moc save:&error];
-            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
         }else if(self.subTask.isRunning == 1){
             [self.ptsTaskTimer invalidate];
             self.ptsTaskTimer = nil;
             self.subTask.subactivityEndTime = [NSDate date];
+             self.subTask.userEndTime = self.subTask.subactivityEndTime;
             self.subTask.isRunning = 2;
             self.subTask.isComplete = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -83,7 +85,7 @@
     
 }
 
--(void) setCallTime{
+-(void) setTaskTime{
     NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
     int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
     int duration = (int)timeInterval;
@@ -105,6 +107,9 @@
 -(void) setContainerViewBackground
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"hh:mm";
+        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
         if (self.subTask.isRunning == 1) {
             self.containerView.backgroundColor = [UIColor yellowColor];
         }else if(self.subTask.isComplete){
@@ -122,6 +127,7 @@
     self.subTask.isRunning = 0;
     self.subTask.isComplete = 1;
     self.subTask.subactivityEndTime = [NSDate date];
+     self.subTask.userEndTime = self.subTask.userEndTime;
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSError *error;
     [moc save:&error];
@@ -129,6 +135,7 @@
 }
 
 - (IBAction)addRemark:(id)sender {
+    [self.delegate updateRemarkForSubtask:self.subTask];
 }
 
 - (IBAction)addTime:(id)sender {

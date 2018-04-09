@@ -236,4 +236,48 @@ static PTSManager *sharedInstance;
     return ptsItemToReturn;
 }
 
+#pragma mark Update remark
+-(void) updateRemarkForSubtask:(PTSSubTask *)task forFlight:(int) flightId completionHandler:(void(^)(BOOL isSuccessfull))remarkUpdateCompletionHandler{
+    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToUpdatePTSSubTaskRemark:task forFlight:flightId] completionHandler:^(BOOL requestSuccessfull, id responseData) {
+        remarkUpdateCompletionHandler(requestSuccessfull);
+    }];
+}
+
+-(ApiRequestData *) getRequestDataToUpdatePTSSubTaskRemark:(PTSSubTask *)task forFlight:(int) flightId{
+    ApiRequestData *requestData = [[ApiRequestData alloc] init];
+    
+    requestData.baseURL = @"http://techdew.co.in/pts/webapi/update_remarks.php?cmd=";
+    requestData.postData = [self getDatForUpdateRemark:task forFlight:flightId];
+    
+    return requestData;
+}
+
+-(NSDictionary *) getDatForUpdateRemark:(PTSSubTask *)task forFlight:(int) flightId{
+    NSMutableDictionary *remarkUpdateData = [[NSMutableDictionary alloc] init];
+    User *user = [self getLoggedInUser];
+
+    UIDevice *device = [UIDevice currentDevice];
+    NSString  *currentDeviceId = [[device identifierForVendor]UUIDString];
+    [remarkUpdateData setObject:currentDeviceId forKey:@"deviceid"];
+    [remarkUpdateData setObject:[NSNumber numberWithDouble:user.userId] forKey:@"userid"];
+    [remarkUpdateData setObject:[NSNumber numberWithInt:flightId] forKey:@"actual_flight_id"];
+    [remarkUpdateData setObject:[NSNumber numberWithInt:task.subTaskId] forKey:@"sub_activity_id"];
+    [remarkUpdateData setObject:task.userSubActFeedback forKey:@"remarks"];
+    
+    return remarkUpdateData;
+}
+
+-(User *) getLoggedInUser{
+    
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSError *error;
+    NSArray *userArray = [moc executeFetchRequest:fetchRequest error:&error];
+    User *loggedInUser;
+    if (userArray.count >0) {
+        loggedInUser = [userArray objectAtIndex:0];
+    }
+    
+    return loggedInUser;
+}
 @end

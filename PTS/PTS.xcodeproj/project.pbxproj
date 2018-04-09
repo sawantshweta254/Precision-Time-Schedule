@@ -28,6 +28,7 @@
 		B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EDF20370ED70039C023 /* WebApiManager.m */; };
 		B6AD9EE4203711550039C023 /* ApiRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EE3203711550039C023 /* ApiRequestData.m */; };
 		B6AD9EE720371A7B0039C023 /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EE620371A7B0039C023 /* Login.m */; };
+		B6CD0C38206E7B69005DC552 /* AddRemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CD0C37206E7B69005DC552 /* AddRemarkViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,8 @@
 		B6AD9EE3203711550039C023 /* ApiRequestData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiRequestData.m; sourceTree = "<group>"; };
 		B6AD9EE520371A7B0039C023 /* Login.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Login.h; sourceTree = "<group>"; };
 		B6AD9EE620371A7B0039C023 /* Login.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
+		B6CD0C36206E7B69005DC552 /* AddRemarkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddRemarkViewController.h; sourceTree = "<group>"; };
+		B6CD0C37206E7B69005DC552 /* AddRemarkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddRemarkViewController.m; sourceTree = "<group>"; };
 		DE23A25BFCFF97451AD99181 /* Pods-PTS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PTS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PTS/Pods-PTS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +111,8 @@
 				B679F074204BB56F0002360A /* PTSDetailListController.m */,
 				B679F076204BB5FC0002360A /* PTSDetailCell.h */,
 				B679F077204BB5FC0002360A /* PTSDetailCell.m */,
+				B6CD0C36206E7B69005DC552 /* AddRemarkViewController.h */,
+				B6CD0C37206E7B69005DC552 /* AddRemarkViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -343,6 +348,7 @@
 				B6356DE820561B0E0051ADDB /* TaskTimeUpdatesClient.m in Sources */,
 				B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */,
 				B6411ADA2034AA0900DE8BD8 /* main.m in Sources */,
+				B6CD0C38206E7B69005DC552 /* AddRemarkViewController.m in Sources */,
 				B6AD9EE720371A7B0039C023 /* Login.m in Sources */,
 				B6411AD22034AA0900DE8BD8 /* PTS.xcdatamodeld in Sources */,
 				B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */,
