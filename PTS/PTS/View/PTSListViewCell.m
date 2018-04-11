@@ -42,10 +42,14 @@
     self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
     self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
     
-    if (self.ptsItem.ptsStartTime != nil) {
+    if (self.ptsItem.isRunning == 2) {
+        [self.labelPtsTimer setText:[AppUtility getTimeDifference:self.ptsItem.ptsStartTime toEndTime:self.ptsItem.ptsEndTime]];
+
+    }else if (self.ptsItem.isRunning == 1){
         [self setCallTime];
         [self startPTSTimer];
-    }else{
+    }
+    else{
         NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
         timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;

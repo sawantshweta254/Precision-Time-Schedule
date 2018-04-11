@@ -21,24 +21,26 @@
 @property NSDictionary* lastSampleSent;
 @property NSDictionary* lastSampleRcvd;
 @property(nonatomic, strong) NSURL *webSocketReconnectURL;
+@property (nonatomic)  void(^socketConnectedCompletion)(BOOL isConnected);
 @end
 
 @implementation TaskTimeUpdatesClient
 
-- (void)connectToWebSocket
+- (void)connectToWebSocket:(void (^)(BOOL isConnected))socketConnected
 {
     if (self.webSocketClient == nil || self.webSocketClient.readyState == SR_CLOSED) {
         NSURL *clientURL = [NSURL URLWithString:[@"ws://172.104.182.245:10001" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
         self.webSocketClient = [[SRWebSocket alloc] initWithURL:clientURL];
         self.webSocketClient.delegate = self;
+        self.socketConnectedCompletion = socketConnected;
         [self.webSocketClient open];
     }
-    
 }
 
 -(void) webSocketDidOpen:(SRWebSocket *)webSocket{
     NSLog(@"Did Open");
     self.webSocketClient = webSocket;
+    self.socketConnectedCompletion(TRUE);
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
@@ -67,6 +69,12 @@
     }
 }
 
-
+-(BOOL) isWebSocketConnected{
+    if (self.webSocketClient.readyState == SR_OPEN) {
+        return YES;
+    }
+    
+    return NO;
+}
 
 @end

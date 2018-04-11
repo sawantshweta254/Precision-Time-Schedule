@@ -41,8 +41,8 @@
     if (self.ptsTask.isRunning == 1) {
         [self setCallTime];
         [self startPTSTimer];
-    }else if (self.ptsTask.ptsStartTime != nil){
-        [self setCallTime];  //// Calculate differece between start and end and print
+    }else if (self.ptsTask.ptsStartTime != nil){        
+        [self.labelPtsTimer setText:[AppUtility getTimeDifference:self.ptsTask.ptsStartTime toEndTime:self.ptsTask.ptsEndTime]];  
     }
     
     if (self.ptsTask.aboveWingActivities.count != 0 && self.ptsTask.belowWingActivities.count != 0) {
@@ -146,6 +146,16 @@
         return 2;
     }
 }
+
+//-(CGSize)collectionView:(UICollectionView *)collectionView
+//                 layout:(UICollectionViewLayout *)collectionViewLayout
+// sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//
+//    // Two columns with spacing in between
+//    CGFloat size = 186;
+//    return CGSizeMake(size, size);
+//
+//}
 
 #pragma mark Button Actions
 - (IBAction)closeDetails:(id)sender {

@@ -25,7 +25,8 @@
 @implementation PTSDetailCell
 
 -(void) setCellData:(PTSSubTask *) subTask forFlight:(int)flightId{
-    
+    self.subTask = subTask;
+
     self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
     self.taskNumLabel.text = subTask.notations;
@@ -53,7 +54,6 @@
     
     [self setContainerViewBackground];
     
-    self.subTask = subTask;
 }
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
@@ -111,9 +111,10 @@
         dateFormatter.dateFormat = @"hh:mm";
         self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
         if (self.subTask.isRunning == 1) {
-            self.containerView.backgroundColor = [UIColor yellowColor];
+            self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];
         }else if(self.subTask.isComplete){
-            self.containerView.backgroundColor = [UIColor greenColor];
+            self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
+            [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         }else{
             self.containerView.backgroundColor = [UIColor whiteColor];
         }
@@ -122,16 +123,18 @@
 
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
-     self.containerView.backgroundColor = [UIColor greenColor];
-    self.subTask.subactivityStartTime = [NSDate date];
-    self.subTask.isRunning = 0;
-    self.subTask.isComplete = 1;
-    self.subTask.subactivityEndTime = [NSDate date];
-     self.subTask.userEndTime = self.subTask.userEndTime;
-    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-    NSError *error;
-    [moc save:&error];
-    [self.delegate updateFlightPTS];
+    if (self.ptsItem.isRunning == 1) {
+        self.containerView.backgroundColor = [UIColor greenColor];
+        self.subTask.subactivityStartTime = [NSDate date];
+        self.subTask.isRunning = 2;
+        self.subTask.isComplete = 1;
+        self.subTask.subactivityEndTime = [NSDate date];
+        self.subTask.userEndTime = self.subTask.userEndTime;
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
+        [self.delegate updateFlightPTS];
+    }
 }
 
 - (IBAction)addRemark:(id)sender {

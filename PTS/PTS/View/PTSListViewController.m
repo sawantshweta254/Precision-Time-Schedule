@@ -20,7 +20,9 @@
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *leftBarButtonItem;
+
+@property (weak, nonatomic) IBOutlet UIButton *socketConnectedButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation PTSListViewController
@@ -36,10 +38,11 @@
     
     if (self.taskUpdateClient == nil) {
         self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-        [self.taskUpdateClient connectToWebSocket];
+        [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+            [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+        }];
     }
 
-    [self.leftBarButtonItem setCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"red"]]];
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -56,7 +59,18 @@
             [self.tableView reloadData];
         }];
     }
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"Welcome %@",loggedInUser.userName];
+    UIBarButtonItem *reloadBarButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sync_data"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(reloadTaskList:)];
+    [self.navigationItem setRightBarButtonItem:reloadBarButton];
+
+    if ([self.taskUpdateClient isWebSocketConnected]) {
+        [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+    }else{
+        [self.socketConnectedButton setImage:[UIImage imageNamed:@"red"] forState:UIControlStateNormal];
+    }
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -114,7 +128,9 @@
 */
 #pragma mark Button Actions
 - (IBAction)reloadTaskList:(id)sender {
-
+    [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+        [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+    }];
 }
 
 #pragma mark - Navigation

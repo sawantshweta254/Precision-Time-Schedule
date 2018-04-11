@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PTSListViewController : UITableViewController
+@interface PTSListViewController : UIViewController
 
 @end

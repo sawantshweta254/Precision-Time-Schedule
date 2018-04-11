@@ -17,4 +17,15 @@
     return [timeFormatter stringFromTimeInterval:timeInMinutes * 60];
 }
 
++(NSString *)getTimeDifference:(NSDate *)startTime toEndTime:(NSDate *)endTime{
+    double timeInterval = [endTime timeIntervalSinceDate:startTime];
+    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    if (timeInterval > 3600) {
+        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }else{
+        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+    }
+    return [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]];
+}
 @end

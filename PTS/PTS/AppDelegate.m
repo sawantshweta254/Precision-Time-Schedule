@@ -16,8 +16,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; // this will change the back button tint
     [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:71/255.0 green:20/255.0 blue:61/255.0 alpha:1]];
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+
     return YES;
 }
 

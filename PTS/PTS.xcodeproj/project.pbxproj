@@ -493,7 +493,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92EA64825710CF3CC73BE377 /* Pods-PTS.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2NBDVAZT58;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
@@ -510,7 +509,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DE23A25BFCFF97451AD99181 /* Pods-PTS.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2NBDVAZT58;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
