@@ -48,7 +48,23 @@
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
         [self setTaskTime];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
-
+    }else if (self.subTask.isRunning == 2){
+        NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
+        int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
+        int duration = (int)timeInterval;
+        NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+        timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+        if (duration > 3600) {
+            timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+        }else{
+            timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+        }
+        
+        int timeElapsed = ptsTaskTimeWindow - duration;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+        });
     }
     
     
@@ -124,7 +140,7 @@
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
     if (self.ptsItem.isRunning == 1) {
-        self.containerView.backgroundColor = [UIColor greenColor];
+        self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
         self.subTask.subactivityStartTime = [NSDate date];
         self.subTask.isRunning = 2;
         self.subTask.isComplete = 1;

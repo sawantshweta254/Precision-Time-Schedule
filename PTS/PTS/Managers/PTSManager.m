@@ -43,7 +43,7 @@ static PTSManager *sharedInstance;
             NSArray *fetchedList = [self parsePTSList:responseData existingPTSData:ptsIdsDBArray];
             
             if (fetchedList.count > 0) {
-                [finalPTSList addObjectsFromArray:ptsArray];
+                [finalPTSList addObjectsFromArray:fetchedList];
             }
             
         }

@@ -494,12 +494,12 @@
 			baseConfigurationReference = 92EA64825710CF3CC73BE377 /* Pods-PTS.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2NBDVAZT58;
+				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softdew.PTS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anemoi.sta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -510,12 +510,12 @@
 			baseConfigurationReference = DE23A25BFCFF97451AD99181 /* Pods-PTS.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2NBDVAZT58;
+				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softdew.PTS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anemoi.sta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

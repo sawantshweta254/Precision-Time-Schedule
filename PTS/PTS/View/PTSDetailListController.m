@@ -40,8 +40,9 @@
 
     if (self.ptsTask.isRunning == 1) {
         [self setCallTime];
-        [self startPTSTimer];
-    }else if (self.ptsTask.ptsStartTime != nil){        
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    }else if (self.ptsTask.ptsStartTime != nil){
         [self.labelPtsTimer setText:[AppUtility getTimeDifference:self.ptsTask.ptsStartTime toEndTime:self.ptsTask.ptsEndTime]];  
     }
     
@@ -178,7 +179,8 @@
     if (((UILongPressGestureRecognizer*)sender).state == UIGestureRecognizerStateEnded ) {
         
         if (self.ptsTask.isRunning == 0) {
-            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to start the tasks?" preferredStyle:UIAlertControllerStyleAlert];
+            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to start PTS for flight %@", self.ptsTask.flightNo];
+            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:@"Message" message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self startPTSTimer];
             }];
@@ -190,7 +192,8 @@
             
             [self presentViewController:updateTimerAlert animated:YES completion:nil];
         }else  if (self.ptsTask.isRunning == 1){
-            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:nil message:@"Would you like to end the tasks?" preferredStyle:UIAlertControllerStyleAlert];
+            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to stop PTS for flight %@", self.ptsTask.flightNo];
+            UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:@"Message" message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self startPTSTimer];
             }];
