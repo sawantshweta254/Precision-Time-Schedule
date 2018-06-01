@@ -9,6 +9,9 @@
 #import "PTSDetailListController.h"
 #import "PTSManager.h"
 #import "AddRemarkViewController.h"
+#import "SetTimeViewController.h"
+
+#define cellHeight 100
 
 @interface PTSDetailListController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelArrivalTime;
@@ -104,15 +107,20 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
-    NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
-    AddRemarkViewController *addRemarkViewController = segue.destinationViewController;
-    addRemarkViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    addRemarkViewController.flightId = self.ptsTask.flightId;
-    if (self.selectedWingIndex == 0) {
-        addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+    if ([segue.identifier isEqualToString:@"AddRemarkSegue"]) {
+        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
+        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
+        AddRemarkViewController *addRemarkViewController = segue.destinationViewController;
+        addRemarkViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        addRemarkViewController.flightId = self.ptsTask.flightId;
+        if (self.selectedWingIndex == 0) {
+            addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+        }else{
+            addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+        }
     }else{
-        addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+        SetTimeViewController *setTimeViewController = segue.destinationViewController;
+        setTimeViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     }
 }
 
@@ -140,23 +148,31 @@
     return self.ptsBWingSubItemList.count;
 }
 
-- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    if (self.selectedListTypeIndex == 0) {
-        return 1;
-    }else{
-        return 2;
-    }
-}
-
-//-(CGSize)collectionView:(UICollectionView *)collectionView
-//                 layout:(UICollectionViewLayout *)collectionViewLayout
-// sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-//
-//    // Two columns with spacing in between
-//    CGFloat size = 186;
-//    return CGSizeMake(size, size);
-//
+//- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+//    if (self.selectedListTypeIndex == 0) {
+//        return 1;
+//    }else{
+//        return 2;
+//    }
 //}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    float cellWidth = screenWidth / 2.0; //Replace the divisor with the column count requirement. Make sure to have it in float.
+    
+    
+    if (self .selectedListTypeIndex == 0) {
+        CGSize size = CGSizeMake(screenWidth, cellHeight);
+        return size;
+    }
+    
+    CGSize size = CGSizeMake(cellWidth, cellHeight);
+    return size;
+}
 
 #pragma mark Button Actions
 - (IBAction)closeDetails:(id)sender {

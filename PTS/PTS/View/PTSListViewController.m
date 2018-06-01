@@ -131,6 +131,12 @@
     [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
     }];
+    
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+        self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark - Navigation

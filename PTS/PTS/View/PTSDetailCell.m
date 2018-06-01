@@ -45,6 +45,7 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
+    self.eidtTimeButton.hidden = TRUE;
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
         [self setTaskTime];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
@@ -64,6 +65,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+            self.eidtTimeButton.hidden = FALSE;
         });
     }
     
@@ -133,6 +135,15 @@
             [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         }else{
             self.containerView.backgroundColor = [UIColor whiteColor];
+            if (self.subTask.start - self.subTask.end == 0) {
+                [self.labelSubTaskTimer setHidden:YES];
+                [self.taskTimerButton setHidden:NO];
+                [self.taskTimerButton setTitle:@"Done" forState:UIControlStateNormal];
+            }else{
+                [self.taskTimerButton setHidden:YES];
+                [self.labelSubTaskTimer setHidden:NO];
+                self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
+            }
         }
     });
 }

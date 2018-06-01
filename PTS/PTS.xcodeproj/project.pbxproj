@@ -23,6 +23,7 @@
 		B6411ADA2034AA0900DE8BD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6411AD92034AA0900DE8BD8 /* main.m */; };
 		B65343102035CC8B003159AA /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = B653430F2035CC8B003159AA /* LoginController.m */; };
 		B65343142035CCED003159AA /* LoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B65343132035CCED003159AA /* LoginManager.m */; };
+		B65DC167207FBAAA00A7BA0B /* SetTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B65DC166207FBAAA00A7BA0B /* SetTimeViewController.m */; };
 		B679F075204BB56F0002360A /* PTSDetailListController.m in Sources */ = {isa = PBXBuildFile; fileRef = B679F074204BB56F0002360A /* PTSDetailListController.m */; };
 		B679F078204BB5FC0002360A /* PTSDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B679F077204BB5FC0002360A /* PTSDetailCell.m */; };
 		B6AD9EE020370ED70039C023 /* WebApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AD9EDF20370ED70039C023 /* WebApiManager.m */; };
@@ -61,6 +62,8 @@
 		B653430F2035CC8B003159AA /* LoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
 		B65343122035CCED003159AA /* LoginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginManager.h; sourceTree = "<group>"; };
 		B65343132035CCED003159AA /* LoginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginManager.m; sourceTree = "<group>"; };
+		B65DC165207FBAAA00A7BA0B /* SetTimeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetTimeViewController.h; sourceTree = "<group>"; };
+		B65DC166207FBAAA00A7BA0B /* SetTimeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SetTimeViewController.m; sourceTree = "<group>"; };
 		B679F073204BB56F0002360A /* PTSDetailListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSDetailListController.h; sourceTree = "<group>"; };
 		B679F074204BB56F0002360A /* PTSDetailListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTSDetailListController.m; sourceTree = "<group>"; };
 		B679F076204BB5FC0002360A /* PTSDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTSDetailCell.h; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 				B679F077204BB5FC0002360A /* PTSDetailCell.m */,
 				B6CD0C36206E7B69005DC552 /* AddRemarkViewController.h */,
 				B6CD0C37206E7B69005DC552 /* AddRemarkViewController.m */,
+				B65DC165207FBAAA00A7BA0B /* SetTimeViewController.h */,
+				B65DC166207FBAAA00A7BA0B /* SetTimeViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -359,6 +364,7 @@
 				B679F078204BB5FC0002360A /* PTSDetailCell.m in Sources */,
 				B65343102035CC8B003159AA /* LoginController.m in Sources */,
 				B6377C89203C69C700AEBF5A /* PTSListViewCell.m in Sources */,
+				B65DC167207FBAAA00A7BA0B /* SetTimeViewController.m in Sources */,
 				B65343142035CCED003159AA /* LoginManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,6 +499,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92EA64825710CF3CC73BE377 /* Pods-PTS.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
@@ -501,6 +509,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anemoi.sta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -509,6 +519,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DE23A25BFCFF97451AD99181 /* Pods-PTS.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
@@ -517,6 +529,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anemoi.sta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
