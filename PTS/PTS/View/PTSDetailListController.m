@@ -41,6 +41,10 @@
 
     [self setFlightDetails];
 
+    [self.wingSegmentCOntroller setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
+    [self.listTypeSegmentController setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
+    
+
     if (self.ptsTask.isRunning == 1) {
         [self setCallTime];
         [self.ptsTaskTimer invalidate];

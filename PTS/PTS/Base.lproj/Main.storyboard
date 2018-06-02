@@ -259,29 +259,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="542-9n-not">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="134"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="154"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Jtk-CL-01C">
-                                        <rect key="frame" x="278" y="96" width="87" height="29"/>
-                                        <color key="backgroundColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="278" y="116" width="87" height="29"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <segments>
                                             <segment title="LIST"/>
                                             <segment title="Card"/>
                                         </segments>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="displayStyleChanged:" destination="lee-af-D2s" eventType="valueChanged" id="SWX-SR-Uym"/>
                                         </connections>
                                     </segmentedControl>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrival_flight" translatesAutoresizingMaskIntoConstraints="NO" id="J6h-7x-TNG">
-                                        <rect key="frame" x="10" y="34" width="67" height="67"/>
+                                        <rect key="frame" x="10" y="43.5" width="67" height="67"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="J6h-7x-TNG" secondAttribute="height" multiplier="1:1" id="VXX-w9-gFv"/>
                                             <constraint firstAttribute="height" constant="67" id="ejw-la-89b"/>
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="F1v-BM-qMd">
-                                        <rect key="frame" x="87" y="35.5" width="49.5" height="64"/>
+                                        <rect key="frame" x="87" y="45.5" width="49.5" height="64"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BA4-o2-R00">
                                                 <rect key="frame" x="0.0" y="0.0" width="49.5" height="23"/>
@@ -303,28 +308,8 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xse-Uu-kgG">
-                                        <rect key="frame" x="325" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="Xse-Uu-kgG" secondAttribute="height" multiplier="1:1" id="1St-B9-Ieh"/>
-                                            <constraint firstAttribute="width" constant="40" id="7gq-KR-VzV"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name=".SFNSText" family=".SF NS Text" pointSize="15"/>
-                                        <state key="normal" title="Done">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="">
-                                                <integer key="value" value="0"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="closeDetails:" destination="lee-af-D2s" eventType="touchUpInside" id="QCK-qM-I39"/>
-                                        </connections>
-                                    </button>
                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vi6-4g-jC5">
-                                        <rect key="frame" x="309" y="53" width="56" height="23"/>
+                                        <rect key="frame" x="309" y="73" width="56" height="23"/>
                                         <gestureRecognizers/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -333,37 +318,43 @@
                                             <outletCollection property="gestureRecognizers" destination="qsY-ay-hCE" appends="YES" id="cJ6-ha-Z24"/>
                                         </connections>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PNF-rJ-5c4">
+                                        <rect key="frame" x="10" y="16" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="closeDetails:" destination="lee-af-D2s" eventType="touchUpInside" id="bte-4W-ut3"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.2784313725" green="0.078431372550000003" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="134" id="2aH-0U-svt"/>
+                                    <constraint firstAttribute="height" constant="154" id="2aH-0U-svt"/>
                                     <constraint firstItem="J6h-7x-TNG" firstAttribute="leading" secondItem="542-9n-not" secondAttribute="leading" constant="10" id="7vS-cD-1kJ"/>
                                     <constraint firstItem="F1v-BM-qMd" firstAttribute="leading" secondItem="J6h-7x-TNG" secondAttribute="trailing" constant="10" id="HrP-mH-IuP"/>
                                     <constraint firstItem="J6h-7x-TNG" firstAttribute="centerY" secondItem="542-9n-not" secondAttribute="centerY" id="JO7-cn-KCS"/>
                                     <constraint firstAttribute="trailing" secondItem="vi6-4g-jC5" secondAttribute="trailing" constant="10" id="Nd3-nL-fdx"/>
-                                    <constraint firstAttribute="trailing" secondItem="Xse-Uu-kgG" secondAttribute="trailing" constant="10" id="QQU-dH-bqA"/>
                                     <constraint firstItem="Jtk-CL-01C" firstAttribute="top" secondItem="vi6-4g-jC5" secondAttribute="bottom" constant="20" id="Uun-Bp-12V"/>
-                                    <constraint firstItem="Xse-Uu-kgG" firstAttribute="top" secondItem="542-9n-not" secondAttribute="top" constant="10" id="msk-gY-qqa"/>
                                     <constraint firstItem="F1v-BM-qMd" firstAttribute="centerY" secondItem="542-9n-not" secondAttribute="centerY" id="njK-pf-7XC"/>
                                     <constraint firstAttribute="trailing" secondItem="Jtk-CL-01C" secondAttribute="trailing" constant="10" id="oBa-yp-hiw"/>
                                     <constraint firstAttribute="bottom" secondItem="Jtk-CL-01C" secondAttribute="bottom" constant="10" id="uhd-9E-dnh"/>
                                 </constraints>
                             </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DtL-BF-FvP">
-                                <rect key="frame" x="0.0" y="134" width="375" height="29"/>
-                                <color key="backgroundColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="154" width="375" height="29"/>
+                                <color key="backgroundColor" red="0.2784313725" green="0.078431372550000003" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <segments>
                                     <segment title="ABOVE WING"/>
                                     <segment title="BELOW WING"/>
                                 </segments>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="wingTypeChanged:" destination="lee-af-D2s" eventType="valueChanged" id="vjO-kq-nfc"/>
                                 </connections>
                             </segmentedControl>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gbE-EO-wj7">
-                                <rect key="frame" x="0.0" y="162" width="375" height="505"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="0.0" y="182" width="375" height="485"/>
+                                <color key="backgroundColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="cuK-g9-1wU">
                                     <size key="itemSize" width="374" height="84"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
