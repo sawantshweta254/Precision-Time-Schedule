@@ -30,11 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     if (self.taskUpdateClient == nil) {
         self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
@@ -56,7 +52,7 @@
     }else{
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-            [self.tableView reloadData];
+            [self loadListOnView];
         }];
     }
     
@@ -74,6 +70,33 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) loadListOnView{
+    if (self.ptsTasks.count > 0) {
+        [self.tableView reloadData];
+    }else{
+        UILabel *noDataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
+        [noDataLabel setFont:[UIFont systemFontOfSize:25]];
+        noDataLabel.numberOfLines = 2;
+        
+        UIFont *boldFont = [UIFont boldSystemFontOfSize:25];
+        NSString *noFlightString = @"Currently NO FLIGHT is Assigned";
+        NSRange boldedRange = [noFlightString rangeOfString:@"NO FLIGHT"];
+        
+        NSMutableAttributedString *attrNoFlightString = [[NSMutableAttributedString alloc] initWithString:noFlightString];
+        
+        [attrNoFlightString beginEditing];
+        [attrNoFlightString addAttribute:NSFontAttributeName
+                           value:boldFont
+                           range:boldedRange];
+        
+        [attrNoFlightString endEditing];
+        noDataLabel.attributedText   = attrNoFlightString;
+        noDataLabel.textColor        = [UIColor grayColor];
+        noDataLabel.textAlignment    = NSTextAlignmentCenter;
+        self.tableView.backgroundView = noDataLabel;
+    }
 }
 
 #pragma mark - Table view data source
@@ -135,7 +158,7 @@
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-        [self.tableView reloadData];
+        [self loadListOnView];
     }];
 }
 
