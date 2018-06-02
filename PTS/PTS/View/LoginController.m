@@ -9,10 +9,12 @@
 #import "LoginController.h"
 #import "LoginManager.h"
 #import "PTSManager.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface LoginController ()
 @property (weak, nonatomic) IBOutlet UITextField *textfieldUsername;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldPassword;
+@property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
 @end
 
 @implementation LoginController
@@ -20,10 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.textfieldUsername.leftViewMode = UITextFieldViewModeAlways;
-    self.textfieldUsername.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user_name"]];
-    self.textfieldPassword.leftViewMode = UITextFieldViewModeAlways;
-    self.textfieldPassword.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pwd"]];
+    self.buttonLogin.layer.borderWidth = 1.0f;;
+    self.buttonLogin.layer.borderColor = [UIColor whiteColor].CGColor;
 }
 
 - (void)didReceiveMemoryWarning {
