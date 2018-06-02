@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldUsername;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldPassword;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
+@property (weak, nonatomic) IBOutlet UIScrollView *loginViewScrollview;
 @end
 
 @implementation LoginController
@@ -24,6 +25,9 @@
     
     self.buttonLogin.layer.borderWidth = 1.0f;;
     self.buttonLogin.layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,15 +35,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-*/
+
 - (IBAction)loginUser:(id)sender {
     
     [[LoginManager sharedInstance] loginUser:self.textfieldUsername.text withPassword:self.textfieldPassword.text completionHandler:^(BOOL didLogin, User *user, NSString *errorMessage) {
@@ -47,9 +46,47 @@
             [self dismissViewControllerAnimated:YES completion:^{
             }];
         }else{
-//            NSLog(@"Login Error : %@", errorMessage);
+            NSString *message = [NSString stringWithFormat:@"Username or Password invalid"];
+            UIAlertController *invalidLoginError = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            
+            [invalidLoginError addAction:actionOk];
+            
+            [self presentViewController:invalidLoginError animated:YES completion:nil];
         }
     }];
+}
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    if (textField == self.textfieldUsername) {
+        [self.textfieldPassword becomeFirstResponder];
+    }else{
+        [self loginUser:nil];
+    }
+    
+    [textField resignFirstResponder];
+    return true;
+}
+
+#pragma mark Notification methods
+-(void)keyboardWillShow:(NSNotification*)notify
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, self.buttonLogin.frame.origin.y - 20, 0.0);
+    self.loginViewScrollview.contentInset = contentInsets;
+    self.loginViewScrollview.scrollIndicatorInsets = contentInsets;
+}
+
+-(void)keyboardWillHide:(NSNotification*)notify
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.loginViewScrollview.contentInset = contentInsets;
+    self.loginViewScrollview.scrollIndicatorInsets = contentInsets;
+}
+
+-(void)setScrollingInViewForKeyboardRect:(CGRect)keyboardRect
+{
+    [self.loginViewScrollview setContentSize:CGSizeMake(self.loginViewScrollview.contentSize.width, self.loginViewScrollview.contentSize.height+(keyboardRect.size.height))];
 }
 
 @end
