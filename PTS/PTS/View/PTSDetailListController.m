@@ -8,8 +8,7 @@
 
 #import "PTSDetailListController.h"
 #import "PTSManager.h"
-#import "AddRemarkViewController.h"
-#import "SetTimeViewController.h"
+
 
 #define cellHeight 100
 
@@ -118,6 +117,7 @@
         addRemarkViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         addRemarkViewController.flightId = self.ptsTask.flightId;
         addRemarkViewController.subTask = (PTSSubTask *)sender;
+        addRemarkViewController.delegate = self;
 //        if (self.selectedWingIndex == 0) {
 ////            addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
 //            addRemarkViewController.subTask = (PTSSubTask *)sender;
@@ -286,4 +286,8 @@
     [self performSegueWithIdentifier:@"AddRemarkSegue" sender:subTask];
 }
 
+#pragma mark AddRemarkView delegate methods
+-(void) updateSubTaskWithRemark{
+    [self.taskUpdateClient updateFlightTask:self.ptsTask];
+}
 @end

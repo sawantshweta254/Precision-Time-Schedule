@@ -157,6 +157,8 @@
         self.subTask.isComplete = 1;
         self.subTask.subactivityEndTime = [NSDate date];
         self.subTask.userEndTime = self.subTask.userEndTime;
+        [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
+        
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];

@@ -9,7 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "PTSSubTask+CoreDataProperties.h"
 
+@protocol AddRemarkViewDelegate
+-(void) updateSubTaskWithRemark;
+@end
+
 @interface AddRemarkViewController : UIViewController
 @property (nonatomic, retain) PTSSubTask *subTask;
 @property (nonatomic) int flightId;
+
+@property (nonatomic, weak) id <AddRemarkViewDelegate> delegate;
+
 @end

@@ -75,13 +75,17 @@
     NSError *error;
     [moc save:&error];
     
-    [[PTSManager sharedInstance] updateRemarkForSubtask:self.subTask forFlight:self.flightId completionHandler:^(BOOL isSuccessfull) {
-        if (isSuccessfull) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                
-            }];
-        }
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate updateSubTaskWithRemark];
     }];
+        
+//    [[PTSManager sharedInstance] updateRemarkForSubtask:self.subTask forFlight:self.flightId completionHandler:^(BOOL isSuccessfull) {
+//        if (isSuccessfull) {
+//            [self dismissViewControllerAnimated:YES completion:^{
+//
+//            }];
+//        }
+//    }];
 }
 
 - (IBAction)dismissAddRemarkView:(id)sender {
