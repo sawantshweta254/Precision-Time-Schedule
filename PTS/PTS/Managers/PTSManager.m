@@ -98,6 +98,13 @@ static PTSManager *sharedInstance;
     NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
     for (NSDictionary *ptsItem in ptsList) {
         
+//        NSError *jsonError;
+//        NSString *originalString = [ptsItem objectForKey:@"json_data"];
+//        NSData *data = [[NSData alloc] initWithBase64EncodedString:originalString options:0];//[NSData dataFromBase64String:originalString];
+//        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+//                                                             options:NSJSONReadingMutableContainers
+//                                                               error:&jsonError];
+        
         NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
         
         if (![ptsTaskIds containsObject:ptsId]) {

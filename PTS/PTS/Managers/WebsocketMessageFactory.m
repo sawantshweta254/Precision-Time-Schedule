@@ -146,16 +146,29 @@
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
     [dateFormatter1 setDateFormat:@"hh:mm"];
     
-    [subTaskDictionary setValue:@"0" forKey:@"subactivity_start_time"];
+//    [subTaskDictionary setValue:@"0" forKey:@"subactivity_start_time"];
+//     [subTaskDictionary setValue:@"0" forKey:@"subactivity_end_time"];
+//    [subTaskDictionary setValue:@"0" forKey:@"user_start_time"];
+//    [subTaskDictionary setValue:@"0" forKey:@"user_end_time"];
+    
     if (ptsSubTask.subactivityStartTime != nil ) {
         [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.subactivityStartTime], [dateFormatter stringFromDate:ptsSubTask.subactivityStartTime]] forKey:@"subactivity_start_time"];
     }
-    [subTaskDictionary setValue:@"0" forKey:@"subactivity_end_time"];
+    
+    if (ptsSubTask.subactivityEndTime != nil ) {
+        [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.subactivityEndTime], [dateFormatter stringFromDate:ptsSubTask.subactivityEndTime]] forKey:@"subactivity_end_time"];
+    }
+    
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isComplete] forKey:@"is_complete"];
     
-    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.userStartTime] forKey:@"user_start_time"];
-    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.userEndTime] forKey:@"user_end_time"];
+    if (ptsSubTask.userStartTime != nil) {
+        [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.userStartTime], [dateFormatter stringFromDate:ptsSubTask.userStartTime]] forKey:@"user_start_time"];
+    }
     
+    if (ptsSubTask.userEndTime != nil) {
+        [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.userEndTime], [dateFormatter stringFromDate:ptsSubTask.userEndTime]] forKey:@"user_end_time"];
+    }
+   
     [subTaskDictionary setValue:ptsSubTask.notations forKey:@"notations"];
     [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerStopTime] forKey:@"timer_stop_time"];
     [subTaskDictionary setValue:ptsSubTask.userSubActFeedback forKey:@"user_subact_feedback"];

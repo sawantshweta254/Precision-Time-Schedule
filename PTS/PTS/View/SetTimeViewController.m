@@ -75,8 +75,10 @@
 //    NSDate *pickedDate = self.timePicker.date;
     if (self.timerPickedFor == Start_Timer_Picker) {
         self.buttonStartTime.titleLabel.text = self.labelPickerViewTime.text;
+        self.subTask.userStartTime = [self.timePicker date];
     }else{
         self.buttonEndTime.titleLabel.text = self.labelPickerViewTime.text;
+        self.subTask.userEndTime = [self.timePicker date];
     }
     
     self.pickerView.hidden = TRUE;
@@ -88,7 +90,7 @@
 
 - (IBAction)submitTime:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
-        
+        [self.delegate updateSubTaskTime];
     }];
 }
 

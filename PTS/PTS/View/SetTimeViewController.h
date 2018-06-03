@@ -7,9 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PTSSubTask+CoreDataProperties.h"
+
+@protocol SetTimeViewDelegate
+-(void) updateSubTaskTime;
+@end
 
 @interface SetTimeViewController : UIViewController
 
 @property (nonatomic) BOOL shouldShowEndTimePicker;
+@property (nonatomic, retain) PTSSubTask *subTask;
+@property (nonatomic, weak) id <SetTimeViewDelegate> delegate;
 
 @end

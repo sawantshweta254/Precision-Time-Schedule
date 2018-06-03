@@ -120,15 +120,22 @@
         addRemarkViewController.delegate = self;
 //        if (self.selectedWingIndex == 0) {
 ////            addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
-//            addRemarkViewController.subTask = (PTSSubTask *)sender;
 //        }else{
 ////            addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
-//            addRemarkViewController.subTask = (PTSSubTask *)sender;
 //        }
     }else{
+        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
+        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
         SetTimeViewController *setTimeViewController = segue.destinationViewController;
         setTimeViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    }
+        setTimeViewController.delegate = self;
+        
+        if (self.selectedWingIndex == 0) {
+            setTimeViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+        }else{
+            setTimeViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+        }
+     }
 }
 
 
@@ -288,6 +295,11 @@
 
 #pragma mark AddRemarkView delegate methods
 -(void) updateSubTaskWithRemark{
+    [self.taskUpdateClient updateFlightTask:self.ptsTask];
+}
+
+#pragma mark SetTimeView delegate methods
+-(void) updateSubTaskTime{
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
 }
 @end
