@@ -165,7 +165,9 @@
 }
 
 - (IBAction)addRemark:(id)sender {
-    [self.delegate updateRemarkForSubtask:self.subTask];
+    if (self.ptsItem.isRunning == 1) {
+        [self.delegate updateRemarkForSubtask:self.subTask];
+    }
 }
 
 - (IBAction)addTime:(id)sender {

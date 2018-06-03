@@ -112,16 +112,19 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"AddRemarkSegue"]) {
-        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
-        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
+//        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
+//        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
         AddRemarkViewController *addRemarkViewController = segue.destinationViewController;
         addRemarkViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         addRemarkViewController.flightId = self.ptsTask.flightId;
-        if (self.selectedWingIndex == 0) {
-            addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
-        }else{
-            addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
-        }
+        addRemarkViewController.subTask = (PTSSubTask *)sender;
+//        if (self.selectedWingIndex == 0) {
+////            addRemarkViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+//            addRemarkViewController.subTask = (PTSSubTask *)sender;
+//        }else{
+////            addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+//            addRemarkViewController.subTask = (PTSSubTask *)sender;
+//        }
     }else{
         SetTimeViewController *setTimeViewController = segue.destinationViewController;
         setTimeViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -280,7 +283,7 @@
 }
 
 -(void) updateRemarkForSubtask:(PTSSubTask *)subTask{
-    
+    [self performSegueWithIdentifier:@"AddRemarkSegue" sender:subTask];
 }
 
 @end

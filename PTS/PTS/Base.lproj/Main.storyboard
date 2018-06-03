@@ -410,7 +410,6 @@
                                                                     <state key="normal" image="remark"/>
                                                                     <connections>
                                                                         <action selector="addRemark:" destination="QFb-aP-jFb" eventType="touchUpInside" id="cE9-dS-w4C"/>
-                                                                        <segue destination="ecu-rB-XVf" kind="presentation" identifier="AddRemarkSegue" id="FXj-Aw-PXk"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -508,6 +507,7 @@
                         <outlet property="listTypeSegmentController" destination="Jtk-CL-01C" id="4lQ-pY-WU8"/>
                         <outlet property="ptsSubTasksCollectionView" destination="gbE-EO-wj7" id="ma4-z0-5Sr"/>
                         <outlet property="wingSegmentCOntroller" destination="DtL-BF-FvP" id="qRU-Uh-8Z9"/>
+                        <segue destination="ecu-rB-XVf" kind="presentation" identifier="AddRemarkSegue" id="FMV-rz-Bke"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vhb-09-Dz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
