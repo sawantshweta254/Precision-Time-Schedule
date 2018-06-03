@@ -75,6 +75,7 @@
 -(void) loadListOnView{
     if (self.ptsTasks.count > 0) {
         [self.tableView reloadData];
+        self.tableView.backgroundView = nil;
     }else{
         UILabel *noDataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
         [noDataLabel setFont:[UIFont systemFontOfSize:25]];

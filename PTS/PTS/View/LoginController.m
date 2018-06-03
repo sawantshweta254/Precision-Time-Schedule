@@ -84,9 +84,4 @@
     self.loginViewScrollview.scrollIndicatorInsets = contentInsets;
 }
 
--(void)setScrollingInViewForKeyboardRect:(CGRect)keyboardRect
-{
-    [self.loginViewScrollview setContentSize:CGSizeMake(self.loginViewScrollview.contentSize.width, self.loginViewScrollview.contentSize.height+(keyboardRect.size.height))];
-}
-
 @end

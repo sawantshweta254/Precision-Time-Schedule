@@ -12,6 +12,8 @@
 @interface AddRemarkViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
 @property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *remarkPageScrollView;
+@property (weak, nonatomic) IBOutlet UIView *remarkView;
 
 @end
 
@@ -21,11 +23,24 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.remarkTextView.text = self.subTask.userSubActFeedback;
+    
+    [[self.remarkTextView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+    [[self.remarkTextView layer] setBorderWidth:1];
+    [[self.remarkTextView layer] setCornerRadius:10];
+    [self.remarkTextView setClipsToBounds: YES];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /*
@@ -37,6 +52,23 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark Notification methods
+-(void)keyboardWillShow:(NSNotification*)notify
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 100, 0.0);
+    self.remarkPageScrollView.contentInset = contentInsets;
+    self.remarkPageScrollView.scrollIndicatorInsets = contentInsets;
+}
+
+-(void)keyboardWillHide:(NSNotification*)notify
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.remarkPageScrollView.contentInset = contentInsets;
+    self.remarkPageScrollView.scrollIndicatorInsets = contentInsets;
+}
+
+#pragma mark Button Actions
 - (IBAction)submitRemark:(id)sender {
     self.subTask.userSubActFeedback = self.remarkTextView.text;
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
