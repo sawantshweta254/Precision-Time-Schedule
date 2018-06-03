@@ -74,10 +74,10 @@
 - (IBAction)pickerViewOkTapped:(id)sender {
 //    NSDate *pickedDate = self.timePicker.date;
     if (self.timerPickedFor == Start_Timer_Picker) {
-        self.buttonStartTime.titleLabel.text = self.labelPickerViewTime.text;
+        self.buttonStartTime.titleLabel.text = [NSString stringWithFormat:@"Start Time      %@",self.labelPickerViewTime.text];
         self.subTask.userStartTime = [self.timePicker date];
     }else{
-        self.buttonEndTime.titleLabel.text = self.labelPickerViewTime.text;
+        self.buttonEndTime.titleLabel.text = [NSString stringWithFormat:@"End Time      %@",self.labelPickerViewTime.text];
         self.subTask.userEndTime = [self.timePicker date];
     }
     
