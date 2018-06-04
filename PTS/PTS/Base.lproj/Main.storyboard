@@ -390,23 +390,31 @@
                                                             <rect key="frame" x="50" y="5" width="305" height="68"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4DL-Uu-gJB">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="34"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="42" height="22.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Hz-2Q-jdA">
-                                                                    <rect key="frame" x="0.0" y="34" width="34" height="0.0"/>
-                                                                    <state key="normal" title="Time">
+                                                                <button hidden="YES" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Hz-2Q-jdA">
+                                                                    <rect key="frame" x="0.0" y="22.5" width="30" height="0.0"/>
+                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                                                    <inset key="imageEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                                    <state key="normal">
                                                                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </state>
                                                                     <connections>
-                                                                        <action selector="addTime:" destination="QFb-aP-jFb" eventType="touchUpInside" id="A36-ZP-7sS"/>
+                                                                        <action selector="addTime:" destination="QFb-aP-jFb" eventType="touchUpInside" id="7Ld-gW-3Q9"/>
                                                                         <segue destination="Dja-ps-L8c" kind="presentation" id="hM4-XP-7FY"/>
                                                                     </connections>
                                                                 </button>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X5p-UP-qMK">
+                                                                    <rect key="frame" x="0.0" y="22.5" width="37" height="23"/>
+                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ztu-JV-ueH">
-                                                                    <rect key="frame" x="0.0" y="34" width="30" height="34"/>
+                                                                    <rect key="frame" x="0.0" y="45.5" width="30" height="22.5"/>
                                                                     <state key="normal" image="remark"/>
                                                                     <connections>
                                                                         <action selector="addRemark:" destination="QFb-aP-jFb" eventType="touchUpInside" id="cE9-dS-w4C"/>
@@ -465,6 +473,7 @@
                                             <outlet property="containerView" destination="3hz-kx-jbV" id="q9r-7E-MiO"/>
                                             <outlet property="eidtTimeButton" destination="8Hz-2Q-jdA" id="4pY-0Z-3MN"/>
                                             <outlet property="labelSubTaskTimer" destination="d72-hK-Wqj" id="m42-UY-kfR"/>
+                                            <outlet property="labelUserTaskTime" destination="X5p-UP-qMK" id="uuC-Wh-EJe"/>
                                             <outlet property="remarkButton" destination="ztu-JV-ueH" id="vPn-wW-Nb1"/>
                                             <outlet property="taskNameLabel" destination="4DL-Uu-gJB" id="Ag2-2X-Je6"/>
                                             <outlet property="taskNumLabel" destination="0lB-vA-5ZH" id="M4F-TQ-Bkp"/>

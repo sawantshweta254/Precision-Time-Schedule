@@ -16,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *taskTimerButton;
 @property (weak, nonatomic) IBOutlet UILabel *labelSubTaskTimer;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UILabel *labelUserTaskTime;
+@property (weak, nonatomic) IBOutlet UILabel *labelSystemTaskTime;
+@property (weak, nonatomic) IBOutlet UIView *viewEditTime;
 
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
@@ -45,7 +48,8 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    self.eidtTimeButton.hidden = TRUE;
+    self.viewEditTime.hidden = TRUE;
+    
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
         [self setTaskTime];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
@@ -64,9 +68,10 @@
         int timeElapsed = ptsTaskTimeWindow - duration;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
-            self.eidtTimeButton.hidden = FALSE;
+            [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];                
         });
+        
+        [self setTimeLabels];
     }
     
     
@@ -145,6 +150,36 @@
                 self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
             }
         }
+    });
+}
+
+-(void) setTimeLabels{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm"];
+    NSString *systemTaskTime;
+    NSString *userTaskTime;
+    
+    self.eidtTimeButton.hidden = FALSE;
+    if (self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) {
+        systemTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
+    }else if (self.subTask.subactivityStartTime != nil){
+        systemTaskTime = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime]];
+    }else{
+        self.eidtTimeButton.hidden = TRUE;
+    }
+    
+    self.labelUserTaskTime.hidden = FALSE;
+    if (self.subTask.userStartTime != nil && self.subTask.userEndTime != nil) {
+        userTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.userStartTime], [dateFormatter stringFromDate:self.subTask.userEndTime]];
+    }else if (self.subTask.userStartTime != nil){
+        userTaskTime = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.subTask.userStartTime]];
+    }else{
+        self.labelUserTaskTime.hidden = TRUE;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.eidtTimeButton setTitle:systemTaskTime forState:UIControlStateNormal];
+        [self.labelUserTaskTime setText:userTaskTime];
     });
 }
 

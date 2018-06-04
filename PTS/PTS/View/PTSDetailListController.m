@@ -301,5 +301,6 @@
 #pragma mark SetTimeView delegate methods
 -(void) updateSubTaskTime{
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
+    [self.ptsSubTasksCollectionView reloadData];
 }
 @end
