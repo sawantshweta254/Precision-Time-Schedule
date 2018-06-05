@@ -71,10 +71,10 @@
             [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];                
         });
         
-        [self setTimeLabels];
+        
     }
     
-    
+    [self setTimeLabels];
     [self setContainerViewBackground];
     
 }
@@ -160,6 +160,7 @@
     NSString *userTaskTime;
     
     self.eidtTimeButton.hidden = FALSE;
+
     if (self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) {
         systemTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
     }else if (self.subTask.subactivityStartTime != nil){
@@ -180,6 +181,12 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eidtTimeButton setTitle:systemTaskTime forState:UIControlStateNormal];
         [self.labelUserTaskTime setText:userTaskTime];
+        
+        UIFont *font = [UIFont fontWithName:@"Helvetica" size:15];
+        NSDictionary *userAttributes = @{NSFontAttributeName: font};
+        const CGSize textSize = [systemTaskTime sizeWithAttributes: userAttributes];
+        
+        self.eidtTimeButton.imageEdgeInsets = UIEdgeInsetsMake(0.f, textSize.width + 5, 0.f, 0.f);
     });
 }
 
