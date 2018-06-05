@@ -34,9 +34,10 @@
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"NL"];
     [self.timePicker setLocale:locale];
     
-//    self.labelHeaderSetTime.clipsToBounds = TRUE;
-//    self.labelHeaderSetTime.layer.leftco = 10;
-//    self.labelHeaderSetTime.layer.maskedCorners = 
+    [self.buttonEndTime setHidden:NO];
+    if (self.subTask.start - self.subTask.end == 0) {
+        [self.buttonEndTime setHidden:YES];
+    }
 
 }
 

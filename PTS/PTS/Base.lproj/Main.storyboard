@@ -563,31 +563,40 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Is-Bc-2Hz">
-                                        <rect key="frame" x="10" y="50" width="261" height="40"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Zgs-Cu-qnd">
+                                        <rect key="frame" x="10" y="50" width="261" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Is-Bc-2Hz">
+                                                <rect key="frame" x="0.0" y="0.0" width="261" height="45"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <state key="normal" title="Start Time          00:00">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="setStartTime:" destination="Dja-ps-L8c" eventType="touchUpInside" id="p8I-KQ-A1J"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rPb-69-GgA">
+                                                <rect key="frame" x="0.0" y="55" width="261" height="45"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <state key="normal" title="End Time           00:00">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="setEndTime:" destination="Dja-ps-L8c" eventType="touchUpInside" id="3AS-K6-oFU"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="aBD-ly-Nqa"/>
+                                            <constraint firstAttribute="height" constant="100" id="sYC-43-rhn"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Start Time          00:00">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="setStartTime:" destination="Dja-ps-L8c" eventType="touchUpInside" id="p8I-KQ-A1J"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rPb-69-GgA">
-                                        <rect key="frame" x="10" y="100" width="261" height="40"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="End Time           00:00">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="setEndTime:" destination="Dja-ps-L8c" eventType="touchUpInside" id="3AS-K6-oFU"/>
-                                        </connections>
-                                    </button>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GcN-Yv-o8w">
                                         <rect key="frame" x="90.5" y="162" width="100" height="30"/>
                                         <color key="backgroundColor" red="0.55967789889999997" green="0.44912475349999997" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -610,18 +619,14 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="rPb-69-GgA" firstAttribute="leading" secondItem="2Is-Bc-2Hz" secondAttribute="leading" id="8KH-1Z-ABz"/>
-                                    <constraint firstAttribute="trailing" secondItem="2Is-Bc-2Hz" secondAttribute="trailing" constant="10" id="Chp-e7-OAh"/>
                                     <constraint firstAttribute="trailing" secondItem="oX4-Ri-gez" secondAttribute="trailing" id="FgE-gL-lzw"/>
-                                    <constraint firstItem="rPb-69-GgA" firstAttribute="trailing" secondItem="2Is-Bc-2Hz" secondAttribute="trailing" id="Gvo-0b-eBd"/>
-                                    <constraint firstItem="2Is-Bc-2Hz" firstAttribute="top" secondItem="oX4-Ri-gez" secondAttribute="bottom" constant="20" id="HO2-2J-l5x"/>
                                     <constraint firstAttribute="height" constant="202" id="KDl-ah-JHf"/>
-                                    <constraint firstItem="2Is-Bc-2Hz" firstAttribute="leading" secondItem="hJh-Pp-2aK" secondAttribute="leading" constant="10" id="Xpy-Mr-f7Y"/>
                                     <constraint firstItem="oX4-Ri-gez" firstAttribute="top" secondItem="hJh-Pp-2aK" secondAttribute="top" id="aOj-bV-Aob"/>
-                                    <constraint firstItem="rPb-69-GgA" firstAttribute="top" secondItem="2Is-Bc-2Hz" secondAttribute="bottom" constant="10" id="dEq-6v-UKB"/>
+                                    <constraint firstItem="Zgs-Cu-qnd" firstAttribute="leading" secondItem="hJh-Pp-2aK" secondAttribute="leading" constant="10" id="dAk-sz-sfs"/>
                                     <constraint firstItem="oX4-Ri-gez" firstAttribute="leading" secondItem="hJh-Pp-2aK" secondAttribute="leading" id="ejG-Ok-70h"/>
-                                    <constraint firstItem="rPb-69-GgA" firstAttribute="height" secondItem="2Is-Bc-2Hz" secondAttribute="height" id="naz-pd-hOD"/>
                                     <constraint firstItem="GcN-Yv-o8w" firstAttribute="centerX" secondItem="hJh-Pp-2aK" secondAttribute="centerX" id="pyf-1E-ONB"/>
+                                    <constraint firstItem="Zgs-Cu-qnd" firstAttribute="top" secondItem="oX4-Ri-gez" secondAttribute="bottom" constant="20" id="qy1-1C-Zni"/>
+                                    <constraint firstAttribute="trailing" secondItem="Zgs-Cu-qnd" secondAttribute="trailing" constant="10" id="tyT-oA-H6Z"/>
                                     <constraint firstAttribute="bottom" secondItem="GcN-Yv-o8w" secondAttribute="bottom" constant="10" id="vuB-NS-nTI"/>
                                 </constraints>
                             </view>

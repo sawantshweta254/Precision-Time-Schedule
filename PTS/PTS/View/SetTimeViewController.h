@@ -15,7 +15,6 @@
 
 @interface SetTimeViewController : UIViewController
 
-@property (nonatomic) BOOL shouldShowEndTimePicker;
 @property (nonatomic, retain) PTSSubTask *subTask;
 @property (nonatomic, weak) id <SetTimeViewDelegate> delegate;
 
