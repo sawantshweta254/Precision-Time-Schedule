@@ -17,8 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelSubTaskTimer;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UILabel *labelUserTaskTime;
-@property (weak, nonatomic) IBOutlet UILabel *labelSystemTaskTime;
-@property (weak, nonatomic) IBOutlet UIView *viewEditTime;
 
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
@@ -48,11 +46,12 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    self.viewEditTime.hidden = TRUE;
-    
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
-        [self setTaskTime];
-        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
+        [self setTaskTime:nil];
+        if (self.ptsTaskTimer == nil) {
+            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
+
+        }
     }else if (self.subTask.isRunning == 2){
         NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
         int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
@@ -83,17 +82,15 @@
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
             self.subTask.subactivityStartTime = [NSDate date];
-            self.subTask.userStartTime = self.subTask.subactivityStartTime;
             self.subTask.isRunning = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;
             [moc save:&error];
-            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime) userInfo:nil repeats:YES];
+            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
         }else if(self.subTask.isRunning == 1){
             [self.ptsTaskTimer invalidate];
             self.ptsTaskTimer = nil;
             self.subTask.subactivityEndTime = [NSDate date];
-             self.subTask.userEndTime = self.subTask.subactivityEndTime;
             self.subTask.isRunning = 2;
             self.subTask.isComplete = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -104,11 +101,12 @@
         [self.delegate updateFlightPTS];
     }
     
+    [self setTimeLabels];
     [self setContainerViewBackground];
     
 }
 
--(void) setTaskTime{
+-(void) setTaskTime:(id)nsTimer{
     NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
     int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
     int duration = (int)timeInterval;
@@ -160,8 +158,7 @@
     NSString *userTaskTime;
     
     self.eidtTimeButton.hidden = FALSE;
-
-    if (self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) {
+    if ((self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) && (self.subTask.start - self.subTask.end != 0)) {
         systemTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
     }else if (self.subTask.subactivityStartTime != nil){
         systemTaskTime = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime]];
@@ -201,6 +198,7 @@
         self.subTask.userEndTime = self.subTask.userEndTime;
         [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         
+        [self setTimeLabels];
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
