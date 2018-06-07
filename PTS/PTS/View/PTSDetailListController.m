@@ -8,7 +8,7 @@
 
 #import "PTSDetailListController.h"
 #import "PTSManager.h"
-
+#import "LoginManager.h"
 
 #define cellHeight 100
 
@@ -106,8 +106,18 @@
 }
 
 
-#pragma mark - Navigation
+#pragma mark- Navigation
 
+-(BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+    if ([identifier isEqualToString:@"SetTastTime"]){
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        if (loggedInUser.empType == 2) {
+            return FALSE;
+        }
+    }
+    
+    return TRUE;
+}
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"AddRemarkSegue"]) {
@@ -206,6 +216,11 @@
 }
 
 - (IBAction)updatePTSItemTimer:(id)sender {
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 2) {
+        return;
+    }
+    
     if (((UILongPressGestureRecognizer*)sender).state == UIGestureRecognizerStateEnded ) {
         
         if (self.ptsTask.isRunning == 0) {

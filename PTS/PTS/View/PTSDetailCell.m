@@ -7,6 +7,8 @@
 //
 
 #import "PTSDetailCell.h"
+#import "User+CoreDataProperties.h"
+#import "LoginManager.h"
 
 @interface PTSDetailCell()
 @property (weak, nonatomic) IBOutlet UILabel *taskNumLabel;
@@ -50,7 +52,6 @@
         [self setTaskTime:nil];
         if (self.ptsTaskTimer == nil) {
             self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
-
         }
     }else if (self.subTask.isRunning == 2){
         NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
@@ -79,6 +80,10 @@
 }
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 2) {
+        return;
+    }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
             self.subTask.subactivityStartTime = [NSDate date];
@@ -189,6 +194,10 @@
 
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 2) {
+        return;
+    }
     if (self.ptsItem.isRunning == 1) {
         self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
         self.subTask.subactivityStartTime = [NSDate date];

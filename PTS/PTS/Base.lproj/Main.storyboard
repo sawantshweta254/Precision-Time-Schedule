@@ -405,7 +405,7 @@
                                                                     </state>
                                                                     <connections>
                                                                         <action selector="addTime:" destination="QFb-aP-jFb" eventType="touchUpInside" id="7Ld-gW-3Q9"/>
-                                                                        <segue destination="Dja-ps-L8c" kind="presentation" id="hM4-XP-7FY"/>
+                                                                        <segue destination="Dja-ps-L8c" kind="presentation" identifier="SetTastTime" id="hM4-XP-7FY"/>
                                                                     </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X5p-UP-qMK">

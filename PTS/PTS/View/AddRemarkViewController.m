@@ -8,6 +8,7 @@
 
 #import "AddRemarkViewController.h"
 #import "PTSManager.h"
+#import "LoginManager.h"
 
 @interface AddRemarkViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
@@ -29,6 +30,10 @@
     [[self.remarkTextView layer] setCornerRadius:10];
     [self.remarkTextView setClipsToBounds: YES];
     
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 2) {
+        [self.remarkTextView setEditable:FALSE];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
