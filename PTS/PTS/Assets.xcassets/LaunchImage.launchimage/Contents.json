@@ -135,7 +135,6 @@
     {
       "orientation" : "portrait",
       "idiom" : "ipad",
-      "filename" : "icon.png",
       "extent" : "full-screen",
       "scale" : "2x"
     },
