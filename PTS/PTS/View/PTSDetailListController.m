@@ -77,6 +77,8 @@
             [self.ptsSubTasksCollectionView reloadData];
         }];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,6 +107,11 @@
     self.labelPtsTimer.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:self.ptsTask.timeWindow * 60]];
 }
 
+#pragma mark NSNotification methods
+-(void)updateChangesForPTS:(NSNotification *) notification
+{
+    [self.ptsSubTasksCollectionView reloadData];
+}
 
 #pragma mark- Navigation
 

@@ -28,24 +28,12 @@
         
     }*/
     if (ptsItem!=nil) {
-        [messageDict setValue:[NSString stringWithFormat:@"%d", ptsItem.flightId] forKey:@"flight_id"];
-        [messageDict setValue:[NSString stringWithFormat:@"%d", ptsItem.ptsSubTaskId] forKey:@"m_pts_id"];
+        NSArray *flightIds = [NSArray arrayWithObject:[NSNumber numberWithInt:ptsItem.flightId]];
+        [messageDict setValue:flightIds forKey:@"flights_id"];
     }else{
         [messageDict setValue:@"" forKey:@"flight_id"];
-        [messageDict setValue:@"" forKey:@"m_pts_id"];
     }
     
-//    NSMutableDictionary *messageDict = [NSMutableDictionary dictionary];
-//    [messageDict setValue:[NSNumber numberWithInteger:25] forKey:@"userid"];
-//    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"MsgType"];
-//    [messageDict setValue:@"Shweta Sawant" forKey:@"user_name"];
-//    [messageDict setValue:[NSNumber numberWithInteger:3] forKey:@"user_type"];
-//
-//    //    if (loggedInUser.empType == 1 || loggedInUser.empType == 2 || loggedInUser.empType == 4) {
-//    //        //        [messageDict setValue:[NSArray arrayWithObjects:[NSNumber numberWithInteger:607],[NSNumber numberWithInteger:608], nil] forKey:@"flights_id"];
-//    //    }else{
-//    [messageDict setValue:@"617" forKey:@"flight_id"];
-//    [messageDict setValue:@"3" forKey:@"m_pts_id"];
     
     return [self translateToString:messageDict];
 }

@@ -52,7 +52,10 @@
     }else{
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-            [self loadListOnView];
+            if (self.ptsTasks.count > 0) {
+                [self loadListOnView];
+                [self.taskUpdateClient updateUserForFlight:[self.ptsTasks objectAtIndex:0]];
+            }
         }];
     }
     
@@ -65,6 +68,8 @@
     }else{
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"red"] forState:UIControlStateNormal];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,6 +103,12 @@
         noDataLabel.textAlignment    = NSTextAlignmentCenter;
         self.tableView.backgroundView = noDataLabel;
     }
+}
+
+#pragma mark NSNotification methods
+-(void)updateChangesForPTS:(NSNotification *) notification
+{
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source

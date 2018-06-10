@@ -9,6 +9,8 @@
 #import "TaskTimeUpdatesClient.h"
 #import "SRWebSocket.h"
 #import "WebsocketMessageFactory.h"
+#import "LoginManager.h"
+#import "PTSManager.h"
 
 @interface TaskTimeUpdatesClient () <SRWebSocketDelegate>
 
@@ -52,7 +54,16 @@
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+
+    if (loggedInUser.empType == 2) {
+        NSError *jsonError;
+        NSData *objectData = [message dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *ptsJson = [NSJSONSerialization JSONObjectWithData:objectData
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&jsonError];
+        [[PTSManager sharedInstance] parseUpdatesReceivedForPTS:ptsJson];
+    }
 }
 
 - (void) updateUserForFlight:(PTSItem *)pts{
