@@ -12,7 +12,7 @@
 
 @interface WebsocketMessageFactory : NSObject
 
--(NSString *) createLoggedInUserMessageForFlight:(PTSItem *)ptsItem;
+-(NSString *) createLoggedInUserMessageForFlight:(NSArray *)ptsItemsIdArray;
 -(NSString *) createUpdateMessageForFlight:(PTSItem *)ptsItem;
 
 @end

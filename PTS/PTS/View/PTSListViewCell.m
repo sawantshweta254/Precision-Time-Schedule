@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelPtsTimer;
 @property (strong, nonatomic) PTSItem *ptsItem;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
+@property (weak, nonatomic) IBOutlet UIButton *buttonSupervisor;
 @end
 
 @implementation PTSListViewCell
@@ -83,13 +84,6 @@
     }
 }
 
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 -(void) startPTSTimer
 {
     self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
@@ -113,4 +107,10 @@
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
 }
 
+- (IBAction)showSuperVisor:(id)sender {
+    
+    UILabel *supervisorLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 200, self.frame.size.height, 200, 100)];
+    supervisorLabel.text = [NSString stringWithFormat:@"Supervisor - %@", self.ptsItem.supervisorName];
+    [self addSubview:supervisorLabel];
+}
 @end

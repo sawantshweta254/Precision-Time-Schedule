@@ -54,7 +54,8 @@
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
                 [self loadListOnView];
-                [self.taskUpdateClient updateUserForFlight:[self.ptsTasks objectAtIndex:0]];
+                NSArray *ptsIdsArray = [self.ptsTasks valueForKey:@"flightId"];
+                [self.taskUpdateClient updateUserForFlight:ptsIdsArray];
             }
         }];
     }

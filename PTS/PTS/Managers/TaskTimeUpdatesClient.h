@@ -12,7 +12,7 @@
 @interface TaskTimeUpdatesClient : NSObject 
 
 - (void) connectToWebSocket:(void (^)(BOOL isConnected))socketConnected;
-- (void) updateUserForFlight:(PTSItem *)pts;
+- (void) updateUserForFlight:(NSArray *)ptsIdArray;
 - (void) updateFlightTask:(PTSItem *)pts;
 - (BOOL) isWebSocketConnected;
 

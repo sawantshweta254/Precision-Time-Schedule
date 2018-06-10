@@ -12,7 +12,7 @@
 
 @implementation WebsocketMessageFactory
 
--(NSString *) createLoggedInUserMessageForFlight:(PTSItem *)ptsItem{
+-(NSString *) createLoggedInUserMessageForFlight:(NSArray *)ptsItemsIdArray{
     
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
 
@@ -27,9 +27,9 @@
     }else{
         
     }*/
-    if (ptsItem!=nil) {
-        NSArray *flightIds = [NSArray arrayWithObject:[NSNumber numberWithInt:ptsItem.flightId]];
-        [messageDict setValue:flightIds forKey:@"flights_id"];
+    if (loggedInUser.empType == 2) {
+//        NSArray *flightIds = [NSArray arrayWithObject:[NSNumber numberWithInt:ptsItem.flightId]];
+        [messageDict setValue:ptsItemsIdArray forKey:@"flights_id"];
     }else{
         [messageDict setValue:@"" forKey:@"flight_id"];
     }

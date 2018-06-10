@@ -188,7 +188,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jP3-T5-FXR">
                                                     <rect key="frame" x="0.0" y="65.5" width="44.5" height="11.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.55967789888381958" green="0.44912475347518921" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -201,6 +201,9 @@
                                                 <constraint firstAttribute="width" secondItem="NNm-te-mcn" secondAttribute="height" multiplier="1:1" id="hre-Dw-YNK"/>
                                             </constraints>
                                             <state key="normal" image="drop_image"/>
+                                            <connections>
+                                                <action selector="showSuperVisor:" destination="nnO-fm-j2n" eventType="touchUpInside" id="EQB-7d-hyi"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu8-ya-BgW">
                                             <rect key="frame" x="365" y="21" width="0.0" height="0.0"/>
@@ -223,6 +226,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="buttonSupervisor" destination="NNm-te-mcn" id="EEe-tf-S4V"/>
                                     <outlet property="flightTypeIcon" destination="zQQ-BR-78E" id="VEn-Rz-wEn"/>
                                     <outlet property="labelFlightArrivalTime" destination="uJx-Hj-OJZ" id="YIR-bo-fAu"/>
                                     <outlet property="labelFlightName" destination="UdW-Fk-jhT" id="MVd-Ji-FIT"/>
@@ -248,7 +252,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Qb-aS-LZC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-598" y="160"/>
+            <point key="canvasLocation" x="-599.20000000000005" y="158.77061469265368"/>
         </scene>
         <!--Detail List Controller-->
         <scene sceneID="4ej-jo-05d">

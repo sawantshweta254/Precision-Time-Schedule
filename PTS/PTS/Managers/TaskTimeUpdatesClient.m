@@ -68,10 +68,10 @@
     }
 }
 
-- (void) updateUserForFlight:(PTSItem *)pts{
+- (void) updateUserForFlight:(NSArray *)ptsIdsArray{
     if (self.webSocketClient.readyState == SR_OPEN) {
         WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
-        [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:pts]];
+        [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:ptsIdsArray]];
     }
 }
 
