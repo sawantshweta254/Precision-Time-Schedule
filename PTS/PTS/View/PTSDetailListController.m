@@ -79,6 +79,8 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -108,9 +110,15 @@
 }
 
 #pragma mark NSNotification methods
--(void)updateChangesForPTS:(NSNotification *) notification
+-(void) updateChangesForPTS:(NSNotification *) notification
 {
     [self.ptsSubTasksCollectionView reloadData];
+}
+
+-(void) updateSocketConnectivity:(NSNotification *) notification{
+    if ([notification.object boolValue]) {
+        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+    }
 }
 
 #pragma mark- Navigation

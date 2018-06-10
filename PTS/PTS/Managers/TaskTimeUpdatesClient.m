@@ -43,14 +43,16 @@
     NSLog(@"Did Open");
     self.webSocketClient = webSocket;
     self.socketConnectedCompletion(TRUE);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SocketConnectionUpdated" object:[NSNumber numberWithBool:TRUE]];
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SocketConnectionUpdated" object:[NSNumber numberWithBool:FALSE]];
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SocketConnectionUpdated" object:[NSNumber numberWithBool:FALSE]];
+
 }
 
 -(void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{

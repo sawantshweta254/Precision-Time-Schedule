@@ -70,6 +70,7 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,9 +107,23 @@
 }
 
 #pragma mark NSNotification methods
--(void)updateChangesForPTS:(NSNotification *) notification
+-(void) updateChangesForPTS:(NSNotification *) notification
 {
     [self.tableView reloadData];
+}
+
+-(void) updateSocketConnectivity:(NSNotification *) notification{
+    if ([notification.object boolValue]) {
+        [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+//            [self.taskUpdateClient updateFlightTask:self.ptsTask]
+            [self loadListOnView];
+        }];
+    }else{
+        [self.socketConnectedButton setImage:[UIImage imageNamed:@"red"] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - Table view data source
