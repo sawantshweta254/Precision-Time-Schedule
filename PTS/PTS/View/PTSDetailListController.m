@@ -281,6 +281,7 @@
         [self.taskUpdateClient updateFlightTask:self.ptsTask];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
+        [self startChockOnSubActivity];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
@@ -312,6 +313,21 @@
     int timeElapsed = ptsTaskTimeWindow - duration;
     
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+}
+
+-(void) startChockOnSubActivity{
+    PTSSubTask *chockOnSubTask = [self.ptsBWingSubItemList objectAtIndex:0];
+    chockOnSubTask.subactivityStartTime = [NSDate date];
+    chockOnSubTask.isRunning = 2;
+    chockOnSubTask.isComplete = 1;
+    chockOnSubTask.subactivityEndTime = [NSDate date];
+    
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+    NSError *error;
+    [moc save:&error];
+    
+    [self.ptsSubTasksCollectionView reloadItemsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil]];
+    [self.taskUpdateClient updateFlightTask:self.ptsTask];
 }
 
 #pragma mark Cell Delegate methods
