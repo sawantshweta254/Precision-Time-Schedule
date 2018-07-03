@@ -30,7 +30,15 @@
     if (loggedInUser.empType == 2) {
 //        NSArray *flightIds = [NSArray arrayWithObject:[NSNumber numberWithInt:ptsItem.flightId]];
         [messageDict setValue:ptsItemsIdArray forKey:@"flights_id"];
-    }else{
+    }else if (loggedInUser.empType == 3){
+        [messageDict setValue:ptsItemsIdArray forKey:@"master_redcap"];
+        NSMutableDictionary *masterDictionary = [[NSMutableDictionary alloc] init];
+        for (NSNumber *ptsId in ptsItemsIdArray) {
+            [masterDictionary setObject:ptsId forKey:@"flights_id"];
+            [masterDictionary setObject:[NSNumber numberWithInteger:1] forKey:@"is_master"];
+        }
+    }
+    else{
         [messageDict setValue:@"" forKey:@"flight_id"];
     }
     

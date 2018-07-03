@@ -68,7 +68,7 @@ static LoginManager *sharedInstance;
 -(ApiRequestData *) getRequestDataForLogin:(Login *) loginObject{
     ApiRequestData *requestData = [[ApiRequestData alloc] init];
     
-    requestData.baseURL = @"http://techdew.co.in/pts/webapi/signup.php?cmd=";
+    requestData.baseURL = [NSString stringWithFormat:@"%@signup.php?cmd=", SERVICE_API_URL];
     requestData.postData = [self getDataForLoginRequest:loginObject];
     
     return requestData;

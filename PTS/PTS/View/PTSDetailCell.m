@@ -127,6 +127,9 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+        if (duration > ptsTaskTimeWindow) {
+            [self.labelSubTaskTimer setTextColor:[UIColor redColor]];
+        }
     });
 }
 
@@ -135,7 +138,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"hh:mm";
-        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
+//        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
         if (self.subTask.isRunning == 1) {
             self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];
         }else if(self.subTask.isComplete){
@@ -204,7 +207,6 @@
         self.subTask.isRunning = 2;
         self.subTask.isComplete = 1;
         self.subTask.subactivityEndTime = [NSDate date];
-        self.subTask.userEndTime = self.subTask.userEndTime;
         [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         
         [self setTimeLabels];

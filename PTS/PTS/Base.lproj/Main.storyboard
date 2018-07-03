@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NMN-gN-Tgx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NMN-gN-Tgx">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -194,19 +194,19 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NNm-te-mcn">
-                                            <rect key="frame" x="315" y="58.5" width="50" height="50"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bgt-UR-0Vn">
+                                            <rect key="frame" x="299" y="48" width="50" height="50"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="50" id="79u-dy-TXo"/>
-                                                <constraint firstAttribute="width" secondItem="NNm-te-mcn" secondAttribute="height" multiplier="1:1" id="hre-Dw-YNK"/>
+                                                <constraint firstAttribute="width" constant="50" id="r3k-Vr-vwx"/>
+                                                <constraint firstAttribute="width" secondItem="bgt-UR-0Vn" secondAttribute="height" multiplier="1:1" id="yeR-0a-rj9"/>
                                             </constraints>
                                             <state key="normal" image="drop_image"/>
                                             <connections>
-                                                <action selector="showSuperVisor:" destination="nnO-fm-j2n" eventType="touchUpInside" id="EQB-7d-hyi"/>
+                                                <action selector="showSuperVisor:" destination="nnO-fm-j2n" eventType="touchUpInside" id="F4L-mX-Tmb"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu8-ya-BgW">
-                                            <rect key="frame" x="365" y="21" width="0.0" height="0.0"/>
+                                            <rect key="frame" x="349" y="21" width="0.0" height="0.0"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -216,9 +216,9 @@
                                         <constraint firstItem="zQQ-BR-78E" firstAttribute="centerY" secondItem="pNk-ke-TvV" secondAttribute="centerY" id="0gf-eg-Y4F"/>
                                         <constraint firstItem="zQQ-BR-78E" firstAttribute="leading" secondItem="pNk-ke-TvV" secondAttribute="leadingMargin" constant="10" id="BH8-a6-gXx"/>
                                         <constraint firstItem="NAc-xI-ZRP" firstAttribute="centerY" secondItem="pNk-ke-TvV" secondAttribute="centerY" id="EGs-Po-GF3"/>
-                                        <constraint firstItem="Bu8-ya-BgW" firstAttribute="trailing" secondItem="NNm-te-mcn" secondAttribute="trailing" id="RoM-XC-hnj"/>
-                                        <constraint firstAttribute="bottom" secondItem="NNm-te-mcn" secondAttribute="bottom" constant="10" id="bU5-fg-3wz"/>
-                                        <constraint firstAttribute="trailing" secondItem="NNm-te-mcn" secondAttribute="trailing" constant="10" id="eBx-LF-FZ0"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="bgt-UR-0Vn" secondAttribute="bottom" constant="10" id="KQv-Hd-GJ0"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="bgt-UR-0Vn" secondAttribute="trailing" constant="10" id="UYq-1P-thZ"/>
+                                        <constraint firstItem="bgt-UR-0Vn" firstAttribute="trailing" secondItem="Bu8-ya-BgW" secondAttribute="trailing" id="gPF-x6-VL7"/>
                                         <constraint firstItem="NAc-xI-ZRP" firstAttribute="leading" secondItem="zQQ-BR-78E" secondAttribute="trailing" constant="20" id="gmI-5b-yNF"/>
                                         <constraint firstItem="Bu8-ya-BgW" firstAttribute="top" secondItem="pNk-ke-TvV" secondAttribute="topMargin" constant="10" id="gw0-Ir-r3x"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="NAc-xI-ZRP" secondAttribute="bottom" constant="10" id="rSQ-hF-kpP"/>
@@ -226,7 +226,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="buttonSupervisor" destination="NNm-te-mcn" id="EEe-tf-S4V"/>
+                                    <outlet property="buttonSupervisor" destination="bgt-UR-0Vn" id="ayd-5R-d4T"/>
                                     <outlet property="flightTypeIcon" destination="zQQ-BR-78E" id="VEn-Rz-wEn"/>
                                     <outlet property="labelFlightArrivalTime" destination="uJx-Hj-OJZ" id="YIR-bo-fAu"/>
                                     <outlet property="labelFlightName" destination="UdW-Fk-jhT" id="MVd-Ji-FIT"/>

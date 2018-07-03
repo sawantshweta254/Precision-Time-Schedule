@@ -16,19 +16,21 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSTime;
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSDay;
 @property (weak, nonatomic) IBOutlet UILabel *labelPtsTimer;
+@property (weak, nonatomic) IBOutlet UIButton *buttonSupervisor;
 @property (strong, nonatomic) PTSItem *ptsItem;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSupervisor;
+
 @end
 
 @implementation PTSListViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
+//    self.contentView.userInteractionEnabled = NO;
+    
     self.ptsItem = ptsItem;
     self.labelFlightName.text = ptsItem.flightNo;
     
@@ -91,20 +93,31 @@
 }
 
 -(void) setCallTime{
-    NSTimeInterval timeInterval = fabs([self.ptsItem.ptsStartTime timeIntervalSinceNow]);
-    int ptsTaskTimeWindow = self.ptsItem.timeWindow * 60;
-    int duration = (int)timeInterval;
+//    NSTimeInterval timeInterval = fabs([self.ptsItem.ptsStartTime timeIntervalSinceNow]);
+//    int ptsTaskTimeWindow = self.ptsItem.timeWindow * 60;
+//    int duration = (int)timeInterval;
+//    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+//    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+//    if (duration > 3600) {
+//        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+//    }else{
+//        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+//    }
+//
+//    int timeElapsed = ptsTaskTimeWindow - duration;
+//
+//    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+    
+    NSTimeInterval timeInterval = fabs([[NSDate date] timeIntervalSinceDate:self.ptsItem.ptsStartTime]);
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
     timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
-    if (duration > 3600) {
+    if (timeInterval > 3600) {
         timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
     }else{
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
     }
     
-    int timeElapsed = ptsTaskTimeWindow - duration;
-    
-    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
 }
 
 - (IBAction)showSuperVisor:(id)sender {
