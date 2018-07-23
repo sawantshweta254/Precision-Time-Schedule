@@ -33,6 +33,7 @@
         <attribute name="calculatedPTSFinalTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="current_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="end" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hasExceededTime" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isComplete" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isRunning" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="mRefereceTimeId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -83,7 +84,7 @@
     </entity>
     <elements>
         <element name="PTSItem" positionX="-54" positionY="54" width="128" height="450"/>
-        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="405"/>
+        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="420"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="180"/>

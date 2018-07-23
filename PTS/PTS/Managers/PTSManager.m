@@ -29,6 +29,22 @@ static PTSManager *sharedInstance;
     return sharedInstance;
 }
 
+-(void) fetchPTSListFromDB:(User*)user completionHandler:(void(^)(NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
+    
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
+        NSError *error;
+        NSArray *ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
+        
+        NSMutableArray *finalPTSList = [[NSMutableArray alloc] init];
+        if (ptsArray.count > 0) {
+            [finalPTSList addObjectsFromArray:ptsArray];
+        }
+        
+        fetchPTSCompletionHandler(finalPTSList, nil);
+}
+
+
 -(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
     
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSList:user] completionHandler:^(BOOL requestSuccessfull, id responseData) {

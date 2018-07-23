@@ -44,20 +44,28 @@
         LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
         [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
     }else{
+        [[PTSManager sharedInstance] fetchPTSListFromDB:loggedInUser completionHandler:^(NSArray *ptsTasks, NSError *error) {
+            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+            if (self.ptsTasks.count > 0) {
+                [self loadListOnView];
+                [self registerFlightsForUpdate];
+            }
+        }];
+        
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
                 [self loadListOnView];
                 [self registerFlightsForUpdate];
             }
-            if (self.taskUpdateClient == nil) {
-                self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-                [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
-                    [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-                }];
-            }
-
         }];
+        
+        if (self.taskUpdateClient == nil) {
+            self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+            [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+                [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+            }];
+        }
         
     }
     

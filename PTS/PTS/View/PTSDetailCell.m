@@ -33,6 +33,7 @@
     self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
     self.taskNumLabel.text = subTask.notations;
+    self.subTask.hasExceededTime = FALSE;
     
     if (subTask.start - subTask.end == 0) {
         [self.labelSubTaskTimer setHidden:YES];
@@ -48,7 +49,7 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1) {
+    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1 && !self.labelSubTaskTimer.hidden) {
         [self setTaskTime:nil];
         if (self.ptsTaskTimer == nil) {
             self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
@@ -127,10 +128,10 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
-        if (duration > ptsTaskTimeWindow) {
-            [self.labelSubTaskTimer setTextColor:[UIColor redColor]];
-        }else{
-            [self.labelSubTaskTimer setTextColor:[UIColor blackColor]];
+        if (duration > ptsTaskTimeWindow && !self.subTask.hasExceededTime && !self.labelSubTaskTimer.hidden) {
+            self.subTask.hasExceededTime = TRUE;
+            [self setContainerViewBackground];
+            [self.delegate updateFlightPTS];
         }
     });
 }
@@ -142,7 +143,9 @@
         dateFormatter.dateFormat = @"hh:mm";
 //        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
         
-        if (self.subTask.isRunning == 1) {
+        if(self.subTask.hasExceededTime){
+            self.containerView.backgroundColor = [UIColor redColor];
+        }else if (self.subTask.isRunning == 1) {
             self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];
         }else if(self.subTask.isComplete){
             self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
