@@ -48,12 +48,12 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1) {
+    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1) {
         [self setTaskTime:nil];
         if (self.ptsTaskTimer == nil) {
             self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
         }
-    }else if (self.subTask.isRunning == 2){
+    }else if (self.subTask.isRunning == 2 || (self.subTask.isRunning == 1 && self.ptsItem.isRunning != 1)){
         NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
         int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
         int duration = (int)timeInterval;
@@ -81,7 +81,7 @@
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2) {
+    if (loggedInUser.empType == 2 || self.subTask.shouldBeInActive) {
         return;
     }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
@@ -129,6 +129,8 @@
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
         if (duration > ptsTaskTimeWindow) {
             [self.labelSubTaskTimer setTextColor:[UIColor redColor]];
+        }else{
+            [self.labelSubTaskTimer setTextColor:[UIColor blackColor]];
         }
     });
 }
@@ -139,6 +141,7 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"hh:mm";
 //        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
+        
         if (self.subTask.isRunning == 1) {
             self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];
         }else if(self.subTask.isComplete){
@@ -155,6 +158,9 @@
                 [self.labelSubTaskTimer setHidden:NO];
                 self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
             }
+        }
+        if (self.subTask.shouldBeInActive) {
+            self.containerView.backgroundColor = [UIColor grayColor];
         }
     });
 }
@@ -198,7 +204,7 @@
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2) {
+    if (loggedInUser.empType == 2 || self.subTask.shouldBeInActive) {
         return;
     }
     if (self.ptsItem.isRunning == 1) {
@@ -218,12 +224,23 @@
 }
 
 - (IBAction)addRemark:(id)sender {
-    if (self.ptsItem.isRunning == 1) {
+    if ([self shouldPerformAction]) {
         [self.delegate updateRemarkForSubtask:self.subTask];
     }
 }
 
 - (IBAction)addTime:(id)sender {
+    if ([self shouldPerformAction]) {
+        [self.delegate updateUSerTimeForSubtask:self.subTask];
+    }
+}
+
+-(BOOL) shouldPerformAction{
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (self.subTask.isRunning == 0 || self.subTask.shouldBeInActive || loggedInUser.empType == 2){
+        return FALSE;
+    }
+    return TRUE;
 }
 
 @end

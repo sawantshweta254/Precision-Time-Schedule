@@ -12,6 +12,7 @@
 
 @protocol PTSDetailCellDelegate
 -(void) updateRemarkForSubtask:(PTSSubTask *)subTask;
+-(void) updateUSerTimeForSubtask:(PTSSubTask *)subTask;
 -(void) updateFlightPTS;
 @end
 

@@ -123,16 +123,16 @@
 
 #pragma mark- Navigation
 
--(BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    if ([identifier isEqualToString:@"SetTastTime"]){
-        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-        if (loggedInUser.empType == 2) {
-            return FALSE;
-        }
-    }
-    
-    return TRUE;
-}
+//-(BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+//    if ([identifier isEqualToString:@"SetTastTime"]){
+//        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+//        if (loggedInUser.empType == 2) {
+//            return FALSE;
+//        }
+//    }
+//
+//    return TRUE;
+//}
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"AddRemarkSegue"]) {
@@ -149,17 +149,18 @@
 ////            addRemarkViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
 //        }
     }else{
-        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
-        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
+//        CGPoint buttonPoint =  [sender convertPoint:CGPointZero toView:self.ptsSubTasksCollectionView];
+//        NSIndexPath *buttonIndexPath = [self.ptsSubTasksCollectionView indexPathForItemAtPoint:buttonPoint];
         SetTimeViewController *setTimeViewController = segue.destinationViewController;
         setTimeViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         setTimeViewController.delegate = self;
+        setTimeViewController.subTask = (PTSSubTask *)sender;
         
-        if (self.selectedWingIndex == 0) {
-            setTimeViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
-        }else{
-            setTimeViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
-        }
+//        if (self.selectedWingIndex == 0) {
+//            setTimeViewController.subTask = [self.ptsAWingSubItemList objectAtIndex:buttonIndexPath.row];
+//        }else{
+//            setTimeViewController.subTask = [self.ptsBWingSubItemList objectAtIndex:buttonIndexPath.row];
+//        }
      }
 }
 
@@ -232,7 +233,7 @@
 
 - (IBAction)updatePTSItemTimer:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2) {
+    if (loggedInUser.empType == 2 || !self.ptsTask.masterRedCap) {
         return;
     }
     
@@ -291,7 +292,7 @@
         [moc save:&error];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
-        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+        self.ptsTaskTimer = nil;
     }
     
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
@@ -348,6 +349,10 @@
 
 -(void) updateRemarkForSubtask:(PTSSubTask *)subTask{
     [self performSegueWithIdentifier:@"AddRemarkSegue" sender:subTask];
+}
+
+-(void) updateUSerTimeForSubtask:(PTSSubTask *)subTask{
+    [self performSegueWithIdentifier:@"SetTaskTime" sender:subTask];
 }
 
 #pragma mark AddRemarkView delegate methods

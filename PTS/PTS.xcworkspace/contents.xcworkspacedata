@@ -2,6 +2,30 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:RedCapSubtask+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
+      location = "group:RedCap+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCap+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCap+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:RedCap+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:PTSSubTask+CoreDataProperties.h">
    </FileRef>
    <FileRef

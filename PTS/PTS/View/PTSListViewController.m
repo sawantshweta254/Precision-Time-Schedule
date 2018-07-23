@@ -16,6 +16,7 @@
 
 #import "LoginManager.h"
 #import "TaskTimeUpdatesClient.h"
+#import "RedCap+CoreDataProperties.h"
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
@@ -32,13 +33,6 @@
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    if (self.taskUpdateClient == nil) {
-        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-        [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
-            [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-        }];
-    }
-
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -54,10 +48,17 @@
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
                 [self loadListOnView];
-                NSArray *ptsIdsArray = [self.ptsTasks valueForKey:@"flightId"];
-                [self.taskUpdateClient updateUserForFlight:ptsIdsArray];
+                [self registerFlightsForUpdate];
             }
+            if (self.taskUpdateClient == nil) {
+                self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+                [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+                    [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+                }];
+            }
+
         }];
+        
     }
     
     self.navigationItem.title = [NSString stringWithFormat:@"Welcome %@",loggedInUser.userName];
@@ -72,6 +73,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
+}
+
+-(RedCap *) selfRedCap:(NSArray *)redCapsArray{
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    NSPredicate *selfRedcapPredicate = [NSPredicate predicateWithFormat:@"redCapId == %lf",loggedInUser.userId];
+    RedCap *selfRedcap = [[redCapsArray filteredArrayUsingPredicate:selfRedcapPredicate] lastObject];
+    
+    return selfRedcap;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,7 +128,7 @@
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-//            [self.taskUpdateClient updateFlightTask:self.ptsTask]
+            [self registerFlightsForUpdate];
             [self loadListOnView];
         }];
     }else{
@@ -187,6 +196,16 @@
     [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
         [self loadListOnView];
+        
+        if (self.taskUpdateClient == nil) {
+            self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+            [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+                [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+            }];
+        }
+        
+        [self registerFlightsForUpdate];
+
     }];
 }
 
@@ -198,6 +217,17 @@
     PTSDetailListController *ptsDetailView = segue.destinationViewController;
     ptsDetailView.taskUpdateClient = self.taskUpdateClient;
     ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:selectedIndex];
+}
+
+#pragma mark Utility methods
+- (void) registerFlightsForUpdate{
+    NSArray *ptsIdsArray = [self.ptsTasks valueForKey:@"flightId"];
+    NSMutableDictionary *redCapDetailsDic = [[NSMutableDictionary alloc] init];
+    for (PTSItem *ptsItem in self.ptsTasks) {
+        RedCap *selfRedcap = [self selfRedCap:[ptsItem.redCaps allObjects]];
+        [redCapDetailsDic setObject:[NSNumber numberWithBool:selfRedcap.masterRedCap] forKey:[NSNumber numberWithInt:ptsItem.flightId]];
+    }
+    [self.taskUpdateClient updateUserForFlight:ptsIdsArray masterRedCapDetails:redCapDetailsDic];
 }
 
 @end

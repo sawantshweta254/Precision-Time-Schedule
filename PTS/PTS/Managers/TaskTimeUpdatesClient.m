@@ -66,13 +66,20 @@
                                                              options:NSJSONReadingMutableContainers
                                                                error:&jsonError];
         [[PTSManager sharedInstance] parseUpdatesReceivedForPTS:ptsJson];
+    }else if (loggedInUser.empType == 3){
+        NSError *jsonError;
+        NSData *objectData = [message dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *ptsJson = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                options:NSJSONReadingMutableContainers
+                                                                  error:&jsonError];
+        [[PTSManager sharedInstance] parsePTSUpdateReceivedForRedCap:ptsJson];
     }
 }
 
-- (void) updateUserForFlight:(NSArray *)ptsIdsArray{
+- (void) updateUserForFlight:(NSArray *)ptsIdsArray masterRedCapDetails:(NSDictionary *)redcapDictionary;{
     if (self.webSocketClient.readyState == SR_OPEN) {
         WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
-        [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:ptsIdsArray]];
+        [self.webSocketClient send:[messageFactory createLoggedInUserMessageForFlight:ptsIdsArray forRedCapDetails:redcapDictionary]];
     }
 }
 

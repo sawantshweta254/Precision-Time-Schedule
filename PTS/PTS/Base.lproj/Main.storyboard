@@ -409,7 +409,6 @@
                                                                     </state>
                                                                     <connections>
                                                                         <action selector="addTime:" destination="QFb-aP-jFb" eventType="touchUpInside" id="7Ld-gW-3Q9"/>
-                                                                        <segue destination="Dja-ps-L8c" kind="presentation" identifier="SetTastTime" id="hM4-XP-7FY"/>
                                                                     </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X5p-UP-qMK">
@@ -522,6 +521,7 @@
                         <outlet property="ptsSubTasksCollectionView" destination="gbE-EO-wj7" id="ma4-z0-5Sr"/>
                         <outlet property="wingSegmentCOntroller" destination="DtL-BF-FvP" id="qRU-Uh-8Z9"/>
                         <segue destination="ecu-rB-XVf" kind="presentation" identifier="AddRemarkSegue" id="FMV-rz-Bke"/>
+                        <segue destination="Dja-ps-L8c" kind="presentation" identifier="SetTaskTime" id="8Di-jf-EIO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vhb-09-Dz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -531,7 +531,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="655.20000000000005" y="62.518740629685162"/>
+            <point key="canvasLocation" x="497" y="119"/>
         </scene>
         <!--Set Time View Controller-->
         <scene sceneID="KoL-re-GIe">
@@ -917,7 +917,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="YUG-u4-kJm"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email Id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B0u-Xc-YzC">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="shweta@gmail.com" placeholder="Enter Email Id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B0u-Xc-YzC">
                                                                 <rect key="frame" x="40" y="14" width="231" height="17"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -951,7 +951,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="eH5-bR-A0S"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJl-z5-tQ2">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="admin" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJl-z5-tQ2">
                                                                 <rect key="frame" x="40" y="14" width="231" height="17"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1097,6 +1097,6 @@
         <image name="user_name" width="15" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6uS-Ug-PPz"/>
+        <segue reference="ArZ-cv-lE6"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -12,7 +12,7 @@
 
 @implementation WebsocketMessageFactory
 
--(NSString *) createLoggedInUserMessageForFlight:(NSArray *)ptsItemsIdArray{
+-(NSString *) createLoggedInUserMessageForFlight:(NSArray *)ptsItemsIdArray  forRedCapDetails:(NSDictionary *)redCapDictionary{
     
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
 
@@ -27,17 +27,19 @@
     }else{
         
     }*/
+    
     if (loggedInUser.empType == 2) {
-//        NSArray *flightIds = [NSArray arrayWithObject:[NSNumber numberWithInt:ptsItem.flightId]];
         [messageDict setValue:ptsItemsIdArray forKey:@"flights_id"];
     }else if (loggedInUser.empType == 3){
-        [messageDict setValue:ptsItemsIdArray forKey:@"master_redcap"];
-        NSMutableDictionary *masterDictionary = [[NSMutableDictionary alloc] init];
+        NSMutableArray *flightDetails = [[NSMutableArray alloc] init];
         for (NSNumber *ptsId in ptsItemsIdArray) {
+            NSMutableDictionary *masterDictionary = [[NSMutableDictionary alloc] init];
             [masterDictionary setObject:ptsId forKey:@"flights_id"];
-            [masterDictionary setObject:[NSNumber numberWithInteger:1] forKey:@"is_master"];
+            [masterDictionary setObject:[redCapDictionary objectForKey:ptsId] forKey:@"is_master"];
+            [flightDetails addObject:masterDictionary];
         }
-    }
+        [messageDict setValue:flightDetails forKey:@"master_redcap"];
+     }
     else{
         [messageDict setValue:@"" forKey:@"flight_id"];
     }
@@ -55,11 +57,11 @@
     [messageDict setValue:[NSNumber numberWithDouble:loggedInUser.userId] forKey:@"userid"];
     [messageDict setValue:[self ptsTimesInString:ptsItem.ptsStartTime] forKey:@"pts_start_time"];
     
-//    if (ptsItem.ptsEndTime == nil) {
+    if (ptsItem.ptsEndTime == nil) {
         [messageDict setValue:@"0" forKey:@"pts_end_time"];
-//    }else{
-//        [messageDict setValue:[self ptsTimesInString:ptsItem.ptsEndTime] forKey:@"pts_end_time"];
-//    }
+    }else{
+        [messageDict setValue:[self ptsTimesInString:ptsItem.ptsEndTime] forKey:@"pts_end_time"];
+    }
     
 
     [messageDict setValue:currentDeviceId forKey:@"device_id"];
@@ -67,7 +69,7 @@
     [messageDict setValue:ptsItem.flightNo forKey:@"flight_num"];
     [messageDict setValue:[NSNumber numberWithInteger:ptsItem.flightType] forKey:@"flight_type"];
     [messageDict setValue:ptsItem.flightTime forKey:@"arr_dep_type"];
-    [messageDict setValue:[NSNumber numberWithInteger:1] forKey:@"is_running"];
+    [messageDict setValue:[NSNumber numberWithInteger:ptsItem.isRunning] forKey:@"is_running"];
     
     [messageDict setValue:ptsItem.ptsName forKey:@"pts_name"];
     [messageDict setValue:[NSNumber numberWithInteger:ptsItem.timeWindow] forKey:@"pts_time"];
