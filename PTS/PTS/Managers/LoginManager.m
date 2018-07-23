@@ -39,6 +39,16 @@ static LoginManager *sharedInstance;
     return loggedInUser;
 }
 
+-(void) saveListTypeForUser:(BOOL)shouldSetGrid{
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+
+    User *loggedInUser = [self getLoggedInUser];
+    loggedInUser.gridViewSelected = shouldSetGrid;
+    
+    NSError *error;
+    [moc save:&error];
+}
+
 -(void) loginUser:(NSString *) username withPassword:(NSString *) password completionHandler:(void (^)(BOOL didLogin, User *user, NSString *errorMessage))loginCompletionHandler{
     Login *loginObj = [[Login alloc] init];
     loginObj.userName = username;

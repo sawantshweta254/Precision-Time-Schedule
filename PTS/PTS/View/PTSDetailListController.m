@@ -28,7 +28,6 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *listTypeSegmentController;
 
 @property (nonatomic) NSInteger selectedWingIndex;
-@property (nonatomic) NSInteger selectedListTypeIndex;
 
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
 @end
@@ -43,6 +42,10 @@
     [self.wingSegmentCOntroller setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
     [self.listTypeSegmentController setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
     
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.gridViewSelected) {
+        self.listTypeSegmentController.selectedSegmentIndex = 1;
+    }
 
     if (self.ptsTask.isRunning == 1) {
         [self setCallTime];
@@ -188,14 +191,6 @@
     return self.ptsBWingSubItemList.count;
 }
 
-//- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-//    if (self.selectedListTypeIndex == 0) {
-//        return 1;
-//    }else{
-//        return 2;
-//    }
-//}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -205,7 +200,7 @@
     float cellWidth = screenWidth / 2.0; //Replace the divisor with the column count requirement. Make sure to have it in float.
     
     
-    if (self .selectedListTypeIndex == 0) {
+    if (self.listTypeSegmentController.selectedSegmentIndex == 0) {
         CGSize size = CGSizeMake(screenWidth, cellHeight);
         return size;
     }
@@ -222,7 +217,7 @@
 }
 
 - (IBAction)displayStyleChanged:(id)sender {
-    self.selectedListTypeIndex = self.listTypeSegmentController.selectedSegmentIndex;
+    [[LoginManager sharedInstance] saveListTypeForUser:self.listTypeSegmentController.selectedSegmentIndex];
     [self.ptsSubTasksCollectionView reloadData];
 }
 

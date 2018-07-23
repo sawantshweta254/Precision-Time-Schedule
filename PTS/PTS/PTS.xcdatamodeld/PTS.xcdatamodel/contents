@@ -75,6 +75,7 @@
         <attribute name="apiStatus" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="empType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="flightPTSInfo" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="gridViewSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userId" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -85,6 +86,6 @@
         <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="405"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="163"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>
