@@ -60,12 +60,7 @@
             }
         }];
         
-        if (self.taskUpdateClient == nil) {
-            self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-            [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
-                [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-            }];
-        }
+        [self setUpTaskClient];
         
     }
     
@@ -81,6 +76,21 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+
+}
+
+- (void)setUpTaskClient {
+    if (self.taskUpdateClient == nil) {
+        self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+        [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+            [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+        }];
+    }else if(![self.taskUpdateClient isWebSocketConnected]){
+        [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+            [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+        }];
+    }
 }
 
 -(RedCap *) selfRedCap:(NSArray *)redCapsArray{
@@ -125,6 +135,11 @@
 }
 
 #pragma mark NSNotification methods
+-(void)appDidBecomeActive:(NSNotification*)note
+{
+    [self setUpTaskClient];
+}
+
 -(void) updateChangesForPTS:(NSNotification *) notification
 {
     [self.tableView reloadData];
