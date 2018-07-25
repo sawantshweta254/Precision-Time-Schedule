@@ -282,6 +282,8 @@
     }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
         self.ptsTask.isRunning = 2;
+        [self stopAnySubtasksWhichAreRunning];
+        
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
@@ -293,6 +295,24 @@
     [self.ptsSubTasksCollectionView reloadData];
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
     
+}
+
+-(void) stopAnySubtasksWhichAreRunning{
+    for (PTSSubTask *subTask in self.ptsAWingSubItemList) {
+        if (subTask.isRunning == 1) {
+            subTask.isRunning = 2;
+            subTask.isComplete = 1;
+            subTask.subactivityEndTime = [NSDate date];
+        }
+    }
+    
+    for (PTSSubTask *subTask in self.ptsBWingSubItemList) {
+        if (subTask.isRunning == 1) {
+            subTask.isRunning = 2;
+            subTask.isComplete = 1;
+            subTask.subactivityEndTime = [NSDate date];
+        }
+    }
 }
 
 -(void) setCallTime{

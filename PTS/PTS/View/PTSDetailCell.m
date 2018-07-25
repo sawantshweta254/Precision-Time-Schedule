@@ -67,7 +67,9 @@
         }
         
         int timeElapsed = ptsTaskTimeWindow - duration;
-        
+        if (duration > ptsTaskTimeWindow && !self.labelSubTaskTimer.hidden) {
+            self.subTask.hasExceededTime = TRUE;
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];                
         });
