@@ -290,6 +290,7 @@
         self.ptsTaskTimer = nil;
     }
     
+    [self.ptsSubTasksCollectionView reloadData];
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
     
 }
