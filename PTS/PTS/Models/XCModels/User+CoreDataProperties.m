@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 27/02/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -11,16 +11,17 @@
 @implementation User (CoreDataProperties)
 
 + (NSFetchRequest<User *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"User"];
+	return [NSFetchRequest fetchRequestWithEntityName:@"User"];
 }
 
-@dynamic userName;
-@dynamic flightPTSInfo;
 @dynamic airportId;
-@dynamic userId;
 @dynamic apiStatus;
-@dynamic port;
-@dynamic message;
 @dynamic empType;
+@dynamic flightPTSInfo;
+@dynamic gridViewSelected;
+@dynamic message;
+@dynamic port;
+@dynamic userId;
+@dynamic userName;
 
 @end

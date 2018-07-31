@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 19/03/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -11,18 +11,23 @@
 @implementation PTSItem (CoreDataProperties)
 
 + (NSFetchRequest<PTSItem *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"PTSItem"];
+	return [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
 }
 
 @dynamic airlineName;
+@dynamic currentTime;
 @dynamic dutyManagerId;
 @dynamic dutyManagerName;
+@dynamic executionTime;
 @dynamic flightDate;
 @dynamic flightId;
 @dynamic flightNo;
 @dynamic flightTime;
 @dynamic flightType;
+@dynamic isRunning;
 @dynamic jsonData;
+@dynamic masterRedCap;
+@dynamic ptsEndTime;
 @dynamic ptsName;
 @dynamic ptsStartTime;
 @dynamic ptsSubTaskId;
@@ -31,9 +36,10 @@
 @dynamic remarks;
 @dynamic supervisorId;
 @dynamic supervisorName;
+@dynamic timerStopTime;
 @dynamic timeWindow;
-@dynamic ptsEndTime;
 @dynamic aboveWingActivities;
 @dynamic belowWingActivities;
+@dynamic redCaps;
 
 @end

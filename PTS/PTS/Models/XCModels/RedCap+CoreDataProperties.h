@@ -2,7 +2,7 @@
 //  RedCap+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 03/07/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RedCap *> *)fetchRequest;
 
+@property (nonatomic) BOOL masterRedCap;
 @property (nonatomic) int16_t redCapId;
-@property (nonatomic) int16_t tableGroupId;
 @property (nullable, nonatomic, copy) NSString *redcapName;
-@property (nullable, nonatomic, copy) NSString *masterRedCap;
+@property (nonatomic) int16_t tableGroupId;
 @property (nullable, nonatomic, retain) NSSet<RedCapSubtask *> *aboveWingSubTasks;
 @property (nullable, nonatomic, retain) NSSet<RedCapSubtask *> *belowWingSubtask;
 

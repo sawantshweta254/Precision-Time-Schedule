@@ -282,8 +282,10 @@
     }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
         self.ptsTask.isRunning = 2;
-        [self stopAnySubtasksWhichAreRunning];
+//        [self stopAnySubtasksWhichAreRunning];
         
+        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
@@ -293,7 +295,6 @@
     }
     
     [self.ptsSubTasksCollectionView reloadData];
-    [self.taskUpdateClient updateFlightTask:self.ptsTask];
     
 }
 

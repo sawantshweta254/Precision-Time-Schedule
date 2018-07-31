@@ -2,7 +2,7 @@
 //  RedCap+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 03/07/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -14,10 +14,10 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"RedCap"];
 }
 
-@dynamic redCapId;
-@dynamic tableGroupId;
-@dynamic redcapName;
 @dynamic masterRedCap;
+@dynamic redCapId;
+@dynamic redcapName;
+@dynamic tableGroupId;
 @dynamic aboveWingSubTasks;
 @dynamic belowWingSubtask;
 

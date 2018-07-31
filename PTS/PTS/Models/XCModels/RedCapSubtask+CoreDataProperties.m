@@ -2,7 +2,7 @@
 //  RedCapSubtask+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 03/07/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -15,9 +15,9 @@
 }
 
 @dynamic end;
-@dynamic taskId;
 @dynamic notations;
 @dynamic start;
 @dynamic subactivity;
+@dynamic taskId;
 
 @end

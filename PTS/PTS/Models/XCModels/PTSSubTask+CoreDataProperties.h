@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 21/03/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -15,17 +15,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<PTSSubTask *> *)fetchRequest;
 
+@property (nonatomic) int16_t calculatedPTSFinalTime;
 @property (nullable, nonatomic, copy) NSDate *current_time;
 @property (nonatomic) int16_t end;
+@property (nonatomic) BOOL hasExceededTime;
 @property (nonatomic) int16_t isComplete;
 @property (nonatomic) int16_t isRunning;
 @property (nonatomic) int16_t mRefereceTimeId;
-@property (nullable, nonatomic, copy) NSString *negativeDataSendServer;
+@property (nonatomic) BOOL negativeDataSendServer;
 @property (nullable, nonatomic, copy) NSString *notations;
 @property (nonatomic) int16_t ptsDetailsId;
 @property (nonatomic) int16_t ptsTotalTime;
 @property (nonatomic) int16_t ptsWing;
 @property (nullable, nonatomic, copy) NSString *referenceTime;
+@property (nonatomic) BOOL shouldBeInActive;
 @property (nonatomic) int16_t start;
 @property (nullable, nonatomic, copy) NSString *subactivity;
 @property (nullable, nonatomic, copy) NSDate *subactivityEndTime;
@@ -37,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSDate *userEndTime;
 @property (nullable, nonatomic, copy) NSDate *userStartTime;
 @property (nullable, nonatomic, copy) NSString *userSubActFeedback;
-@property (nonatomic) int16_t calculatedPTSFinalTime;
 
 @end
 

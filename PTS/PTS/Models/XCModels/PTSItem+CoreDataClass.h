@@ -2,12 +2,14 @@
 //  PTSItem+CoreDataClass.h
 //  
 //
-//  Created by Shweta Sawant on 01/03/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+
+@class PTSSubTask, RedCap;
 
 NS_ASSUME_NONNULL_BEGIN
 

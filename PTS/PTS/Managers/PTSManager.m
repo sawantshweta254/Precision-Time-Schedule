@@ -73,19 +73,14 @@ static PTSManager *sharedInstance;
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
                 [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList) {
                     if (parsedList.count > 0) {
-                        [finalPTSList addObjectsFromArray:fetchedList];
+                        [finalPTSList addObjectsFromArray:parsedList];
                     }
                     fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
                 }];
             }
-//            else{
-//                fetchedList = [self parsePTSList:responseData existingPTSData:ptsIdsDBArray];
-//            }
             
-//            if (fetchedList.count > 0) {
-//                [finalPTSList addObjectsFromArray:fetchedList];
-//            }
-            
+        }else{
+            fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
         }
     }];
     
@@ -101,23 +96,6 @@ static PTSManager *sharedInstance;
 }
 
 -(NSDictionary *) getDataRequest:(User *)user{
-//    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-//
-//
-//    NSError *error;
-//
-//
-//    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-//    NSArray *userArray = [moc executeFetchRequest:fetchRequest error:&error];
-//    User *useTo;
-//
-//    if (userArray.count >0) {
-//        for (User *user in userArray) {
-//            NSLog(@"User name %@", user.userName);
-//            useTo = user;
-//        }
-//
-//    }
     NSMutableDictionary *getListData = [[NSMutableDictionary alloc] init];
     
     UIDevice *device = [UIDevice currentDevice];
@@ -184,46 +162,19 @@ static PTSManager *sharedInstance;
 }
 
 #pragma mark PTS For Master Redcap
--(void) parseInitialPTSTasksList:(NSArray *)flightInfo didParse:(void (^)(BOOL didParse))completionHandler{
-    [self parsePTSListForMasterRedCap:flightInfo existingPTSData:nil originalResponseData: nil didParse:^(BOOL didParse, NSArray *parsedList) {
-        completionHandler(didParse);
-    }];
-}
-
 -(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData didParse:(void (^)(BOOL didParse, NSArray *parsedList))completionHandler{
     
     NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
    
-    for (NSDictionary *ptsItem in ptsList) {
+    int countForList = 0;
+    for (NSMutableDictionary *ptsItem in ptsList) {
         
         NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
         
         if (![ptsTaskIds containsObject:ptsId]) {
             PTSItem *pts = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
-            
-            
-//                "tbl_group_id" = 1;
-//                type = 1;
-//                "flight_time" = "18:00";
-
-            pts.dutyManagerId = [[ptsItem objectForKey:@"duty_manager_id"] intValue];
-            pts.dutyManagerName = [ptsItem objectForKey:@"dutymanager_name"];
-            pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
-            pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
-            pts.redCapId = [[ptsItem objectForKey:@"redcap_id"] intValue];
-            pts.redCapName = [ptsItem objectForKey:@"redcap_name"];
-            pts.flightDate = [ptsItem objectForKey:@"flight_date"];
-            pts.flightNo = [ptsItem objectForKey:@"flight_no"];
-            pts.airlineName = [ptsItem objectForKey:@"airline_name"];
-            pts.remarks = [ptsItem objectForKey:@"remarks"];
-            pts.ptsName = [ptsItem objectForKey:@"pts_name"];
-            pts.ptsSubTaskId = [[ptsItem objectForKey:@"m_pts_id"] intValue];
-            pts.flightId = [[ptsItem objectForKey:@"id"] intValue];//pts id
-            pts.flightType = [[ptsItem objectForKey:@"type"] intValue];
-            pts.timeWindow = [[ptsItem objectForKey:@"time_window"] intValue];
-            pts.flightTime = [ptsItem objectForKey:@"flight_time"];
             
             NSError *jsonError;
             NSString *originalString = [ptsItem objectForKey:@"json_data"];
@@ -235,50 +186,152 @@ static PTSManager *sharedInstance;
                                                                    error:&jsonError];
             }
             
-           // comment = "";
-           // "current_time" = 1530606135008;
-            //"device_id" = "";
-           // "execute_time" = 1801;
-            
-            //***********************"flight_id" = 7748;
-            
-          
-            
-//            pts.isRunning = [[jsonForPTSItem objectForKey:@"is_running"] intValue];
-//
-//            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            pts.ptsStartTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_start_time"]];
-//            pts.ptsEndTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_end_time"] ];
-        
-            pts.masterRedCap = [[jsonForPTSItem objectForKey:@"master_redcap"] boolValue];
-            
-            [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] parsingCompleted:^(NSArray *redCaps, NSArray *tasksAssignedToRedCaps, BOOL isMasterRedcap) {
-                pts.redCaps = [NSSet setWithArray:redCaps];
-                if (jsonForPTSItem == nil) {
-                    NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
-                    pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsTasksDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
-                    pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsTasksDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
-                    pts.masterRedCap = isMasterRedcap;
-                }else{
-                    [self parseJsonForPTSRedCap:jsonForPTSItem];
+            [self parsePTSFlightDetails:ptsItem storeIn:pts];
+            if (jsonForPTSItem != nil) {
+                [self parseJsonForPTSRedCap:jsonForPTSItem storeIn:pts completionHandler:^(PTSItem *pts) {
+                    NSError *error;
+                    [moc save:&error];
+                    if (!error) {
+                        [ptsListToReturn addObject:pts];
+                    }
+                    
+                    if (ptsListToReturn.count == ptsList.count) {
+                        completionHandler(TRUE, ptsListToReturn);
+
+                    }
+                }];
+            }else{
+                NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
+                [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary];
+                NSError *error;
+                [moc save:&error];
+                if (!error) {
+                    [ptsListToReturn addObject:pts];
                 }
-                
-            }];
-           
-            
-            
-            NSError *error;
-            [moc save:&error];
-            if (!error) {
-                [ptsListToReturn addObject:pts];
+                if (ptsListToReturn.count == ptsList.count) {
+                    completionHandler(TRUE, ptsListToReturn);
+                }
             }
+            
+        }else{
+            countForList++;
         }
         
     }
-        
     
-    completionHandler(TRUE, ptsListToReturn);
+    if (countForList == ptsList.count) {
+        completionHandler(TRUE, ptsListToReturn);
+    }
+    
+
+}
+
+-(void) parsePTSFlightDetailsFromJson:(NSDictionary *)ptsJson storeIn:(PTSItem *)pts{
+    
+//    "device_id" = "DB95E33D-27DC-4693-A1BF-42E8504FC347";
+//    "user_name" = "Shweta Sawant";
+//    "user_type" = 3;
+//    userid = 25;
+
+    pts.redCapId = [[ptsJson objectForKey:@"redcap_id"] intValue];
+    pts.redCapName = [ptsJson objectForKey:@"redcap_name"];
+    pts.flightDate = [ptsJson objectForKey:@"flight_date"];
+    pts.flightNo = [ptsJson objectForKey:@"flight_num"];
+    pts.airlineName = [ptsJson objectForKey:@"airline_name"];
+    pts.remarks = [ptsJson objectForKey:@"remarks"];
+    pts.ptsName = [ptsJson objectForKey:@"pts_name"];
+    pts.ptsSubTaskId = [[ptsJson objectForKey:@"m_pts_id"] intValue];
+    pts.flightId = [[ptsJson objectForKey:@"flight_id"] intValue];//pts id
+    pts.flightType = [[ptsJson objectForKey:@"flight_type"] intValue];
+    pts.timeWindow = [[ptsJson objectForKey:@"pts_time"] intValue];
+    pts.flightTime = [ptsJson objectForKey:@"arr_dep_type"];
+    pts.isRunning = [[ptsJson objectForKey:@"is_running"] intValue];
+    pts.masterRedCap = [[ptsJson objectForKey:@"master_redcap"] boolValue];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    NSString *startTime = [ptsJson objectForKey:@"pts_start_time"];
+    if (startTime.length != 0) {
+        pts.ptsStartTime = [dateFormatter dateFromString:startTime];
+    }
+    
+    NSString *endTime = [ptsJson objectForKey:@"pts_end_time"];
+    if (endTime.length != 0) {
+        pts.ptsEndTime = [dateFormatter dateFromString:endTime];
+    }
+    
+    NSString *currentTime = [ptsJson objectForKey:@"current_time"];
+    if (currentTime.length != 0) {
+        pts.currentTime = [dateFormatter dateFromString:currentTime];
+    }
+    
+    NSString *timerStopTime = [ptsJson objectForKey:@"timer_stop_time"];
+    if (currentTime.length != 0) {
+        pts.timerStopTime = [dateFormatter dateFromString:timerStopTime];
+    }
+    
+    pts.executionTime = [ptsJson objectForKey:@"execute_time"]; //Change to date
+    
+    // comment = "";
+    //"device_id" = "";
+    
+}
+
+-(void) parsePTSFlightDetails:(NSDictionary *)ptsJson storeIn:(PTSItem *)pts{
+    
+    pts.dutyManagerId = [[ptsJson objectForKey:@"duty_manager_id"] intValue];
+    pts.dutyManagerName = [ptsJson objectForKey:@"dutymanager_name"];
+    pts.supervisorId = [[ptsJson objectForKey:@"supervisor_id"] intValue];
+    pts.supervisorName = [ptsJson objectForKey:@"supervisor_name"];
+    pts.redCapId = [[ptsJson objectForKey:@"redcap_id"] intValue];
+    pts.redCapName = [ptsJson objectForKey:@"redcap_name"];
+    pts.flightDate = [ptsJson objectForKey:@"flight_date"];
+    pts.flightNo = [ptsJson objectForKey:@"flight_no"];
+    pts.airlineName = [ptsJson objectForKey:@"airline_name"];
+    pts.remarks = [ptsJson objectForKey:@"remarks"];
+    pts.ptsName = [ptsJson objectForKey:@"pts_name"];
+    pts.ptsSubTaskId = [[ptsJson objectForKey:@"m_pts_id"] intValue];
+    pts.flightId = [[ptsJson objectForKey:@"id"] intValue];//pts id
+    pts.flightType = [[ptsJson objectForKey:@"type"] intValue];
+    pts.timeWindow = [[ptsJson objectForKey:@"time_window"] intValue];
+    pts.flightTime = [ptsJson objectForKey:@"flight_time"];
+    pts.isRunning = [[ptsJson objectForKey:@"is_running"] intValue];
+    pts.masterRedCap = [[ptsJson objectForKey:@"master_redcap"] boolValue];
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSString *startTime = [ptsJson objectForKey:@"pts_start_time"];
+    if (startTime.length != 0) {
+        pts.ptsStartTime = [dateFormatter dateFromString:startTime];
+    }
+    
+    NSString *endTime = [ptsJson objectForKey:@"pts_end_time"];
+    if (endTime.length != 0) {
+        pts.ptsEndTime = [dateFormatter dateFromString:endTime];
+    }
+    
+    NSString *currentTime = [ptsJson objectForKey:@"current_time"];
+    if (currentTime.length != 0) {
+        pts.currentTime = [dateFormatter dateFromString:currentTime];
+    }
+    
+    pts.executionTime = [ptsJson objectForKey:@"execute_time"]; //Change to date
+    
+    // comment = "";
+    //"device_id" = "";
+    
+}
+
+-(void) parseJsonForPTSRedCap:(NSDictionary *)ptsJson storeIn:(PTSItem *)pts completionHandler:(void(^) (PTSItem *pts))ptsToReturn{
+    
+    [self parsePTSFlightDetailsFromJson:ptsJson storeIn:pts];
+    [self parseRedCapData:[ptsJson objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsJson tasksDictionary:nil];
+    
+    ptsToReturn(pts);
+    
 }
 
 -(NSArray *) parseSubtaskForMasterRedCap:(NSArray *)subtasks forWing:(int)wingType alreadyAssignedIds:(NSArray *) assignedTaskIds{
@@ -311,7 +364,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
-        ptsSubTask.negativeDataSendServer = [ptsSubItem objectForKey:@"negativeData_SendServer"];
+        ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];
 //        ptsSubTask.ptsTotalTime = [ptsSubItem objectForKey:@"pts_time"];
     
         ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"sub_activity_id"] intValue];
@@ -338,8 +391,8 @@ static PTSManager *sharedInstance;
 }
 
 
--(void) parseRedCapData:(NSArray *) redcapsData parsingCompleted:(void (^)(NSArray *redCaps, NSArray *tasksAssignedToRedCaps, BOOL isMasterRedcap))completionHandler{
-    
+-(void) parseRedCapData:(NSArray *) redcapsData forPTS:(PTSItem *)pts fromPTSData:(NSDictionary *) ptsDictionary tasksDictionary:(NSDictionary *) wingsTaskDictionary
+{
     NSMutableArray *tasksAssignedToRedCaps = [[NSMutableArray alloc] init];
     NSMutableArray *redCaps = [[NSMutableArray alloc] init];
     
@@ -382,7 +435,18 @@ static PTSManager *sharedInstance;
         }
     }
     
-    completionHandler(redCaps, tasksAssignedToRedCaps, isMaster);
+    pts.redCaps = [NSSet setWithArray:redCaps];
+    if (wingsTaskDictionary == nil) {
+        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
+        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
+    }else{
+        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
+        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
+    }
+    
+    pts.masterRedCap = isMaster;
+    
+    
 }
 
 -(NSArray *) parseRedCapSubActivity:(NSArray *) redcapSubActivities{
@@ -409,9 +473,6 @@ static PTSManager *sharedInstance;
     return subActivityArray;
 }
 
--(void) parseJsonForPTSRedCap:(NSDictionary *)ptsJson{
-    
-}
 
 -(void) parsePTSUpdateReceivedForRedCap:(NSDictionary *) updatedPtsData{
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -426,9 +487,14 @@ static PTSManager *sharedInstance;
         PTSItem *ptsItemToEdit = [ptsListForPTSId objectAtIndex:0];
         [self parsePTSItemForRedcap:updatedPtsData storeIn:ptsItemToEdit];
         
+//        [self parseJsonForPTSRedCap:updatedPtsData storeIn:ptsItemToEdit completionHandler:^(PTSItem *pts) {
+//
+//        }];
+        
         NSError *error;
         [moc save:&error];
         [self updatePTSListForAdminOnView];
+        
     }
     
 }
@@ -497,7 +563,7 @@ static PTSManager *sharedInstance;
     NSEntityDescription *ptsSubTaskEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSSubTask class]) inManagedObjectContext:moc];
     for (NSDictionary *ptsSubItem in subTaskListDictionary) {
         PTSSubTask *ptsSubTask;
-        if (subTasks != nil) {
+        if (subTasks.count > 0) {
             NSPredicate *predicateForSubtask = [NSPredicate predicateWithFormat:@"subTaskId = %d", [[ptsSubItem objectForKey:@"sub_activity_id"] intValue]];
             NSArray *subTaskToEdit = [subTasks filteredArrayUsingPredicate:predicateForSubtask];
             ptsSubTask = [subTaskToEdit objectAtIndex:0];
@@ -531,7 +597,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
-        ptsSubTask.negativeDataSendServer = [ptsSubItem objectForKey:@"negativeData_SendServer"];
+        ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];
         ptsSubTask.notations = [ptsSubItem objectForKey:@"notations"];
         //            ptsSubTask.ptsTotalTime = [ptsSubItem objectForKey:@"pts_time"];
         
@@ -914,7 +980,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
-        ptsSubTask.negativeDataSendServer = [ptsSubItem objectForKey:@"negativeData_SendServer"];
+        ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];
         ptsSubTask.notations = [ptsSubItem objectForKey:@"notations"];
         //            ptsSubTask.ptsTotalTime = [ptsSubItem objectForKey:@"pts_time"];
         

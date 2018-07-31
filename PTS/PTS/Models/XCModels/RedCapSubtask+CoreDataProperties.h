@@ -2,7 +2,7 @@
 //  RedCapSubtask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 03/07/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -16,10 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<RedCapSubtask *> *)fetchRequest;
 
 @property (nonatomic) int16_t end;
-@property (nonatomic) int16_t taskId;
 @property (nullable, nonatomic, copy) NSString *notations;
 @property (nonatomic) int16_t start;
 @property (nullable, nonatomic, copy) NSString *subactivity;
+@property (nonatomic) int16_t taskId;
 
 @end
 

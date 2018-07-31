@@ -9,6 +9,8 @@
 #import "WebsocketMessageFactory.h"
 #import "LoginManager.h"
 #import "AppUtility.h"
+#import "RedCap+CoreDataProperties.h"
+#import "RedCapSubtask+CoreDataProperties.m"
 
 @implementation WebsocketMessageFactory
 
@@ -81,6 +83,7 @@
     [messageDict setValue:[self ptsTimesInString:ptsItem.currentTime] forKey:@"current_time"];
     [messageDict setValue:[self ptsTimesInString:ptsItem.timerStopTime] forKey:@"timer_stop_time"];
     
+    [messageDict setValue:[NSNumber numberWithBool:ptsItem.masterRedCap] forKey:@"master_redcap"];
     if (loggedInUser.empType == UserTypeRedCap) {
         [messageDict setValue:[NSNumber numberWithInteger:2] forKey:@"MsgType"];
     }
@@ -98,6 +101,8 @@
     }
     [messageDict setValue:wingSubTasks forKey:@"above_list"];
     [messageDict setValue:wingBSubTasks forKey:@"below_list"];
+    
+    [messageDict setValue:[self getRedCapData:ptsItem.redCaps.allObjects] forKey:@"redcaps"];
     
     return [self translateToString:messageDict];
 }
@@ -149,6 +154,9 @@
 //    [subTaskDictionary setValue:@"0" forKey:@"user_start_time"];
 //    [subTaskDictionary setValue:@"0" forKey:@"user_end_time"];
     
+    [subTaskDictionary setValue:@"" forKey:@"subactivity_start_time"];
+    [subTaskDictionary setValue:@"" forKey:@"subactivity_end_time"];
+    
     if (ptsSubTask.subactivityStartTime != nil ) {
         [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.subactivityStartTime], [dateFormatter stringFromDate:ptsSubTask.subactivityStartTime]] forKey:@"subactivity_start_time"];
     }
@@ -158,6 +166,9 @@
     }
     
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isComplete] forKey:@"is_complete"];
+    
+    [subTaskDictionary setValue:@"" forKey:@"user_start_time"];
+    [subTaskDictionary setValue:@"" forKey:@"user_end_time"];
     
     if (ptsSubTask.userStartTime != nil) {
         [subTaskDictionary setValue:[NSString stringWithFormat:@"%@@@%@", [dateFormatter1 stringFromDate:ptsSubTask.userStartTime], [dateFormatter stringFromDate:ptsSubTask.userStartTime]] forKey:@"user_start_time"];
@@ -170,7 +181,7 @@
     [subTaskDictionary setValue:ptsSubTask.notations forKey:@"notations"];
     [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerStopTime] forKey:@"timer_stop_time"];
     [subTaskDictionary setValue:ptsSubTask.userSubActFeedback forKey:@"user_subact_feedback"];
-    [subTaskDictionary setValue:ptsSubTask.negativeDataSendServer forKey:@"negativeData_SendServer"];
+    [subTaskDictionary setValue:[NSNumber numberWithBool:ptsSubTask.negativeDataSendServer] forKey:@"negativeData_SendServer"];
     
     return subTaskDictionary;
 }
@@ -182,4 +193,60 @@
     return message;
 }
 
+- (NSArray *) getRedCapData:(NSArray *)redcaps{
+    
+    NSMutableArray *redCapsArray = [[NSMutableArray alloc] init];
+    for (RedCap *redCap in redcaps) {
+        NSMutableDictionary *redCapData = [[NSMutableDictionary alloc] init];
+        
+        [redCapData setValue:[NSNumber numberWithInt:redCap.redCapId] forKey:@"redcap_id"];
+        [redCapData setValue:redCap.redcapName forKey:@"name"];
+        [redCapData setValue:[NSNumber numberWithBool:redCap.masterRedCap] forKey:@"master_redcap"];
+        [redCapData setValue:[NSNumber numberWithInt:redCap.tableGroupId] forKey:@"tbl_group_id"];
+        
+        [redCapData setValue:[self getRedCapGroupJson:redCap] forKey:@"group_json"];
+        
+        [redCapsArray addObject:redCapData];
+    }
+    
+    return redCapsArray;
+}
+
+- (NSArray *) getRedCapGroupJson:(RedCap *)redcap{
+    
+    NSMutableArray *redCapSubActivities = [[NSMutableArray alloc] init];
+    [redCapSubActivities addObject:[self parseRedCapSubactivities:redcap.aboveWingSubTasks.allObjects forWingType:1]];
+    [redCapSubActivities addObject:[self parseRedCapSubactivities:redcap.belowWingSubtask.allObjects forWingType:2]];
+    
+    return redCapSubActivities;
+}
+
+-(NSDictionary *) parseRedCapSubactivities:(NSArray *)activities forWingType:(int)windId{
+    
+    NSMutableDictionary *groupActivity = [[NSMutableDictionary alloc] init];
+    [groupActivity setValue:[NSNumber numberWithInt:windId] forKey:@"id"];
+    
+    if (windId == 1) {
+        [groupActivity setValue:@"ABOVE THE WING ACTIVITY" forKey:@"type"];
+    }else{
+        [groupActivity setValue:@"BELOW THE WING ACTIVITY" forKey:@"type"];
+    }
+    
+    NSMutableArray *subTasks = [[NSMutableArray alloc] init];
+    for (RedCapSubtask *subTask in activities) {
+        NSMutableDictionary *subTaskDictionary = [[NSMutableDictionary alloc] init];
+        
+        [subTaskDictionary setValue:[NSNumber numberWithInt:subTask.taskId] forKey:@"id"];
+        [subTaskDictionary setValue:subTask.subactivity forKey:@"subactivity"];
+        [subTaskDictionary setValue:subTask.notations forKey:@"notations"];
+        [subTaskDictionary setValue:[NSNumber numberWithInt:subTask.start] forKey:@"start"];
+        [subTaskDictionary setValue:[NSNumber numberWithInt:subTask.end] forKey:@"end"];
+        
+        [subTasks addObject:subTaskDictionary];
+    }
+    
+    [groupActivity setValue:subTasks forKey:@"sub_act_array"];
+    
+    return groupActivity;
+}
 @end

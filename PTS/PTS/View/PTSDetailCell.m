@@ -33,7 +33,6 @@
     self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
     self.taskNumLabel.text = subTask.notations;
-    self.subTask.hasExceededTime = FALSE;
     
     if (subTask.start - subTask.end == 0) {
         [self.labelSubTaskTimer setHidden:YES];
@@ -67,8 +66,11 @@
         }
         
         int timeElapsed = ptsTaskTimeWindow - duration;
-        if (duration > ptsTaskTimeWindow && !self.labelSubTaskTimer.hidden) {
-            self.subTask.hasExceededTime = TRUE;
+        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
+            self.subTask.negativeDataSendServer = TRUE;
+            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+            NSError *error;
+            [moc save:&error];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];                
@@ -77,6 +79,10 @@
         
     }
     
+    if (self.ptsItem.isRunning != 1 && self.ptsTaskTimer != nil) {
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = nil;
+    }
     [self setTimeLabels];
     [self setContainerViewBackground];
     
@@ -128,10 +134,17 @@
     
     int timeElapsed = ptsTaskTimeWindow - duration;
     
+    if ([self.subTask.subactivity isEqualToString:@"Operation Clearance"]) {
+        
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
-        if (duration > ptsTaskTimeWindow && !self.subTask.hasExceededTime && !self.labelSubTaskTimer.hidden) {
-            self.subTask.hasExceededTime = TRUE;
+        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
+            self.subTask.negativeDataSendServer = TRUE;
+            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+            NSError *error;
+            [moc save:&error];
             [self setContainerViewBackground];
             [self.delegate updateFlightPTS];
         }
@@ -145,7 +158,7 @@
         dateFormatter.dateFormat = @"hh:mm";
 //        self.eidtTimeButton.titleLabel.text = [NSString stringWithFormat:@"%@ to %@",[dateFormatter stringFromDate:self.subTask.subactivityStartTime],[dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
         
-        if(self.subTask.hasExceededTime){
+        if(self.subTask.negativeDataSendServer){
             self.containerView.backgroundColor = [UIColor redColor];
         }else if (self.subTask.isRunning == 1) {
             self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];

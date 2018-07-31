@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 21/03/18.
+//  Created by Shweta Sawant on 29/07/18.
 //
 //
 
@@ -11,11 +11,13 @@
 @implementation PTSSubTask (CoreDataProperties)
 
 + (NSFetchRequest<PTSSubTask *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"PTSSubTask"];
+	return [NSFetchRequest fetchRequestWithEntityName:@"PTSSubTask"];
 }
 
+@dynamic calculatedPTSFinalTime;
 @dynamic current_time;
 @dynamic end;
+@dynamic hasExceededTime;
 @dynamic isComplete;
 @dynamic isRunning;
 @dynamic mRefereceTimeId;
@@ -25,6 +27,7 @@
 @dynamic ptsTotalTime;
 @dynamic ptsWing;
 @dynamic referenceTime;
+@dynamic shouldBeInActive;
 @dynamic start;
 @dynamic subactivity;
 @dynamic subactivityEndTime;
@@ -36,6 +39,5 @@
 @dynamic userEndTime;
 @dynamic userStartTime;
 @dynamic userSubActFeedback;
-@dynamic calculatedPTSFinalTime;
 
 @end
