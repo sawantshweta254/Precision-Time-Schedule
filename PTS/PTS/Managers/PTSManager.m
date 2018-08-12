@@ -63,7 +63,7 @@ static PTSManager *sharedInstance;
             
             NSArray *fetchedList;
             
-            if (user.empType == 2) {
+            if (user.empType != 3) {
                fetchedList = [self parsePTSListForAdmin:responseData existingPTSData:ptsIdsDBArray];
                 if (fetchedList.count > 0) {
                     [finalPTSList addObjectsFromArray:fetchedList];
@@ -253,17 +253,17 @@ static PTSManager *sharedInstance;
     [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
     
     NSString *startTime = [ptsJson objectForKey:@"pts_start_time"];
-    if (startTime.length != 0) {
+    if (![startTime isEqualToString:@"0"]) {
         pts.ptsStartTime = [dateFormatter dateFromString:startTime];
     }
     
     NSString *endTime = [ptsJson objectForKey:@"pts_end_time"];
-    if (endTime.length != 0) {
+    if (![endTime isEqualToString:@"0"]) {
         pts.ptsEndTime = [dateFormatter dateFromString:endTime];
     }
     
     NSString *currentTime = [ptsJson objectForKey:@"current_time"];
-    if (currentTime.length != 0) {
+    if (![currentTime isEqualToString:@"0"]) {
         pts.currentTime = [dateFormatter dateFromString:currentTime];
     }
     
@@ -304,17 +304,17 @@ static PTSManager *sharedInstance;
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     NSString *startTime = [ptsJson objectForKey:@"pts_start_time"];
-    if (startTime.length != 0) {
+    if (startTime != nil && ![startTime isEqualToString:@"0"]) {
         pts.ptsStartTime = [dateFormatter dateFromString:startTime];
     }
     
     NSString *endTime = [ptsJson objectForKey:@"pts_end_time"];
-    if (endTime.length != 0) {
+    if (endTime != nil && ![endTime isEqualToString:@"0"]) {
         pts.ptsEndTime = [dateFormatter dateFromString:endTime];
     }
     
     NSString *currentTime = [ptsJson objectForKey:@"current_time"];
-    if (currentTime.length != 0) {
+    if (![currentTime isEqualToString:@"0"]) {
         pts.currentTime = [dateFormatter dateFromString:currentTime];
     }
     
@@ -526,15 +526,27 @@ static PTSManager *sharedInstance;
     ptsItem.flightTime = [ptsTaskDictionary objectForKey:@"arr_dep_type"];
     ptsItem.isRunning = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
     
-    ptsItem.ptsStartTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"pts_start_time"]];
-    ptsItem.ptsEndTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"pts_end_time"]];
+    NSString *ptsStartTimeString = [ptsTaskDictionary objectForKey:@"pts_start_time"];
+    NSString *ptsEndTimeString = [ptsTaskDictionary objectForKey:@"pts_end_time"];
+    
+    if (ptsStartTimeString.length != 0 && ptsStartTimeString.integerValue != 0) {
+        ptsItem.ptsStartTime = [dateFormatter dateFromString:ptsStartTimeString];
+    }
+    
+    if (ptsEndTimeString.length != 0 && ptsEndTimeString.integerValue != 0) {
+        ptsItem.ptsEndTime = [dateFormatter dateFromString:ptsEndTimeString];
+    }
     
     ptsItem.ptsName = [ptsTaskDictionary objectForKey:@"pts_name"];
     ptsItem.timeWindow = [[ptsTaskDictionary objectForKey:@"pts_time"] intValue];
     ptsItem.ptsSubTaskId = [[ptsTaskDictionary objectForKey:@"m_pts_id"] intValue];
     ptsItem.airlineName = [ptsTaskDictionary objectForKey:@"airline_name"];
     ptsItem.executionTime = [ptsTaskDictionary objectForKey:@"execute_time"];
-    //    ptsItem.currentTime = [ptsTaskDictionary objectForKey:@"current_time"];//1528377701972 change to date format
+    
+    NSString *currentTime = [ptsTaskDictionary objectForKey:@"current_time"];
+    if (![currentTime isEqualToString:@"0"]) {
+        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+    }
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
     //        itemFromSocket. = [ptsTask objectForKey:@"MsgType"];
     //        itemFromSocket. = [ptsTask objectForKey:@"user_name"];
@@ -566,7 +578,11 @@ static PTSManager *sharedInstance;
         if (subTasks.count > 0) {
             NSPredicate *predicateForSubtask = [NSPredicate predicateWithFormat:@"subTaskId = %d", [[ptsSubItem objectForKey:@"sub_activity_id"] intValue]];
             NSArray *subTaskToEdit = [subTasks filteredArrayUsingPredicate:predicateForSubtask];
-            ptsSubTask = [subTaskToEdit objectAtIndex:0];
+            if (subTaskToEdit.count > 0) {
+                ptsSubTask = [subTaskToEdit objectAtIndex:0];
+            }else{
+                ptsSubTask = (PTSSubTask*)[[NSManagedObject alloc] initWithEntity:ptsSubTaskEntity insertIntoManagedObjectContext:moc];
+            }
         }else{
             ptsSubTask = (PTSSubTask*)[[NSManagedObject alloc] initWithEntity:ptsSubTaskEntity insertIntoManagedObjectContext:moc];
         }
@@ -574,7 +590,10 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-        //                ptsSubTask.current_time = [ptsSubItem objectForKey:@"start_time"];
+        NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
+        if (![cTime isEqualToString:@"0"]) {
+            ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
+        }
         ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"sub_activity_id"] intValue];
         //            ptsSubTask.mRefereceTimeId = [[ptsSubItem objectForKey:@"m_ref_time_id"] intValue];
         ptsSubTask.start = [[ptsSubItem objectForKey:@"start_time"] intValue];
@@ -592,8 +611,10 @@ static PTSManager *sharedInstance;
         ptsSubTask.userEndTime = [dateFormatter dateFromString:[self getDateString:[ptsSubItem objectForKey:@"user_end_time"]]];
         
         ptsSubTask.timerStopTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"timer_stop_time"]];
-        ptsSubTask.timerExecutedTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"time_execute_time"]];
         
+        if (![[ptsSubItem objectForKey:@"time_execute_time"] isKindOfClass:[NSNull class]]) {
+            ptsSubTask.timerExecutedTime = [ptsSubItem objectForKey:@"time_execute_time"];
+        }
         ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
@@ -917,7 +938,11 @@ static PTSManager *sharedInstance;
     ptsItem.ptsSubTaskId = [[ptsTaskDictionary objectForKey:@"m_pts_id"] intValue];
     ptsItem.airlineName = [ptsTaskDictionary objectForKey:@"airline_name"];
     ptsItem.executionTime = [ptsTaskDictionary objectForKey:@"execute_time"];
-//    ptsItem.currentTime = [ptsTaskDictionary objectForKey:@"current_time"];//1528377701972 change to date format
+    NSString *currentTime = [ptsTaskDictionary objectForKey:@"current_time"];
+    if (![currentTime isEqualToString:@"0"]) {
+        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+    }
+
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
     //        itemFromSocket. = [ptsTask objectForKey:@"MsgType"];
     //        itemFromSocket. = [ptsTask objectForKey:@"user_name"];
@@ -957,7 +982,11 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-        //                ptsSubTask.current_time = [ptsSubItem objectForKey:@"start_time"];
+        NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
+        if (![cTime isEqualToString:@"0"]) {
+            ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
+        }
+        
         ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"sub_activity_id"] intValue];
         //            ptsSubTask.mRefereceTimeId = [[ptsSubItem objectForKey:@"m_ref_time_id"] intValue];
         ptsSubTask.start = [[ptsSubItem objectForKey:@"start_time"] intValue];
@@ -975,7 +1004,10 @@ static PTSManager *sharedInstance;
         ptsSubTask.userEndTime = [dateFormatter dateFromString:[self getDateString:[ptsSubItem objectForKey:@"user_end_time"]]];
         
         ptsSubTask.timerStopTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"timer_stop_time"]];
-        ptsSubTask.timerExecutedTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"time_execute_time"]];
+        
+        if (![[ptsSubItem objectForKey:@"time_execute_time"] isKindOfClass:[NSNull class]]) {
+            ptsSubTask.timerExecutedTime = [ptsSubItem objectForKey:@"time_execute_time"];
+        }
         
         ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];

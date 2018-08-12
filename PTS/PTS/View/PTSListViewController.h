@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginController.h"
 
-@interface PTSListViewController : UIViewController
+@interface PTSListViewController : UIViewController <LoginViewDelegate>
 
 @end

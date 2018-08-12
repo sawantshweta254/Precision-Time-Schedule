@@ -228,7 +228,7 @@
 
 - (IBAction)updatePTSItemTimer:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2 || !self.ptsTask.masterRedCap) {
+    if (loggedInUser.empType != 3 || !self.ptsTask.masterRedCap) {
         return;
     }
     
@@ -342,6 +342,7 @@
     }
     
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+    self.ptsTask.executionTime = [NSString stringWithFormat:@"%f", timeInterval];
 }
 
 -(void) startChockOnSubActivity{

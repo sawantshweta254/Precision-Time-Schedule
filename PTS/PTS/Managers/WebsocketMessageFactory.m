@@ -30,7 +30,7 @@
         
     }*/
     
-    if (loggedInUser.empType == 2) {
+    if (loggedInUser.empType != 3) {
         [messageDict setValue:ptsItemsIdArray forKey:@"flights_id"];
     }else if (loggedInUser.empType == 3){
         NSMutableArray *flightDetails = [[NSMutableArray alloc] init];
@@ -79,8 +79,11 @@
     [messageDict setValue:[NSNumber numberWithInteger:ptsItem.ptsSubTaskId] forKey:@"m_pts_id"];
     [messageDict setValue:ptsItem.airlineName forKey:@"airline_name"];
     
-    [messageDict setValue:@"" forKey:@"execute_time"];
-    [messageDict setValue:[self ptsTimesInString:ptsItem.currentTime] forKey:@"current_time"];
+    
+    NSTimeInterval timeInterval = fabs([[NSDate date] timeIntervalSinceDate:ptsItem.ptsStartTime])*1000;
+    [messageDict setValue:[NSString stringWithFormat:@"%.f", timeInterval] forKey:@"execute_time"];
+    
+    [messageDict setValue:[NSString stringWithFormat:@"%.f", [ptsItem.ptsStartTime timeIntervalSince1970]*1000] forKey:@"current_time"];
     [messageDict setValue:[self ptsTimesInString:ptsItem.timerStopTime] forKey:@"timer_stop_time"];
     
     [messageDict setValue:[NSNumber numberWithBool:ptsItem.masterRedCap] forKey:@"master_redcap"];
@@ -112,7 +115,7 @@
         return @"0";
     }
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"YYYY-MM-dd hh:mm:ss";
+    dateFormatter.dateFormat = @"YYYY-MM-dd HH:mm:ss";
     return [dateFormatter stringFromDate:ptsDate];
 }
 
@@ -139,15 +142,22 @@
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.end] forKey:@"end_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInt:abs(ptsSubTask.start - ptsSubTask.end) + 1] forKey:@"pts_time"]; //// total time
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subActivityType] forKey:@"subactivity_type"];// 2mins or more mins
-    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.current_time] forKey:@"current_time"];
+    [subTaskDictionary setValue:[NSString stringWithFormat:@"%.f", [ptsSubTask.current_time timeIntervalSince1970]*1000] forKey:@"current_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isRunning] forKey:@"is_running"];
-    [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerExecutedTime] forKey:@"time_execute_time"];
+    
+    if (ptsSubTask.timerExecutedTime != nil) {
+        [subTaskDictionary setValue:ptsSubTask.timerExecutedTime forKey:@"time_execute_time"];
+    }
+    
+    if (ptsSubTask.start - ptsSubTask.end == 0){
+        [subTaskDictionary setValue:@"0" forKey:@"time_execute_time"];
+    }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"hh:mm"];
+    [dateFormatter1 setDateFormat:@"mm:ss"];
     
 //    [subTaskDictionary setValue:@"0" forKey:@"subactivity_start_time"];
 //     [subTaskDictionary setValue:@"0" forKey:@"subactivity_end_time"];

@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol LoginViewDelegate
+-(void) userDidLogin;
+@end
 
 @interface LoginController : UIViewController
+
+@property (nonatomic, weak) id <LoginViewDelegate> delegate;
 
 @end

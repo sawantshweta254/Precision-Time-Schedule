@@ -90,11 +90,12 @@
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2 || self.subTask.shouldBeInActive) {
+    if (loggedInUser.empType != 3 || self.subTask.shouldBeInActive) {
         return;
     }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
+            self.subTask.current_time = [NSDate date];
             self.subTask.subactivityStartTime = [NSDate date];
             self.subTask.isRunning = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -134,12 +135,9 @@
     
     int timeElapsed = ptsTaskTimeWindow - duration;
     
-    if ([self.subTask.subactivity isEqualToString:@"Operation Clearance"]) {
-        
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -222,7 +220,7 @@
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 2 || self.subTask.shouldBeInActive) {
+    if (loggedInUser.empType != 3 || self.subTask.shouldBeInActive) {
         return;
     }
     if (self.ptsItem.isRunning == 1) {
@@ -231,6 +229,7 @@
         self.subTask.isRunning = 2;
         self.subTask.isComplete = 1;
         self.subTask.subactivityEndTime = [NSDate date];
+        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"0"];
         [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         
         [self setTimeLabels];
@@ -255,7 +254,7 @@
 
 -(BOOL) shouldPerformAction{
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (self.subTask.isRunning == 0 || self.subTask.shouldBeInActive || loggedInUser.empType == 2){
+    if (self.subTask.isRunning == 0 || self.subTask.shouldBeInActive || loggedInUser.empType != 3){
         return FALSE;
     }
     return TRUE;

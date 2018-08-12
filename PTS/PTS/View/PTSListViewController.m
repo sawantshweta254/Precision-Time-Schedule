@@ -32,27 +32,14 @@
     [super viewDidLoad];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-}
-
--(void) viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     
     if (!loggedInUser) {
         UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
+        loginView.delegate = self;
         [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
     }else{
-//        [[PTSManager sharedInstance] fetchPTSListFromDB:loggedInUser completionHandler:^(NSArray *ptsTasks, NSError *error) {
-//            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-//            if (self.ptsTasks.count > 0) {
-//                [self loadListOnView];
-//                [self registerFlightsForUpdate];
-//            }
-//        }];
-        
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
@@ -62,13 +49,18 @@
         }];
         
         [self setUpTaskClient];
-        
     }
     
-    self.navigationItem.title = [NSString stringWithFormat:@"Welcome %@",loggedInUser.userName];
+    [self setViewTitle:loggedInUser.userName];
     UIBarButtonItem *reloadBarButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sync_data"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(reloadTaskList:)];
     [self.navigationItem setRightBarButtonItem:reloadBarButton];
+}
 
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
+    [self.tableView reloadData];
+    
     if ([self.taskUpdateClient isWebSocketConnected]) {
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
     }else{
@@ -79,6 +71,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
+}
+
+-(void) setViewTitle: (NSString *) userName{
+    self.navigationItem.title = [NSString stringWithFormat:@"Welcome %@",userName];
 }
 
 - (void)setUpTaskClient {
@@ -217,6 +213,7 @@
     }];
     
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    [self setViewTitle:loggedInUser.userName];
     [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
         [self loadListOnView];
@@ -254,4 +251,8 @@
     [self.taskUpdateClient updateUserForFlight:ptsIdsArray masterRedCapDetails:redCapDetailsDic];
 }
 
+#pragma mark Login delegate methods
+-(void) userDidLogin{
+    [self reloadTaskList:nil];
+}
 @end

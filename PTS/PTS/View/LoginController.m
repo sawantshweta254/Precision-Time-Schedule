@@ -44,6 +44,7 @@
     [[LoginManager sharedInstance] loginUser:self.textfieldUsername.text withPassword:self.textfieldPassword.text completionHandler:^(BOOL didLogin, User *user, NSString *errorMessage) {
         if (didLogin) {
             [self dismissViewControllerAnimated:YES completion:^{
+                [self.delegate userDidLogin];
             }];
         }else{
             NSString *message = [NSString stringWithFormat:@"Username or Password invalid"];

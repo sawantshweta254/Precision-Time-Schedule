@@ -2,6 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:PTSSubTask+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTSSubTask+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTSSubTask+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:PTSSubTask+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.h">
    </FileRef>
    <FileRef

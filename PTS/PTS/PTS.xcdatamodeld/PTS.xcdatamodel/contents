@@ -50,7 +50,7 @@
         <attribute name="subactivityStartTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="subActivityType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="subTaskId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="timerExecutedTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timerExecutedTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timerStopTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="userEndTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="userStartTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
