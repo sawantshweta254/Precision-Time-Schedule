@@ -30,12 +30,20 @@
 @property (nonatomic) NSInteger selectedWingIndex;
 
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *commentViewHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *commentViewBottom;
+@property (weak, nonatomic) IBOutlet UITextField *commentTextfield;
 @end
 
 @implementation PTSDetailListController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 
     [self setFlightDetails];
 
@@ -91,6 +99,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self ];
+}
 
 -(void) setFlightDetails{
     
@@ -223,6 +234,14 @@
 
 - (IBAction)wingTypeChanged:(id)sender {
     self.selectedWingIndex = self.wingSegmentCOntroller.selectedSegmentIndex;
+    
+    if (self.selectedWingIndex == 1) {
+        self.commentViewHeight.constant = 50;
+    }else{
+        self.commentViewHeight.constant = 0;
+    }
+    [self.view layoutIfNeeded];
+
     [self.ptsSubTasksCollectionView reloadData];
 }
 
@@ -265,11 +284,26 @@
     }
 }
 
+- (IBAction)updateCommentTapped:(id)sender {
+    [self updateTaskComment];
+}
+
 #pragma mark Utility Methods
 -(void) startPTSTimer
 {
     if (self.ptsTask.isRunning == 0) {
         self.ptsTask.ptsStartTime = [NSDate date];
+        self.ptsTask.currentTime = [NSDate date];
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"HH:mm:ss";
+        NSDate *date = [formatter dateFromString:[formatter stringFromDate:self.ptsTask.currentTime]];
+        // Get the time in seconds; includes 3 decimal place precision
+        NSTimeInterval seconds = [date timeIntervalSince1970]*1000;
+        
+//        formatter date
+        
+        self.ptsTask.executionTime = @"27184";//[NSString stringWithFormat:@"%.f", seconds];
         self.ptsTask.isRunning = 1;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
@@ -360,6 +394,15 @@
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
 }
 
+-(void) updateTaskComment{
+    if (self.ptsTask.isRunning != 0) {
+        self.ptsTask.coment = self.commentTextfield.text;
+        self.commentTextfield.text = @"";
+        [self.commentTextfield resignFirstResponder];
+        [self updateFlightPTS];
+    }
+}
+
 #pragma mark Cell Delegate methods
 -(void) updateFlightPTS{
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
@@ -383,4 +426,25 @@
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
     [self.ptsSubTasksCollectionView reloadData];
 }
+
+#pragma mark Textfield methods
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    [self updateTaskComment];
+    return true;
+}
+
+#pragma mark Keyboard methods
+- (void)keyboardWillShow:(NSNotification *)notify {
+    NSDictionary *info = [notify userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    self.commentViewBottom.constant = -kbSize.height;
+    [self.view layoutIfNeeded];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notify {
+    self.commentViewBottom.constant = 0;
+    [self.view layoutIfNeeded];
+}
+
 @end

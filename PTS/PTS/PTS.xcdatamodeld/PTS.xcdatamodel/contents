@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17C89" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="PTSItem" representedClassName="PTSItem" syncable="YES" codeGenerationType="class">
         <attribute name="airlineName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coment" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="currentTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dutyManagerId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="dutyManagerName" optional="YES" attributeType="String" syncable="YES"/>
@@ -83,7 +84,7 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="450"/>
+        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="465"/>
         <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="420"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>

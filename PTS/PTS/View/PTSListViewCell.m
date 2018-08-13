@@ -28,6 +28,11 @@
     [super awakeFromNib];
 }
 
+- (void) dealloc{
+    [self.ptsTaskTimer invalidate];
+    self.ptsTaskTimer = nil;
+}
+
 -(void) setPTSDetails:(PTSItem *)ptsItem{
 //    self.contentView.userInteractionEnabled = NO;
     
@@ -47,9 +52,10 @@
     
     if (self.ptsItem.isRunning == 2) {
         [self.labelPtsTimer setText:[AppUtility getTimeDifference:self.ptsItem.ptsStartTime toEndTime:self.ptsItem.ptsEndTime]];
-
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = nil;
     }else if (self.ptsItem.isRunning == 1){
-        [self setCallTime];
+        [self setCallTime: nil];
         [self startPTSTimer];
     }
     else{
@@ -88,11 +94,11 @@
 
 -(void) startPTSTimer
 {
-    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
+    self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime:) userInfo:nil repeats:YES];
     
 }
 
--(void) setCallTime{
+-(void) setCallTime:(NSTimer *)timer{
 //    NSTimeInterval timeInterval = fabs([self.ptsItem.ptsStartTime timeIntervalSinceNow]);
 //    int ptsTaskTimeWindow = self.ptsItem.timeWindow * 60;
 //    int duration = (int)timeInterval;
@@ -118,6 +124,12 @@
     }
     
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+
+    
+    if (self.ptsItem.isRunning == 2) {
+        [timer invalidate];
+        timer = nil;
+    }
 }
 
 - (IBAction)showSuperVisor:(id)sender {

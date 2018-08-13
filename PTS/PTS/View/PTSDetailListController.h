@@ -13,7 +13,7 @@
 #import "AddRemarkViewController.h"
 #import "SetTimeViewController.h"
 
-@interface PTSDetailListController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, PTSDetailCellDelegate, AddRemarkViewDelegate, SetTimeViewDelegate>
+@interface PTSDetailListController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate, PTSDetailCellDelegate, AddRemarkViewDelegate, SetTimeViewDelegate, UITextFieldDelegate>
 
 @property(nonatomic, strong) PTSItem *ptsTask;
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;

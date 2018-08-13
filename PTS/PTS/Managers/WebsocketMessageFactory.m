@@ -107,6 +107,8 @@
     
     [messageDict setValue:[self getRedCapData:ptsItem.redCaps.allObjects] forKey:@"redcaps"];
     
+    [messageDict setValue:ptsItem.coment forKey:@"comment"];
+    
     return [self translateToString:messageDict];
 }
 

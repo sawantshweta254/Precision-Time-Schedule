@@ -402,7 +402,7 @@
                                                                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Hz-2Q-jdA">
                                                                     <rect key="frame" x="0.0" y="17" width="20" height="17"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                                                     <inset key="titleEdgeInsets" minX="-20" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                                     <state key="normal" title="" image="pencil">
                                                                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -412,8 +412,8 @@
                                                                     </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X5p-UP-qMK">
-                                                                    <rect key="frame" x="0.0" y="34" width="37" height="17"/>
-                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
+                                                                    <rect key="frame" x="0.0" y="34" width="33" height="17"/>
+                                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
@@ -490,17 +490,58 @@
                                     <outlet property="delegate" destination="lee-af-D2s" id="CbP-5y-9zi"/>
                                 </connections>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YCd-uq-A0a">
+                                <rect key="frame" x="0.0" y="667" width="375" height="0.0"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please write down comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5er-Zu-i0B">
+                                        <rect key="frame" x="10" y="0.0" width="305" height="0.0"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="lee-af-D2s" id="nh1-mc-het"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sfd-6g-VhT">
+                                        <rect key="frame" x="325" y="0.0" width="40" height="0.0"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="fCa-dy-t7G"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Send">
+                                            <color key="titleColor" red="0.2784313725" green="0.078431372550000003" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="updateCommentTapped:" destination="lee-af-D2s" eventType="touchUpInside" id="Zvk-us-kVp"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="5er-Zu-i0B" firstAttribute="centerY" secondItem="YCd-uq-A0a" secondAttribute="centerY" id="0WV-CU-r44"/>
+                                    <constraint firstItem="Sfd-6g-VhT" firstAttribute="height" secondItem="5er-Zu-i0B" secondAttribute="height" id="15O-RE-XZM"/>
+                                    <constraint firstItem="5er-Zu-i0B" firstAttribute="leading" secondItem="YCd-uq-A0a" secondAttribute="leading" constant="10" id="IMZ-hi-CWL"/>
+                                    <constraint firstAttribute="trailing" secondItem="Sfd-6g-VhT" secondAttribute="trailing" constant="10" id="Kfj-hG-OTy"/>
+                                    <constraint firstItem="Sfd-6g-VhT" firstAttribute="leading" secondItem="5er-Zu-i0B" secondAttribute="trailing" constant="10" id="LA6-J7-LIe"/>
+                                    <constraint firstAttribute="height" id="bz6-Ur-5Za"/>
+                                    <constraint firstItem="Sfd-6g-VhT" firstAttribute="centerY" secondItem="YCd-uq-A0a" secondAttribute="centerY" id="lyF-ES-rnY"/>
+                                    <constraint firstItem="5er-Zu-i0B" firstAttribute="height" secondItem="YCd-uq-A0a" secondAttribute="height" multiplier="0.8" id="sGQ-Pe-Quf"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="YCd-uq-A0a" firstAttribute="leading" secondItem="jQd-ZP-oNo" secondAttribute="leading" id="6e1-88-yqW"/>
                             <constraint firstItem="gbE-EO-wj7" firstAttribute="leading" secondItem="jQd-ZP-oNo" secondAttribute="leading" id="AWH-EG-S8L"/>
-                            <constraint firstItem="gbE-EO-wj7" firstAttribute="bottom" secondItem="jQd-ZP-oNo" secondAttribute="bottom" id="H3s-Jl-uz4"/>
+                            <constraint firstItem="YCd-uq-A0a" firstAttribute="bottom" secondItem="jQd-ZP-oNo" secondAttribute="bottom" id="B3A-ge-Jku"/>
                             <constraint firstItem="542-9n-not" firstAttribute="leading" secondItem="jQd-ZP-oNo" secondAttribute="leading" id="JDh-iR-aC1"/>
                             <constraint firstItem="542-9n-not" firstAttribute="trailing" secondItem="jQd-ZP-oNo" secondAttribute="trailing" id="McA-up-JYI"/>
                             <constraint firstItem="542-9n-not" firstAttribute="top" secondItem="BK3-yv-W1z" secondAttribute="top" id="SuF-jv-dSc"/>
                             <constraint firstItem="gbE-EO-wj7" firstAttribute="trailing" secondItem="jQd-ZP-oNo" secondAttribute="trailing" id="UTM-06-91J"/>
                             <constraint firstItem="542-9n-not" firstAttribute="leading" secondItem="jQd-ZP-oNo" secondAttribute="leading" id="WRk-l6-Uhr"/>
                             <constraint firstItem="DtL-BF-FvP" firstAttribute="top" secondItem="542-9n-not" secondAttribute="bottom" id="WyH-aM-oG8"/>
+                            <constraint firstItem="YCd-uq-A0a" firstAttribute="top" secondItem="gbE-EO-wj7" secondAttribute="bottom" id="Xya-1B-GwM"/>
+                            <constraint firstItem="YCd-uq-A0a" firstAttribute="trailing" secondItem="jQd-ZP-oNo" secondAttribute="trailing" id="ex2-0D-C6U"/>
                             <constraint firstItem="542-9n-not" firstAttribute="top" secondItem="BK3-yv-W1z" secondAttribute="top" id="idQ-m9-NLa"/>
                             <constraint firstItem="DtL-BF-FvP" firstAttribute="top" secondItem="542-9n-not" secondAttribute="bottom" id="m13-Df-SM7"/>
                             <constraint firstItem="gbE-EO-wj7" firstAttribute="top" secondItem="DtL-BF-FvP" secondAttribute="bottom" id="n5R-Xh-gyk"/>
@@ -512,6 +553,9 @@
                         <viewLayoutGuide key="safeArea" id="jQd-ZP-oNo"/>
                     </view>
                     <connections>
+                        <outlet property="commentTextfield" destination="5er-Zu-i0B" id="Bf9-dd-czH"/>
+                        <outlet property="commentViewBottom" destination="B3A-ge-Jku" id="YQU-Zc-JZE"/>
+                        <outlet property="commentViewHeight" destination="bz6-Ur-5Za" id="Q3l-Nd-baD"/>
                         <outlet property="flightTypeIcon" destination="J6h-7x-TNG" id="BPr-xo-Ttd"/>
                         <outlet property="labelArrivalTime" destination="zU5-7l-yyy" id="k8P-4M-tbM"/>
                         <outlet property="labelFlightName" destination="BA4-o2-R00" id="78o-6E-i9G"/>
@@ -531,7 +575,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="497" y="119"/>
+            <point key="canvasLocation" x="496.80000000000001" y="118.29085457271366"/>
         </scene>
         <!--Set Time View Controller-->
         <scene sceneID="KoL-re-GIe">

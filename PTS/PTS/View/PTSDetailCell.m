@@ -50,9 +50,7 @@
     
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1 && !self.labelSubTaskTimer.hidden) {
         [self setTaskTime:nil];
-        if (self.ptsTaskTimer == nil) {
-            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
-        }
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
     }else if (self.subTask.isRunning == 2 || (self.subTask.isRunning == 1 && self.ptsItem.isRunning != 1)){
         NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
         int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
@@ -135,6 +133,11 @@
     
     int timeElapsed = ptsTaskTimeWindow - duration;
     
+    if (self.subTask.isRunning == 2) {
+        [nsTimer invalidate];
+        nsTimer = nil;
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
@@ -175,7 +178,7 @@
                 self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
             }
         }
-        if (self.subTask.shouldBeInActive) {
+        if (self.subTask.shouldBeInActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0)) {
             self.containerView.backgroundColor = [UIColor grayColor];
         }
     });
@@ -187,6 +190,7 @@
     NSString *systemTaskTime;
     NSString *userTaskTime;
     
+    self.eidtTimeButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.eidtTimeButton.hidden = FALSE;
     if ((self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) && (self.subTask.start - self.subTask.end != 0)) {
         systemTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
@@ -209,9 +213,12 @@
         [self.eidtTimeButton setTitle:systemTaskTime forState:UIControlStateNormal];
         [self.labelUserTaskTime setText:userTaskTime];
         
-        UIFont *font = [UIFont fontWithName:@"Helvetica" size:15];
+        self.eidtTimeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+
+        UIFont *font = [UIFont fontWithName:@"Helvetica" size:13];
         NSDictionary *userAttributes = @{NSFontAttributeName: font};
         const CGSize textSize = [systemTaskTime sizeWithAttributes: userAttributes];
+        
         
         self.eidtTimeButton.imageEdgeInsets = UIEdgeInsetsMake(0.f, textSize.width + 5, 0.f, 0.f);
     });
