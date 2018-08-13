@@ -193,7 +193,7 @@
     self.eidtTimeButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.eidtTimeButton.hidden = FALSE;
     if ((self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) && (self.subTask.start - self.subTask.end != 0)) {
-        systemTaskTime = [NSString stringWithFormat:@"%@ to %@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
+        systemTaskTime = [NSString stringWithFormat:@"%@ to %@  ", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
     }else if (self.subTask.subactivityStartTime != nil){
         systemTaskTime = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime]];
     }else{
@@ -212,15 +212,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eidtTimeButton setTitle:systemTaskTime forState:UIControlStateNormal];
         [self.labelUserTaskTime setText:userTaskTime];
-        
-        self.eidtTimeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-
-        UIFont *font = [UIFont fontWithName:@"Helvetica" size:13];
-        NSDictionary *userAttributes = @{NSFontAttributeName: font};
-        const CGSize textSize = [systemTaskTime sizeWithAttributes: userAttributes];
-        
-        
-        self.eidtTimeButton.imageEdgeInsets = UIEdgeInsetsMake(0.f, textSize.width + 5, 0.f, 0.f);
+        self.eidtTimeButton.titleEdgeInsets = UIEdgeInsetsMake(0.f, 0.0f, 0.f, 0.f);
     });
 }
 
