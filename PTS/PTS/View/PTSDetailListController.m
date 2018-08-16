@@ -375,7 +375,20 @@
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
     }
     
-    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+    NSString *appendZero = @"";
+    if (timeInterval > 3600) {
+        NSUInteger hours = (((NSUInteger)round(timeInterval))/3600);
+        if (hours < 10) {
+            appendZero = [appendZero stringByAppendingString:@"0"];
+        }
+    }else{
+        NSUInteger minutes = (((NSUInteger)round(timeInterval))/60) % 60;
+        if (minutes < 10) {
+            appendZero = [appendZero stringByAppendingString:@"0"];
+        }
+    }
+    
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@%@",appendZero, [timeFormatter stringFromTimeInterval:timeInterval]]];
     self.ptsTask.executionTime = [NSString stringWithFormat:@"%f", timeInterval];
 }
 

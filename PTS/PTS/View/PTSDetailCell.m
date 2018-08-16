@@ -49,32 +49,10 @@
     }
     
     if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1 && !self.labelSubTaskTimer.hidden) {
-        [self setTaskTime:nil];
-        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
+        [self setTaskTime:fabs([self.subTask.subactivityStartTime timeIntervalSinceNow])];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerUpdated:) userInfo:nil repeats:YES];
     }else if (self.subTask.isRunning == 2 || (self.subTask.isRunning == 1 && self.ptsItem.isRunning != 1)){
-        NSTimeInterval timeInterval = fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime]);
-        int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
-        int duration = (int)timeInterval;
-        NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
-        timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
-        if (duration > 3600) {
-            timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
-        }else{
-            timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
-        }
-        
-        int timeElapsed = ptsTaskTimeWindow - duration;
-        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
-            self.subTask.negativeDataSendServer = TRUE;
-            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-            NSError *error;
-            [moc save:&error];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];                
-        });
-        
-        
+        [self setTaskTime:fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime])];
     }
     
     if (self.ptsItem.isRunning != 1 && self.ptsTaskTimer != nil) {
@@ -99,7 +77,7 @@
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;
             [moc save:&error];
-            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setTaskTime:) userInfo:nil repeats:YES];
+            self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerUpdated:) userInfo:nil repeats:YES];
         }else if(self.subTask.isRunning == 1){
             [self.ptsTaskTimer invalidate];
             self.ptsTaskTimer = nil;
@@ -119,8 +97,17 @@
     
 }
 
--(void) setTaskTime:(id)nsTimer{
-    NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
+-(void) timerUpdated:(id)nsTimer{
+    if (self.subTask.isRunning == 2) {
+        [nsTimer invalidate];
+        nsTimer = nil;
+        return;
+    }
+    [self setTaskTime:fabs([self.subTask.subactivityStartTime timeIntervalSinceNow])];
+}
+
+-(void) setTaskTime:(NSTimeInterval) timeIntervalToUse{
+    NSTimeInterval timeInterval = timeIntervalToUse;
     int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
     int duration = (int)timeInterval;
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
@@ -131,15 +118,30 @@
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
     }
     
-    int timeElapsed = ptsTaskTimeWindow - duration;
-    
-    if (self.subTask.isRunning == 2) {
-        [nsTimer invalidate];
-        nsTimer = nil;
-        return;
+    int timeElapsed;
+    NSString *minusSign = @"";
+    if (duration > ptsTaskTimeWindow) {
+        timeElapsed = duration - ptsTaskTimeWindow;
+        minusSign = @"-";
+    }else{
+        timeElapsed = ptsTaskTimeWindow - duration;
     }
+    
+    if (timeElapsed > 3600) {
+        NSUInteger hours = (((NSUInteger)round(timeElapsed))/3600);
+        if (hours < 10) {
+            minusSign = [minusSign stringByAppendingString:@"0"];
+        }
+    }else{
+        NSUInteger minutes = (((NSUInteger)round(timeElapsed))/60) % 60;
+        if (minutes < 10) {
+            minusSign = [minusSign stringByAppendingString:@"0"];
+        }
+    }
+    
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
+        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
             self.subTask.negativeDataSendServer = TRUE;
@@ -151,6 +153,47 @@
         }
     });
 }
+//-(void) setTaskTime1:(id)nsTimer{
+//    NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
+//    int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
+//    int duration = (int)timeInterval;
+//    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
+//    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+//    if (duration > 3600) {
+//        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+//    }else{
+//        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
+//    }
+//
+//    int timeElapsed;
+//    NSString *minusSign = @"";
+//    if (duration > ptsTaskTimeWindow) {
+//        timeElapsed = duration - ptsTaskTimeWindow;
+//        minusSign = @"-";
+//    }else{
+//        timeElapsed = ptsTaskTimeWindow - duration;
+//    }
+//
+//
+//    if (self.subTask.isRunning == 2) {
+//        [nsTimer invalidate];
+//        nsTimer = nil;
+//        return;
+//    }
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
+//        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
+//        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
+//            self.subTask.negativeDataSendServer = TRUE;
+//            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+//            NSError *error;
+//            [moc save:&error];
+//            [self setContainerViewBackground];
+//            [self.delegate updateFlightPTS];
+//        }
+//    });
+//}
 
 -(void) setContainerViewBackground
 {
@@ -168,7 +211,7 @@
             [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         }else{
             self.containerView.backgroundColor = [UIColor whiteColor];
-            if (self.subTask.start - self.subTask.end == 0) {
+            if (self.subTask.start - self.subTask.end == 0 || self.subTask.start - self.subTask.end == 1) {
                 [self.labelSubTaskTimer setHidden:YES];
                 [self.taskTimerButton setHidden:NO];
                 [self.taskTimerButton setTitle:@"Done" forState:UIControlStateNormal];

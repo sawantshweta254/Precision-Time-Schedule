@@ -73,6 +73,12 @@
             self.ptsTaskTimer = nil;
         }
     });
+    
+    if(self.ptsItem.isRunning == 2){
+        self.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
+    }else{
+        self.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 -(NSString *) getTimeInStringFormat:(NSString *) flightDate{
@@ -123,7 +129,20 @@
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
     }
     
-    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeInterval]]];
+    NSString *appendZero = @"";
+    if (timeInterval > 3600) {
+        NSUInteger hours = (((NSUInteger)round(timeInterval))/3600);
+        if (hours < 10) {
+            appendZero = [appendZero stringByAppendingString:@"0"];
+        }
+    }else{
+        NSUInteger minutes = (((NSUInteger)round(timeInterval))/60) % 60;
+        if (minutes < 10) {
+            appendZero = [appendZero stringByAppendingString:@"0"];
+        }
+    }
+    
+    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@%@",appendZero, [timeFormatter stringFromTimeInterval:timeInterval]]];
 
     
     if (self.ptsItem.isRunning == 2) {

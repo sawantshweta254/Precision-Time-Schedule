@@ -119,48 +119,6 @@ static PTSManager *sharedInstance;
     return nil;
 }
 
--(NSArray *) parsePTSList:(NSDictionary *)responseData existingPTSData:(NSArray *)ptsTaskIds{
-    NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
-    NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-    NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
-    for (NSDictionary *ptsItem in ptsList) {
-        NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
-        
-        if (![ptsTaskIds containsObject:ptsId]) {
-            PTSItem *pts = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
-            
-            pts.airlineName = [ptsItem objectForKey:@"airline_name"];
-            pts.dutyManagerId = [[ptsItem objectForKey:@"duty_manager_id"] intValue];
-            pts.dutyManagerName = [ptsItem objectForKey:@"dutymanager_name"];
-            pts.flightDate = [ptsItem objectForKey:@"flight_date"];
-            pts.flightNo = [ptsItem objectForKey:@"flight_no"];
-            pts.flightTime = [ptsItem objectForKey:@"flight_time"];
-            pts.flightId = [[ptsItem objectForKey:@"id"] intValue];//pts id
-            pts.jsonData = [ptsItem objectForKey:@"json_data"];
-            pts.ptsSubTaskId = [[ptsItem objectForKey:@"m_pts_id"] intValue];
-            pts.ptsName = [ptsItem objectForKey:@"pts_name"];
-            pts.redCapId = [[ptsItem objectForKey:@"redcap_id"] intValue];
-            pts.redCapName = [ptsItem objectForKey:@"redcap_name"];
-            pts.remarks = [ptsItem objectForKey:@"remarks"];
-            pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
-            pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
-            pts.timeWindow = [[ptsItem objectForKey:@"time_window"] intValue];
-            pts.flightType = [[ptsItem objectForKey:@"type"] intValue];
-            
-            NSError *error;
-            [moc save:&error];
-            if (!error) {
-                [ptsListToReturn addObject:pts];
-            }
-        }
-        
-        
-    }
-    
-    return ptsListToReturn;
-}
-
 #pragma mark PTS For Master Redcap
 -(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData didParse:(void (^)(BOOL didParse, NSArray *parsedList))completionHandler{
     
@@ -289,6 +247,9 @@ static PTSManager *sharedInstance;
     pts.redCapName = [ptsJson objectForKey:@"redcap_name"];
     pts.flightDate = [ptsJson objectForKey:@"flight_date"];
     pts.flightNo = [ptsJson objectForKey:@"flight_no"];
+    if (pts.flightNo.length == 0) {
+        pts.flightNo = [ptsJson objectForKey:@"flight_num"];
+    }
     pts.airlineName = [ptsJson objectForKey:@"airline_name"];
     pts.remarks = [ptsJson objectForKey:@"remarks"];
     pts.ptsName = [ptsJson objectForKey:@"pts_name"];
