@@ -23,6 +23,8 @@
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
 @property (nonatomic) NSInteger flightId;
+
+@property (nonatomic) BOOL isLessTimeTask;
 @end
 
 @implementation PTSDetailCell
@@ -33,8 +35,13 @@
     self.flightId = flightId;
     self.taskNameLabel.text = subTask.subactivity;
     self.taskNumLabel.text = subTask.notations;
+    self.isLessTimeTask = FALSE;
     
-    if (subTask.start - subTask.end == 0) {
+    if (subTask.start - subTask.end == 0 || subTask.start - subTask.end == 1){
+        self.isLessTimeTask = TRUE;
+    }
+    
+    if (self.isLessTimeTask) {
         [self.labelSubTaskTimer setHidden:YES];
         [self.taskTimerButton setHidden:NO];
     }else{
@@ -142,7 +149,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
-        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
+        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -211,7 +218,7 @@
             [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
         }else{
             self.containerView.backgroundColor = [UIColor whiteColor];
-            if (self.subTask.start - self.subTask.end == 0 || self.subTask.start - self.subTask.end == 1) {
+            if (self.isLessTimeTask) {
                 [self.labelSubTaskTimer setHidden:YES];
                 [self.taskTimerButton setHidden:NO];
                 [self.taskTimerButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -235,7 +242,7 @@
     
     self.eidtTimeButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.eidtTimeButton.hidden = FALSE;
-    if ((self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) && (self.subTask.start - self.subTask.end != 0)) {
+    if ((self.subTask.subactivityStartTime != nil && self.subTask.subactivityEndTime != nil) && !self.isLessTimeTask) {
         systemTaskTime = [NSString stringWithFormat:@"%@ to %@  ", [dateFormatter stringFromDate:self.subTask.subactivityStartTime], [dateFormatter stringFromDate:self.subTask.subactivityEndTime]];
     }else if (self.subTask.subactivityStartTime != nil){
         systemTaskTime = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.subTask.subactivityStartTime]];

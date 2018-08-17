@@ -50,18 +50,6 @@
       location = "group:PTS/Models/XCModels/RedCap+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:PTS/Models/XCModels/PTSSubTask+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
       location = "group:PTS/Models/XCModels/User+CoreDataProperties.h">
    </FileRef>
    <FileRef

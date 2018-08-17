@@ -35,7 +35,7 @@
     [self.timePicker setLocale:locale];
     
     [self.buttonEndTime setHidden:NO];
-    if (self.subTask.start - self.subTask.end == 0) {
+    if (self.subTask.start - self.subTask.end == 0 || self.subTask.start - self.subTask.end == 1) {
         [self.buttonEndTime setHidden:YES];
     }
 

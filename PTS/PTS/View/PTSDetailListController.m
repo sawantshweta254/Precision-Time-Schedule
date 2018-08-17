@@ -294,16 +294,6 @@
     if (self.ptsTask.isRunning == 0) {
         self.ptsTask.ptsStartTime = [NSDate date];
         self.ptsTask.currentTime = [NSDate date];
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"HH:mm:ss";
-        NSDate *date = [formatter dateFromString:[formatter stringFromDate:self.ptsTask.currentTime]];
-        // Get the time in seconds; includes 3 decimal place precision
-        NSTimeInterval seconds = [date timeIntervalSince1970]*1000;
-        
-//        formatter date
-        
-        self.ptsTask.executionTime = @"27184";//[NSString stringWithFormat:@"%.f", seconds];
         self.ptsTask.isRunning = 1;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
@@ -316,10 +306,8 @@
     }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
         self.ptsTask.isRunning = 2;
-//        [self stopAnySubtasksWhichAreRunning];
-        
+        [self stopAnySubtasksWhichAreRunning];
         [self.taskUpdateClient updateFlightTask:self.ptsTask];
-
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
