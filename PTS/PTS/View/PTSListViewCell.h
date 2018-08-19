@@ -9,7 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "PTSItem+CoreDataProperties.h"
 
+@protocol PTSListViewCellDelegate
+-(void) showSupervisor;
+@end
+
 @interface PTSListViewCell : UITableViewCell
+
+@property (nonatomic, weak) id <PTSListViewCellDelegate> delegate;
 
 -(void) setPTSDetails:(PTSItem *)ptsItem;
 @end

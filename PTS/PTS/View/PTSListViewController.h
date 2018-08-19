@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginController.h"
+#import "PTSListViewCell.h"
 
-@interface PTSListViewController : UIViewController <LoginViewDelegate>
+@interface PTSListViewController : UIViewController <LoginViewDelegate, PTSListViewCellDelegate>
 
 @end

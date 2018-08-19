@@ -75,6 +75,9 @@
                                                         <constraint firstAttribute="width" constant="50" id="sbl-S0-0L5"/>
                                                     </constraints>
                                                     <state key="normal" image="drop_image"/>
+                                                    <connections>
+                                                        <action selector="showSuperVisor:" destination="DF3-pa-Ngn" eventType="touchUpInside" id="59g-Iv-4eg"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THd-aC-w51">
                                                     <rect key="frame" x="365" y="21" width="0.0" height="0.0"/>
@@ -97,6 +100,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="buttonSupervisor" destination="eN9-Ig-uc2" id="VWe-2x-vlo"/>
                                             <outlet property="flightTypeIcon" destination="YN0-1a-S5e" id="HTY-ER-ym7"/>
                                             <outlet property="labelFlightArrivalTime" destination="Gvh-5l-dMM" id="61v-k1-qqP"/>
                                             <outlet property="labelFlightName" destination="1v5-0g-Ejy" id="WZA-Rm-PZE"/>
@@ -136,11 +140,42 @@
                     <connections>
                         <outlet property="socketConnectedButton" destination="bKW-3V-7uL" id="fuP-l3-yAN"/>
                         <outlet property="tableView" destination="6h9-ok-naT" id="opY-5R-jfe"/>
+                        <segue destination="bcj-mG-CTm" kind="popoverPresentation" identifier="SupervisorSegue" popoverAnchorView="6h9-ok-naT" id="XFy-hP-kiv">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xtI-Lb-QGD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-530.39999999999998" y="-600.44977511244383"/>
+        </scene>
+        <!--Supervisor View Controller-->
+        <scene sceneID="OBz-rG-Jhy">
+            <objects>
+                <viewController storyboardIdentifier="SupervisorViewController" id="bcj-mG-CTm" customClass="SupervisorViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3ie-eY-L4i">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Supervisor - " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dg-9n-FRw">
+                                <rect key="frame" x="10" y="333" width="355" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Vib-Zv-y0C" firstAttribute="trailing" secondItem="4dg-9n-FRw" secondAttribute="trailing" constant="10" id="RQv-k4-ogG"/>
+                            <constraint firstItem="4dg-9n-FRw" firstAttribute="leading" secondItem="Vib-Zv-y0C" secondAttribute="leading" constant="10" id="ZmK-hp-b1T"/>
+                            <constraint firstItem="4dg-9n-FRw" firstAttribute="centerY" secondItem="Vib-Zv-y0C" secondAttribute="centerY" id="zeG-KH-wXm"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Vib-Zv-y0C"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cL5-4r-67A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="33" y="-1427"/>
         </scene>
         <!--List View Controller-->
         <scene sceneID="EyT-pX-DQ6">

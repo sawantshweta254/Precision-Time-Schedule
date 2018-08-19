@@ -84,7 +84,7 @@
 }
 
 - (void) updateFlightTask:(PTSItem *)pts{
-    if (self.webSocketClient.readyState == SR_OPEN) {
+    if (self.webSocketClient.readyState == SR_OPEN && pts.isRunning != 0) {
         WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];
         [self.webSocketClient send:[messageFactory createUpdateMessageForFlight:pts]];
     }

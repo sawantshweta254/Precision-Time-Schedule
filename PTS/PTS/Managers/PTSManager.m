@@ -64,11 +64,19 @@ static PTSManager *sharedInstance;
             NSArray *fetchedList;
             
             if (user.empType != 3) {
-               fetchedList = [self parsePTSListForAdmin:responseData existingPTSData:ptsIdsDBArray];
-                if (fetchedList.count > 0) {
-                    [finalPTSList addObjectsFromArray:fetchedList];
-                }
-                fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
+//               fetchedList = [self parsePTSListForAdmin:responseData existingPTSData:ptsIdsDBArray];
+//                if (fetchedList.count > 0) {
+//                    [finalPTSList addObjectsFromArray:fetchedList];
+//                }
+//                fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
+                
+                NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
+                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList) {
+                    if (parsedList.count > 0) {
+                        [finalPTSList addObjectsFromArray:parsedList];
+                    }
+                    fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
+                }];
             }else if (user.empType == 3){
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
                 [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList) {
@@ -576,7 +584,10 @@ static PTSManager *sharedInstance;
         if (![[ptsSubItem objectForKey:@"time_execute_time"] isKindOfClass:[NSNull class]]) {
             ptsSubTask.timerExecutedTime = [ptsSubItem objectForKey:@"time_execute_time"];
         }
-        ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
+        if (![[ptsSubItem objectForKey:@"user_subact_feedback"] isKindOfClass:[NSNull class]]) {
+            ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
+        }
+        
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
         ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];

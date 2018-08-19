@@ -34,11 +34,10 @@
 }
 
 -(void) setPTSDetails:(PTSItem *)ptsItem{
-//    self.contentView.userInteractionEnabled = NO;
     
     self.ptsItem = ptsItem;
     self.labelFlightName.text = ptsItem.flightNo;
-    
+        
     if (ptsItem.flightType == ArrivalType) {
         self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", ptsItem.flightTime];
         [self.flightTypeIcon setImage:[UIImage imageNamed:@"arrival_flight"]];
@@ -153,8 +152,6 @@
 
 - (IBAction)showSuperVisor:(id)sender {
     
-    UILabel *supervisorLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 200, self.frame.size.height, 200, 100)];
-    supervisorLabel.text = [NSString stringWithFormat:@"Supervisor - %@", self.ptsItem.supervisorName];
-    [self addSubview:supervisorLabel];
+    [self.delegate showSupervisor];
 }
 @end

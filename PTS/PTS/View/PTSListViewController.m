@@ -8,7 +8,6 @@
 
 #import "PTSListViewController.h"
 #import "LoginController.h"
-#import "PTSListViewCell.h"
 #import "PTSDetailListController.h"
 #import "PTSItem+CoreDataProperties.h"
 #import "PTSManager.h"
@@ -17,6 +16,8 @@
 #import "LoginManager.h"
 #import "TaskTimeUpdatesClient.h"
 #import "RedCap+CoreDataProperties.h"
+
+#import "SupervisorViewController.h"
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
@@ -169,6 +170,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PTSListViewCell *ptsCell = [tableView dequeueReusableCellWithIdentifier:@"PTSItemCell" forIndexPath:indexPath];
     PTSItem *pts = [self.ptsTasks objectAtIndex:indexPath.row];
+    ptsCell.delegate = self;
     [ptsCell setPTSDetails:pts];
     return ptsCell;
 }
@@ -233,11 +235,23 @@
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    UITableViewCell *selectedCell = (UITableViewCell*)sender;
-    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
-    PTSDetailListController *ptsDetailView = segue.destinationViewController;
-    ptsDetailView.taskUpdateClient = self.taskUpdateClient;
-    ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:selectedIndex];
+    if ([segue.identifier isEqualToString:@"SupervisorSegue"]) {
+        SupervisorViewController *supervisorVew = segue.destinationViewController;
+//        supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
+//        supervisorVew.preferredContentSize = CGSizeMake(100, 100);
+//        CGRect selectedCellRect = [self.tableView rectForRowAtIndexPath:m_currentIndexPath];
+//
+//        selectedCellRect.size.width = selectedCellRect.size.width/6;
+        
+        supervisorVew.popoverPresentationController.sourceRect = CGRectMake(100, 100, 100, 100);
+    }else{
+        UITableViewCell *selectedCell = (UITableViewCell*)sender;
+        NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+        PTSDetailListController *ptsDetailView = segue.destinationViewController;
+        ptsDetailView.taskUpdateClient = self.taskUpdateClient;
+        ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:selectedIndex];
+    }
+   
 }
 
 #pragma mark Utility methods

@@ -229,7 +229,7 @@
             }
         }
         if (self.subTask.shouldBeInActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0)) {
-            self.containerView.backgroundColor = [UIColor grayColor];
+            self.containerView.backgroundColor = [UIColor lightGrayColor];
         }
     });
 }

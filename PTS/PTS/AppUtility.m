@@ -18,6 +18,10 @@
 }
 
 +(NSString *)getTimeDifference:(NSDate *)startTime toEndTime:(NSDate *)endTime{
+    
+    if (startTime == nil || endTime == nil) {
+        return @"";
+    }
     double timeInterval = [endTime timeIntervalSinceDate:startTime];
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
     timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;

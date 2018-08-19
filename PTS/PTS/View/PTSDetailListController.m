@@ -91,6 +91,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
+    
+    [self.commentTextfield setText:self.ptsTask.coment];
 
 }
 
@@ -398,7 +400,6 @@
 -(void) updateTaskComment{
     if (self.ptsTask.isRunning != 0) {
         self.ptsTask.coment = self.commentTextfield.text;
-        self.commentTextfield.text = @"";
         [self.commentTextfield resignFirstResponder];
         [self updateFlightPTS];
     }
