@@ -85,7 +85,6 @@
 }
 
 - (void) updateUserForFlight:(NSArray *)ptsIdsArray masterRedCapDetails:(NSDictionary *)redcapDictionary{
-    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     
     if (self.webSocketClient.readyState == SR_OPEN) {
         WebsocketMessageFactory *messageFactory = [[WebsocketMessageFactory alloc] init];

@@ -44,6 +44,22 @@ static PTSManager *sharedInstance;
         fetchPTSCompletionHandler(finalPTSList, nil);
 }
 
+-(void) fetchAndDeletePTSFromDB:(NSArray*)ptsToDelete{
+    
+    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
+    NSError *error;
+    NSArray *ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
+    
+    for (PTSItem *ptsItem in ptsArray) {
+        if ([ptsToDelete containsObject:[NSNumber numberWithInt:ptsItem.flightId] ]){
+            [moc deleteObject:ptsItem];
+            [moc save:&error];
+        }
+    }
+    
+}
+
 
 -(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
     
@@ -71,7 +87,22 @@ static PTSManager *sharedInstance;
 //                fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
                 
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList) {
+                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
+                    
+                    NSMutableArray *mutableExistingPTSIDs = [NSMutableArray arrayWithArray:ptsIdsDBArray];
+                    [mutableExistingPTSIDs removeObjectsInArray:fetchedPTSIDs];
+                    if (mutableExistingPTSIDs.count > 0) {
+                        NSMutableArray *itemsToDelete = [[NSMutableArray alloc] init];
+                        for (PTSItem *itemToDelete in finalPTSList) {
+                            if ([mutableExistingPTSIDs containsObject:[NSNumber numberWithInt:itemToDelete.flightId]]) {
+                                [itemsToDelete addObject:itemToDelete];
+                            }
+                        }
+                        
+                        [finalPTSList removeObjectsInArray:itemsToDelete];
+                        [self fetchAndDeletePTSFromDB:mutableExistingPTSIDs];
+                        
+                    }
                     if (parsedList.count > 0) {
                         [finalPTSList addObjectsFromArray:parsedList];
                     }
@@ -79,7 +110,23 @@ static PTSManager *sharedInstance;
                 }];
             }else if (user.empType == 3){
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList) {
+                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
+                    
+                    NSMutableArray *mutableExistingPTSIDs = [NSMutableArray arrayWithArray:ptsIdsDBArray];
+                    [mutableExistingPTSIDs removeObjectsInArray:fetchedPTSIDs];
+                    if (mutableExistingPTSIDs.count > 0) {
+                        NSMutableArray *itemsToDelete = [[NSMutableArray alloc] init];
+                        for (PTSItem *itemToDelete in finalPTSList) {
+                            if ([mutableExistingPTSIDs containsObject:[NSNumber numberWithInt:itemToDelete.flightId]]) {
+                                [itemsToDelete addObject:itemToDelete];
+                            }
+                        }
+                        
+                        [finalPTSList removeObjectsInArray:itemsToDelete];
+                        [self fetchAndDeletePTSFromDB:mutableExistingPTSIDs];
+
+                    }
+                    
                     if (parsedList.count > 0) {
                         [finalPTSList addObjectsFromArray:parsedList];
                     }
@@ -128,16 +175,19 @@ static PTSManager *sharedInstance;
 }
 
 #pragma mark PTS For Master Redcap
--(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData didParse:(void (^)(BOOL didParse, NSArray *parsedList))completionHandler{
+-(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData didParse:(void (^)(BOOL didParse, NSArray *parsedList, NSArray *fetchedIds))completionHandler{
     
     NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
    
     int countForList = 0;
+    NSMutableArray *fetchedPTSIDs = [[NSMutableArray alloc] init];
     for (NSMutableDictionary *ptsItem in ptsList) {
         
         NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
+        
+        [fetchedPTSIDs addObject:ptsId];
         
         if (![ptsTaskIds containsObject:ptsId]) {
             PTSItem *pts = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
@@ -162,7 +212,7 @@ static PTSManager *sharedInstance;
                     }
                     
                     if (ptsListToReturn.count == ptsList.count) {
-                        completionHandler(TRUE, ptsListToReturn);
+                        completionHandler(TRUE, ptsListToReturn, fetchedPTSIDs);
 
                     }
                 }];
@@ -175,7 +225,7 @@ static PTSManager *sharedInstance;
                     [ptsListToReturn addObject:pts];
                 }
                 if (ptsListToReturn.count == ptsList.count) {
-                    completionHandler(TRUE, ptsListToReturn);
+                    completionHandler(TRUE, ptsListToReturn, fetchedPTSIDs);
                 }
             }
             
@@ -186,7 +236,7 @@ static PTSManager *sharedInstance;
     }
     
     if (countForList == ptsList.count) {
-        completionHandler(TRUE, ptsListToReturn);
+        completionHandler(TRUE, ptsListToReturn, fetchedPTSIDs);
     }
     
 

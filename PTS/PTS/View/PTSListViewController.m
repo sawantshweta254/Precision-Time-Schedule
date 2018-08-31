@@ -47,6 +47,7 @@
         [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
     }else{
         [self setSearchBar];
+        [self showLoadingView];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
@@ -141,6 +142,15 @@
     }
 }
 
+-(void) showLoadingView{
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
+    [loadingLabel setFont:[UIFont systemFontOfSize:25]];
+    loadingLabel.text = @"Loading Flights ...";
+    loadingLabel.textColor        = [UIColor grayColor];
+    loadingLabel.textAlignment    = NSTextAlignmentCenter;
+    self.tableView.backgroundView = loadingLabel;
+}
+
 #pragma mark NSNotification methods
 -(void)appDidBecomeActive:(NSNotification*)note
 {
@@ -156,6 +166,7 @@
     if ([notification.object boolValue]) {
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        [self showLoadingView];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             self.ptsTasksToLoad = self.ptsTasks;
@@ -227,6 +238,7 @@
     
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     [self setViewTitle:loggedInUser.userName];
+    [self showLoadingView];
     [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
         self.ptsTasksToLoad = self.ptsTasks;
@@ -267,6 +279,11 @@
 }
 
 - (void) logoutUser{
+    
+    self.ptsTasks = nil;
+    self.ptsTasksToLoad = nil;
+    [self loadListOnView];
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([User class])];
     request.includesPropertyValues = TRUE;
     NSBatchDeleteRequest *deleteUser = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
@@ -297,8 +314,7 @@
     
     NSError *error;
     [theAppDelegate.persistentContainer.viewContext save:&error];
-    self.ptsTasks = nil;
-    self.ptsTasksToLoad = nil;
+    
     UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
     loginView.delegate = self;
