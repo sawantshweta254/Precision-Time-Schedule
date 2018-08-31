@@ -161,7 +161,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xtI-Lb-QGD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-530.39999999999998" y="-600.44977511244383"/>
+            <point key="canvasLocation" x="-626" y="-600"/>
         </scene>
         <!--Supervisor View Controller-->
         <scene sceneID="OBz-rG-Jhy">
@@ -1106,7 +1106,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="YUG-u4-kJm"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="shweta@gmail.com" placeholder="Enter Email Id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B0u-Xc-YzC">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Email Id" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B0u-Xc-YzC">
                                                                 <rect key="frame" x="40" y="14" width="231" height="17"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1140,7 +1140,7 @@
                                                                     <constraint firstAttribute="height" constant="20" id="eH5-bR-A0S"/>
                                                                 </constraints>
                                                             </imageView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="admin" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJl-z5-tQ2">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IJl-z5-tQ2">
                                                                 <rect key="frame" x="40" y="14" width="231" height="17"/>
                                                                 <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>

@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *socketConnectedButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UISearchController *searchController;
+
+@property (nonatomic, strong) PTSItem *selectedPTSItem;
 @end
 
 @implementation PTSListViewController
@@ -257,14 +259,27 @@
 }
 
 #pragma mark - Navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-        self.searchController.active = NO;
-        UITableViewCell *selectedCell = (UITableViewCell*)sender;
-        NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+    UITableViewCell *selectedCell = (UITableViewCell*)sender;
+    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+    self.selectedPTSItem = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
     
+    if (self.searchController.isActive) {
+        [self.searchController.searchBar setText:@""];
+        [self.searchController resignFirstResponder];
+        [self.searchController dismissViewControllerAnimated:YES completion:^{
+            [self performSegueWithIdentifier:identifier sender:sender];
+        }];
+        return FALSE;
+    }else{
+        return TRUE;
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
         PTSDetailListController *ptsDetailView = segue.destinationViewController;
         ptsDetailView.taskUpdateClient = self.taskUpdateClient;
-        ptsDetailView.ptsTask = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
+        ptsDetailView.ptsTask = self.selectedPTSItem;
 }
 
 #pragma mark Utility methods
@@ -369,7 +384,7 @@
         self.searchController.searchBar.placeholder = @"Search Flight";
         
         self.tableView.tableHeaderView = self.searchController.searchBar;
-        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+//        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     }else{
         self.tableView.tableHeaderView = nil;
     }

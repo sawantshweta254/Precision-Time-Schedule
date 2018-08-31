@@ -39,7 +39,7 @@
 -(void) setPTSDetails:(PTSItem *)ptsItem{
     
     self.ptsItem = ptsItem;
-    self.labelFlightName.text = ptsItem.flightNo;
+    self.labelFlightName.text = [NSString stringWithFormat:@"%@ %hd", ptsItem.flightNo, ptsItem.flightId];
         
     if (ptsItem.flightType == ArrivalType) {
         self.labelFlightArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", ptsItem.flightTime];
@@ -52,6 +52,7 @@
     self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
     self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
     
+    [self.labelPtsTimer setHidden:FALSE];
     if (self.ptsItem.isRunning == 2) {
         [self.labelPtsTimer setText:[AppUtility getTimeDifference:self.ptsItem.ptsStartTime toEndTime:self.ptsItem.ptsEndTime]];
         [self.ptsTaskTimer invalidate];
@@ -61,6 +62,7 @@
         [self startPTSTimer];
     }
     else{
+        [self.labelPtsTimer setHidden:TRUE];
         NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
         timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
         timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
@@ -129,6 +131,13 @@
 //
 //    [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@",[timeFormatter stringFromTimeInterval:timeElapsed]]];
     
+    if (self.ptsItem.ptsStartTime == nil) {
+        return;
+    }
+    if (self.ptsItem.isRunning != 1) {
+        [timer invalidate];
+        timer = nil;
+    }
     NSTimeInterval timeInterval = fabs([[NSDate date] timeIntervalSinceDate:self.ptsItem.ptsStartTime]);
     NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
     timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
@@ -153,11 +162,6 @@
     
     [self.labelPtsTimer setText:[NSString stringWithFormat:@"%@%@",appendZero, [timeFormatter stringFromTimeInterval:timeInterval]]];
 
-    
-    if (self.ptsItem.isRunning == 2) {
-        [timer invalidate];
-        timer = nil;
-    }
 }
 
 #pragma mark Button Actions

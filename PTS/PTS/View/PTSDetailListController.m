@@ -131,6 +131,10 @@
     if (self.ptsTask.isRunning == 2 && self.ptsTaskTimer.isValid) {
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = nil;
+    }else if (self.ptsTask.isRunning == 1) {
+        [self setCallTime];
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }
     [self.ptsSubTasksCollectionView reloadData];
 }
