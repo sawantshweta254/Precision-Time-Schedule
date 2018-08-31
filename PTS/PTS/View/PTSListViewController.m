@@ -24,9 +24,12 @@
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
+@property (nonatomic, retain) NSArray *ptsTasksToLoad;
+@property (nonatomic, retain) PTSItem *selectedSubTask;
 
 @property (weak, nonatomic) IBOutlet UIButton *socketConnectedButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) UISearchController *searchController;
 @end
 
 @implementation PTSListViewController
@@ -43,9 +46,14 @@
         loginView.delegate = self;
         [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
     }else{
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        if (loggedInUser.empType != 3) {
+            [self setSearchBar];
+        }
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
+                self.ptsTasksToLoad = self.ptsTasks;
                 [self loadListOnView];
                 [self registerFlightsForUpdate];
             }
@@ -109,10 +117,10 @@
 }
 
 -(void) loadListOnView{
-    if (self.ptsTasks.count > 0) {
-        [self.tableView reloadData];
+    [self.tableView reloadData];
+    if (self.ptsTasksToLoad.count > 0) {
         self.tableView.backgroundView = nil;
-    }else{
+    }else if(!self.searchController.isActive){
         UILabel *noDataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
         [noDataLabel setFont:[UIFont systemFontOfSize:25]];
         noDataLabel.numberOfLines = 2;
@@ -153,6 +161,7 @@
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+            self.ptsTasksToLoad = self.ptsTasks;
             [self registerFlightsForUpdate];
             [self loadListOnView];
         }];
@@ -168,12 +177,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.ptsTasks.count;
+    return self.ptsTasksToLoad.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PTSListViewCell *ptsCell = [tableView dequeueReusableCellWithIdentifier:@"PTSItemCell" forIndexPath:indexPath];
-    PTSItem *pts = [self.ptsTasks objectAtIndex:indexPath.row];
+    PTSItem *pts = [self.ptsTasksToLoad objectAtIndex:indexPath.row];
     ptsCell.delegate = self;
     [ptsCell setPTSDetails:pts];
     return ptsCell;
@@ -222,6 +231,7 @@
     [self setViewTitle:loggedInUser.userName];
     [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+        self.ptsTasksToLoad = self.ptsTasks;
         [self loadListOnView];
         
         if (self.taskUpdateClient == nil) {
@@ -238,24 +248,27 @@
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"SupervisorSegue"]) {
-        SupervisorViewController *supervisorVew = segue.destinationViewController;
-//        supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
-//        supervisorVew.preferredContentSize = CGSizeMake(100, 100);
-//        CGRect selectedCellRect = [self.tableView rectForRowAtIndexPath:m_currentIndexPath];
-//
-//        selectedCellRect.size.width = selectedCellRect.size.width/6;
-        
-        supervisorVew.popoverPresentationController.sourceRect = CGRectMake(100, 100, 100, 100);
+- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+    UITableViewCell *selectedCell = (UITableViewCell*)sender;
+    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+    self.selectedSubTask = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
+    
+    if (self.searchController.isActive) {
+        [self.searchController.searchBar setText:@""];
+        [self.searchController resignFirstResponder];
+        [self.searchController dismissViewControllerAnimated:YES completion:^{
+            [self performSegueWithIdentifier:identifier sender:sender];
+        }];
+        return FALSE;
     }else{
-        UITableViewCell *selectedCell = (UITableViewCell*)sender;
-        NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+        return TRUE;
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
         PTSDetailListController *ptsDetailView = segue.destinationViewController;
         ptsDetailView.taskUpdateClient = self.taskUpdateClient;
-        ptsDetailView.ptsTask = [self.ptsTasks objectAtIndex:selectedIndex];
-    }
-   
+        ptsDetailView.ptsTask = self.selectedSubTask;
 }
 
 #pragma mark Utility methods
@@ -301,6 +314,7 @@
     NSError *error;
     [theAppDelegate.persistentContainer.viewContext save:&error];
     self.ptsTasks = nil;
+    self.ptsTasksToLoad = nil;
     UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
     loginView.delegate = self;
@@ -310,5 +324,57 @@
 #pragma mark Login delegate methods
 -(void) userDidLogin{
     [self reloadTaskList:nil];
+}
+
+
+#pragma mark Cell Delegate
+-(void) showSupervisor{
+//    [self performSegueWithIdentifier:@"SupervisorSegue" sender:nil];
+    //Handle search bar
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SupervisorViewController *supervisorVew = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([SupervisorViewController class])];
+    [supervisorVew.view setFrame:CGRectMake(100, 100, 100, 100)];
+    supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
+    supervisorVew.preferredContentSize = CGSizeMake(100, 100);
+    
+//    [self presentViewController:supervisorVew animated:TRUE completion:^{
+//
+//    }];
+}
+
+#pragma mark searchbar methods
+-(void) setSearchBar{
+//    self.definesPresentationContext = YES;
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.delegate = self;
+    self.searchController.searchBar.tintColor = UIColor.whiteColor;
+    self.searchController.obscuresBackgroundDuringPresentation = FALSE;
+    self.searchController.searchBar.placeholder = @"Search Flight";
+    
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    
+}
+
+-(void) updateSearchResultsForSearchController:(UISearchController *)searchController{
+    NSString *flightNumber = self.searchController.searchBar.text;
+    if (flightNumber.length > 0) {
+        self.ptsTasksToLoad = [self getFilteredFlightArray:flightNumber];
+    }else{
+        self.ptsTasksToLoad = self.ptsTasks;
+    }
+    
+    [self loadListOnView];
+}
+
+-(NSArray *) getFilteredFlightArray:(NSString *)searchString{
+    NSPredicate *predicateForPTSWithId = [NSPredicate predicateWithFormat:@"flightNo CONTAINS[c] %@", searchString];
+    NSArray *filteredArray = [self.ptsTasks filteredArrayUsingPredicate:predicateForPTSWithId];
+    return filteredArray;
+}
+
+-(void) willDismissSearchController:(UISearchController *)searchController{
+    
 }
 @end

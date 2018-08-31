@@ -107,7 +107,7 @@
                                             <outlet property="labelPTSDay" destination="wTP-vJ-ySz" id="ygD-vh-Lxx"/>
                                             <outlet property="labelPTSTime" destination="vzp-8B-8Uq" id="394-82-H3M"/>
                                             <outlet property="labelPtsTimer" destination="THd-aC-w51" id="eOV-fe-SgK"/>
-                                            <segue destination="lee-af-D2s" kind="presentation" id="ArZ-cv-lE6"/>
+                                            <segue destination="lee-af-D2s" kind="presentation" identifier="PTSDetailsSegue" id="ArZ-cv-lE6"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
