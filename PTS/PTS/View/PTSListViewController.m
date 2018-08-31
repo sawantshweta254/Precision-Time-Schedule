@@ -16,6 +16,8 @@
 #import "LoginManager.h"
 #import "TaskTimeUpdatesClient.h"
 #import "RedCap+CoreDataProperties.h"
+#import "RedCap+CoreDataProperties.h"
+#import "RedCapSubtask+CoreDataProperties.h"
 
 #import "SupervisorViewController.h"
 
@@ -54,7 +56,9 @@
     
     [self setViewTitle:loggedInUser.userName];
     UIBarButtonItem *reloadBarButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sync_data"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(reloadTaskList:)];
-    [self.navigationItem setRightBarButtonItem:reloadBarButton];
+    UIBarButtonItem *logoutBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutUser)];
+    [logoutBarButton setTintColor:[UIColor whiteColor]];
+    [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:reloadBarButton, logoutBarButton, nil]];
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -263,6 +267,44 @@
         [redCapDetailsDic setObject:[NSNumber numberWithBool:selfRedcap.masterRedCap] forKey:[NSNumber numberWithInt:ptsItem.flightId]];
     }
     [self.taskUpdateClient updateUserForFlight:ptsIdsArray masterRedCapDetails:redCapDetailsDic];
+}
+
+- (void) logoutUser{
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([User class])];
+    request.includesPropertyValues = TRUE;
+    NSBatchDeleteRequest *deleteUser = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+
+    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSItem class])];
+    request1.includesPropertyValues = TRUE;
+    NSBatchDeleteRequest *deletePTSItem = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
+    
+    NSFetchRequest *request2 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSSubTask class])];
+    request2.includesPropertyValues = TRUE;
+    NSBatchDeleteRequest *deleteSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request2];
+    
+    NSFetchRequest *request3 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCap class])];
+    request3.includesPropertyValues = TRUE;
+    NSBatchDeleteRequest *deleteRedCap = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request3];
+
+    NSFetchRequest *request4 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCapSubtask class])];
+    request4.includesPropertyValues = TRUE;
+    NSBatchDeleteRequest *deleteRedCapSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request4];
+
+    
+    NSError *deleteError = nil;
+    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteUser error:&deleteError];
+    [theAppDelegate.persistentContainer.viewContext executeRequest:deletePTSItem error:&deleteError];
+    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteSubtasks error:&deleteError];
+    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCap error:&deleteError];
+    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCapSubtasks error:&deleteError];
+    
+    NSError *error;
+    [theAppDelegate.persistentContainer.viewContext save:&error];
+    self.ptsTasks = nil;
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
+    loginView.delegate = self;
+    [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
 }
 
 #pragma mark Login delegate methods

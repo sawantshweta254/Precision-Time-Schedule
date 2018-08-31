@@ -228,7 +228,8 @@
                 self.labelSubTaskTimer.text = [NSString stringWithFormat:@"%@",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
             }
         }
-        if (self.subTask.shouldBeInActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0)) {
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        if (loggedInUser.empType == 3 && (self.subTask.shouldBeInActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0))) {
             self.containerView.backgroundColor = [UIColor lightGrayColor];
         }
     });

@@ -213,11 +213,12 @@ static PTSManager *sharedInstance;
     pts.flightTime = [ptsJson objectForKey:@"arr_dep_type"];
     pts.isRunning = [[ptsJson objectForKey:@"is_running"] intValue];
     pts.masterRedCap = [[ptsJson objectForKey:@"master_redcap"] boolValue];
-    
+    pts.coment = [ptsJson objectForKey:@"comment"];
+
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    
+//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+
     NSString *startTime = [ptsJson objectForKey:@"pts_start_time"];
     if (![startTime isEqualToString:@"0"]) {
         pts.ptsStartTime = [dateFormatter dateFromString:startTime];
@@ -479,6 +480,9 @@ static PTSManager *sharedInstance;
 //    "MsgType": 2,
 //    "user_type": 3,
     
+//    "master_redcap" : true, admin
+//    "user_type" : 3,admin
+    
     
     if (ptsItem == nil) {
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -486,8 +490,6 @@ static PTSManager *sharedInstance;
         ptsItem = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
     }
     
-    //        itemFromSocket. = [ptsTask objectForKey:@"userid"];
-    //        itemFromSocket.dev = [ptsTask objectForKey:@"device_id"];
     ptsItem.flightDate = [ptsTaskDictionary objectForKey:@"flight_date"];
     ptsItem.flightId = [[ptsTaskDictionary objectForKey:@"flight_id"] intValue];
     ptsItem.flightNo = [ptsTaskDictionary objectForKey:@"flight_num"];
@@ -517,10 +519,7 @@ static PTSManager *sharedInstance;
         ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
     }
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
-    //        itemFromSocket. = [ptsTask objectForKey:@"MsgType"];
-    //        itemFromSocket. = [ptsTask objectForKey:@"user_name"];
-    //        itemFromSocket. = [ptsTask objectForKey:@"user_type"];
-    
+
     
     NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"above_list"] storeIn:[ptsItem.aboveWingActivities allObjects]]];
     NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"below_list"] storeIn:[ptsItem.belowWingActivities allObjects]]];
@@ -749,78 +748,78 @@ static PTSManager *sharedInstance;
 }
 
 #pragma mark Admin methods
--(NSArray *) parsePTSListForAdmin:(NSDictionary *)responseData existingPTSData:(NSArray *)ptsTaskIds{
-    NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
-    NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-    NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
-    
-    for (NSDictionary *ptsItem in ptsList) {
-        //        "adhoc_pts_id" = 5;
-        
-        NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
-        
-        if (![ptsTaskIds containsObject:ptsId]) {
-            PTSItem *pts = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
-            
-            //            pts.airlineName = [ptsItem objectForKey:@"airline_name"];
-            pts.dutyManagerId = [[ptsItem objectForKey:@"duty_manager_id"] intValue];
-            pts.dutyManagerName = [ptsItem objectForKey:@"dutymanager_name"];
-            pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
-            pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
-            pts.redCapId = [[ptsItem objectForKey:@"redcap_id"] intValue];
-            pts.redCapName = [ptsItem objectForKey:@"redcap_name"];
-            pts.ptsSubTaskId = [[ptsItem objectForKey:@"adhoc_pts_id"] intValue];
-            pts.flightId = [[ptsItem objectForKey:@"id"] intValue];//pts id
-            
-            NSError *jsonError;
-            NSString *originalString = [ptsItem objectForKey:@"json_data"];
-            NSData *data = [[NSData alloc] initWithBase64EncodedString:originalString options:0];//[NSData dataFromBase64String:originalString];
-            NSDictionary *jsonForPTSItem = [NSJSONSerialization JSONObjectWithData:data
-                                                                           options:NSJSONReadingMutableContainers
-                                                                             error:&jsonError];
-            
-            //            "current_time" = 0;
-            //            "device_id" = "2CF35E75-2C65-4F73-AE08-7034F96ED28E";
-            //            "execute_time" = "";
-            //            "timer_stop_time" = 0;
-            //            "user_name" = "Shweta Sawant";
-            //            "user_type" = 3;
-            //            userid = 25;
-            //            "arr_dep_type" = "07:46";
-            
-            
-            pts.flightDate = [jsonForPTSItem objectForKey:@"flight_date"];
-            pts.flightNo = [jsonForPTSItem objectForKey:@"flight_num"];
-            pts.flightTime = [jsonForPTSItem objectForKey:@"arr_dep_type"];
-            pts.ptsName = [jsonForPTSItem objectForKey:@"pts_name"];
-            //            pts.remarks = [ptsItem objectForKey:@"remarks"];
-            pts.timeWindow = [[jsonForPTSItem objectForKey:@"pts_time"] intValue];
-            pts.flightType = [[jsonForPTSItem objectForKey:@"flight_type"] intValue];
-            
-            pts.isRunning = [[jsonForPTSItem objectForKey:@"is_running"] intValue];
-            pts.ptsSubTaskId = [[jsonForPTSItem objectForKey:@"m_pts_id"] intValue];
-            
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            pts.ptsStartTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_start_time"]];
-            pts.ptsEndTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_end_time"] ];
-            
-            pts.airlineName = [jsonForPTSItem objectForKey:@"airline_name"];
-            
-            pts.aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForAdmin:[jsonForPTSItem objectForKey:@"above_list"] storeIn:nil]];
-            pts.belowWingActivities = [NSSet setWithArray:[self parseSubTaskForAdmin:[jsonForPTSItem objectForKey:@"below_list"] storeIn:nil]];
-
-            NSError *error;
-            [moc save:&error];
-            if (!error) {
-                [ptsListToReturn addObject:pts];
-            }
-        }
-    
-    }
-    return ptsListToReturn;
-}
+//-(NSArray *) parsePTSListForAdmin:(NSDictionary *)responseData existingPTSData:(NSArray *)ptsTaskIds{
+//    NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
+//    NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
+//    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+//    NSEntityDescription *ptsEntity = [NSEntityDescription entityForName:NSStringFromClass([PTSItem class]) inManagedObjectContext:moc];
+//
+//    for (NSDictionary *ptsItem in ptsList) {
+//        //        "adhoc_pts_id" = 5;
+//
+//        NSNumber *ptsId = [NSNumber numberWithInt:[[ptsItem objectForKey:@"id"] intValue]];
+//
+//        if (![ptsTaskIds containsObject:ptsId]) {
+//            PTSItem *pts = (PTSItem*)[[NSManagedObject alloc] initWithEntity:ptsEntity insertIntoManagedObjectContext:moc];
+//
+//            //            pts.airlineName = [ptsItem objectForKey:@"airline_name"];
+//            pts.dutyManagerId = [[ptsItem objectForKey:@"duty_manager_id"] intValue];
+//            pts.dutyManagerName = [ptsItem objectForKey:@"dutymanager_name"];
+//            pts.supervisorId = [[ptsItem objectForKey:@"supervisor_id"] intValue];
+//            pts.supervisorName = [ptsItem objectForKey:@"supervisor_name"];
+//            pts.redCapId = [[ptsItem objectForKey:@"redcap_id"] intValue];
+//            pts.redCapName = [ptsItem objectForKey:@"redcap_name"];
+//            pts.ptsSubTaskId = [[ptsItem objectForKey:@"adhoc_pts_id"] intValue];
+//            pts.flightId = [[ptsItem objectForKey:@"id"] intValue];//pts id
+//
+//            NSError *jsonError;
+//            NSString *originalString = [ptsItem objectForKey:@"json_data"];
+//            NSData *data = [[NSData alloc] initWithBase64EncodedString:originalString options:0];//[NSData dataFromBase64String:originalString];
+//            NSDictionary *jsonForPTSItem = [NSJSONSerialization JSONObjectWithData:data
+//                                                                           options:NSJSONReadingMutableContainers
+//                                                                             error:&jsonError];
+//
+//            //            "current_time" = 0;
+//            //            "device_id" = "2CF35E75-2C65-4F73-AE08-7034F96ED28E";
+//            //            "execute_time" = "";
+//            //            "timer_stop_time" = 0;
+//            //            "user_name" = "Shweta Sawant";
+//            //            "user_type" = 3;
+//            //            userid = 25;
+//            //            "arr_dep_type" = "07:46";
+//
+//
+//            pts.flightDate = [jsonForPTSItem objectForKey:@"flight_date"];
+//            pts.flightNo = [jsonForPTSItem objectForKey:@"flight_num"];
+//            pts.flightTime = [jsonForPTSItem objectForKey:@"arr_dep_type"];
+//            pts.ptsName = [jsonForPTSItem objectForKey:@"pts_name"];
+//            //            pts.remarks = [ptsItem objectForKey:@"remarks"];
+//            pts.timeWindow = [[jsonForPTSItem objectForKey:@"pts_time"] intValue];
+//            pts.flightType = [[jsonForPTSItem objectForKey:@"flight_type"] intValue];
+//
+//            pts.isRunning = [[jsonForPTSItem objectForKey:@"is_running"] intValue];
+//            pts.ptsSubTaskId = [[jsonForPTSItem objectForKey:@"m_pts_id"] intValue];
+//
+//            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//            pts.ptsStartTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_start_time"]];
+//            pts.ptsEndTime = [dateFormatter dateFromString:[jsonForPTSItem objectForKey:@"pts_end_time"] ];
+//
+//            pts.airlineName = [jsonForPTSItem objectForKey:@"airline_name"];
+//
+//            pts.aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForAdmin:[jsonForPTSItem objectForKey:@"above_list"] storeIn:nil]];
+//            pts.belowWingActivities = [NSSet setWithArray:[self parseSubTaskForAdmin:[jsonForPTSItem objectForKey:@"below_list"] storeIn:nil]];
+//
+//            NSError *error;
+//            [moc save:&error];
+//            if (!error) {
+//                [ptsListToReturn addObject:pts];
+//            }
+//        }
+//
+//    }
+//    return ptsListToReturn;
+//}
 
 -(void) parseUpdatesReceivedForPTS:(NSDictionary *)ptsTask{
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;

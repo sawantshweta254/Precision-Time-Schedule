@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:PTSItem+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
       location = "group:PTSSubTask+CoreDataProperties.h">
    </FileRef>
    <FileRef
@@ -26,52 +14,52 @@
       location = "group:PTSSubTask+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.h">
+      location = "group:RedCap+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/PTSItem+CoreDataClass.h">
+      location = "group:RedCap+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/PTSItem+CoreDataClass.m">
+      location = "group:RedCap+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/PTSItem+CoreDataProperties.m">
+      location = "group:RedCap+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCap+CoreDataProperties.h">
+      location = "group:User+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCap+CoreDataClass.h">
+      location = "group:User+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCap+CoreDataClass.m">
+      location = "group:User+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCap+CoreDataProperties.m">
+      location = "group:User+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/User+CoreDataProperties.h">
+      location = "group:RedCapSubtask+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/User+CoreDataClass.h">
+      location = "group:RedCapSubtask+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/User+CoreDataClass.m">
+      location = "group:RedCapSubtask+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/User+CoreDataProperties.m">
+      location = "group:RedCapSubtask+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCapSubtask+CoreDataProperties.h">
+      location = "group:PTSItem+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCapSubtask+CoreDataClass.h">
+      location = "group:PTSItem+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCapSubtask+CoreDataClass.m">
+      location = "group:PTSItem+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTS/Models/XCModels/RedCapSubtask+CoreDataProperties.m">
+      location = "group:PTSItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS.xcodeproj">

@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 12/08/18.
+//  Created by Shweta Sawant on 31/08/18.
 //
 //
 
@@ -15,6 +15,7 @@
 }
 
 @dynamic airlineName;
+@dynamic coment;
 @dynamic currentTime;
 @dynamic dutyManagerId;
 @dynamic dutyManagerName;
@@ -38,7 +39,6 @@
 @dynamic supervisorName;
 @dynamic timerStopTime;
 @dynamic timeWindow;
-@dynamic coment;
 @dynamic aboveWingActivities;
 @dynamic belowWingActivities;
 @dynamic redCaps;

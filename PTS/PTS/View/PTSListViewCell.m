@@ -8,6 +8,8 @@
 
 #import "PTSListViewCell.h"
 #import "AppUtility.h"
+#import "User+CoreDataProperties.h"
+#import "LoginManager.h"
 
 @interface PTSListViewCell()
 @property (weak, nonatomic) IBOutlet UIImageView *flightTypeIcon;
@@ -73,7 +75,8 @@
         }
     });
     
-    if(self.ptsItem.isRunning == 2){
+     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if(self.ptsItem.isRunning == 2 && loggedInUser.empType == 3){
         self.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
     }else{
         self.backgroundColor = [UIColor whiteColor];

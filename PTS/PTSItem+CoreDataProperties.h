@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 12/08/18.
+//  Created by Shweta Sawant on 31/08/18.
 //
 //
 
@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<PTSItem *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *airlineName;
+@property (nullable, nonatomic, copy) NSString *coment;
 @property (nullable, nonatomic, copy) NSDate *currentTime;
 @property (nonatomic) int16_t dutyManagerId;
 @property (nullable, nonatomic, copy) NSString *dutyManagerName;
@@ -39,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *supervisorName;
 @property (nullable, nonatomic, copy) NSDate *timerStopTime;
 @property (nonatomic) int16_t timeWindow;
-@property (nullable, nonatomic, copy) NSString *coment;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *aboveWingActivities;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *belowWingActivities;
 @property (nullable, nonatomic, retain) NSSet<RedCap *> *redCaps;
