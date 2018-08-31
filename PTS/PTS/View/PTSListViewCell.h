@@ -11,6 +11,7 @@
 
 @protocol PTSListViewCellDelegate
 -(void) showSupervisor;
+- (void)showComment:(NSString *)comment;
 @end
 
 @interface PTSListViewCell : UITableViewCell

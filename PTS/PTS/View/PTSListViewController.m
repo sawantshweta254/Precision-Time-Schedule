@@ -20,12 +20,12 @@
 #import "RedCapSubtask+CoreDataProperties.h"
 
 #import "SupervisorViewController.h"
+#import "CommentViewController.h"
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
 @property (nonatomic, retain) NSArray *ptsTasksToLoad;
-@property (nonatomic, retain) PTSItem *selectedSubTask;
 
 @property (weak, nonatomic) IBOutlet UIButton *socketConnectedButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -46,10 +46,7 @@
         loginView.delegate = self;
         [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
     }else{
-        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-        if (loggedInUser.empType != 3) {
-            [self setSearchBar];
-        }
+        [self setSearchBar];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
@@ -163,6 +160,7 @@
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             self.ptsTasksToLoad = self.ptsTasks;
             [self registerFlightsForUpdate];
+            [self setSearchBar];
             [self loadListOnView];
         }];
     }else{
@@ -233,7 +231,7 @@
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
         self.ptsTasksToLoad = self.ptsTasks;
         [self loadListOnView];
-        
+        [self setSearchBar];
         if (self.taskUpdateClient == nil) {
             self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
             [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
@@ -247,28 +245,14 @@
 }
 
 #pragma mark - Navigation
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    UITableViewCell *selectedCell = (UITableViewCell*)sender;
-    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
-    self.selectedSubTask = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
-    
-    if (self.searchController.isActive) {
-        [self.searchController.searchBar setText:@""];
-        [self.searchController resignFirstResponder];
-        [self.searchController dismissViewControllerAnimated:YES completion:^{
-            [self performSegueWithIdentifier:identifier sender:sender];
-        }];
-        return FALSE;
-    }else{
-        return TRUE;
-    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+        self.searchController.active = NO;
+        UITableViewCell *selectedCell = (UITableViewCell*)sender;
+        NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+    
         PTSDetailListController *ptsDetailView = segue.destinationViewController;
         ptsDetailView.taskUpdateClient = self.taskUpdateClient;
-        ptsDetailView.ptsTask = self.selectedSubTask;
+        ptsDetailView.ptsTask = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
 }
 
 #pragma mark Utility methods
@@ -323,6 +307,7 @@
 
 #pragma mark Login delegate methods
 -(void) userDidLogin{
+    [self setSearchBar];
     [self reloadTaskList:nil];
 }
 
@@ -342,18 +327,38 @@
 //    }];
 }
 
+- (void)showComment:(NSString *)comment {
+    
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    CommentViewController *commentViewController = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([CommentViewController class])];
+    commentViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    commentViewController.comment = comment;
+    
+    self.searchController.active = NO;
+    [self.navigationController presentViewController:commentViewController animated:YES completion:nil];
+}
+
 #pragma mark searchbar methods
 -(void) setSearchBar{
-//    self.definesPresentationContext = YES;
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchResultsUpdater = self;
-    self.searchController.delegate = self;
-    self.searchController.searchBar.tintColor = UIColor.whiteColor;
-    self.searchController.obscuresBackgroundDuringPresentation = FALSE;
-    self.searchController.searchBar.placeholder = @"Search Flight";
     
-    self.tableView.tableHeaderView = self.searchController.searchBar;
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType != 3) {
+        self.definesPresentationContext = YES;
+        self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        self.searchController.searchResultsUpdater = self;
+        self.searchController.delegate = self;
+        self.searchController.searchBar.tintColor = UIColor.whiteColor;
+        self.searchController.obscuresBackgroundDuringPresentation = FALSE;
+        self.searchController.searchBar.placeholder = @"Search Flight";
+        
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    }else{
+        self.tableView.tableHeaderView = nil;
+    }
+    
+    
     
 }
 

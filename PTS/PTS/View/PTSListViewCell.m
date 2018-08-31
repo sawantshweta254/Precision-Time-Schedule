@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelPTSDay;
 @property (weak, nonatomic) IBOutlet UILabel *labelPtsTimer;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSupervisor;
+@property (weak, nonatomic) IBOutlet UIButton *buttonComment;
 @property (strong, nonatomic) PTSItem *ptsItem;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
 
@@ -80,6 +81,12 @@
         self.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
     }else{
         self.backgroundColor = [UIColor whiteColor];
+    }
+    
+    if (loggedInUser.empType != 3 && self.ptsItem.coment.length > 0) {
+        self.buttonComment.hidden = FALSE;
+    }else{
+        self.buttonComment.hidden = TRUE;
     }
 }
 
@@ -153,8 +160,13 @@
     }
 }
 
+#pragma mark Button Actions
 - (IBAction)showSuperVisor:(id)sender {
     
     [self.delegate showSupervisor];
+}
+
+- (IBAction)showComment:(id)sender {
+    [self.delegate showComment:self.ptsItem.coment];
 }
 @end

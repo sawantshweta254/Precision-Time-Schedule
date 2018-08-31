@@ -128,6 +128,10 @@
 #pragma mark NSNotification methods
 -(void) updateChangesForPTS:(NSNotification *) notification
 {
+    if (self.ptsTask.isRunning == 2 && self.ptsTaskTimer.isValid) {
+        [self.ptsTaskTimer invalidate];
+        self.ptsTaskTimer = nil;
+    }
     [self.ptsSubTasksCollectionView reloadData];
 }
 
@@ -237,7 +241,8 @@
 - (IBAction)wingTypeChanged:(id)sender {
     self.selectedWingIndex = self.wingSegmentCOntroller.selectedSegmentIndex;
     
-    if (self.selectedWingIndex == 1) {
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (self.selectedWingIndex == 1 && loggedInUser.empType == 3) {
         self.commentViewHeight.constant = 50;
     }else{
         self.commentViewHeight.constant = 0;
