@@ -10,7 +10,6 @@
 #import "PTSItem+CoreDataProperties.h"
 
 @protocol PTSListViewCellDelegate
--(void) showSupervisor;
 - (void)showComment:(NSString *)comment;
 @end
 

@@ -19,7 +19,7 @@
 #import "RedCap+CoreDataProperties.h"
 #import "RedCapSubtask+CoreDataProperties.h"
 
-#import "SupervisorViewController.h"
+#import "SupervisorTableViewController.h"
 #import "CommentViewController.h"
 
 @interface PTSListViewController ()
@@ -277,9 +277,30 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"SupervisorSegue"]) {
+        SupervisorTableViewController *supervisorVew = segue.destinationViewController;
+        supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
+        supervisorVew.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        if (loggedInUser.empType == 3) {
+            supervisorVew.preferredContentSize = CGSizeMake(200, 50);
+        }else{
+            supervisorVew.preferredContentSize = CGSizeMake(200, 100);
+        }
+        
+        UIPopoverPresentationController *popOverController = [supervisorVew popoverPresentationController];
+        popOverController.sourceRect = ((UIButton *)sender).frame;
+        popOverController.sourceView = self.tableView;
+        popOverController.delegate = self;
+        popOverController.backgroundColor = [UIColor whiteColor];
+        popOverController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    }else{
         PTSDetailListController *ptsDetailView = segue.destinationViewController;
         ptsDetailView.taskUpdateClient = self.taskUpdateClient;
         ptsDetailView.ptsTask = self.selectedPTSItem;
+    }
+    
 }
 
 #pragma mark Utility methods
@@ -343,21 +364,16 @@
 }
 
 
-#pragma mark Cell Delegate
--(void) showSupervisor{
-//    [self performSegueWithIdentifier:@"SupervisorSegue" sender:nil];
-    //Handle search bar
-    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    SupervisorViewController *supervisorVew = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([SupervisorViewController class])];
-    [supervisorVew.view setFrame:CGRectMake(100, 100, 100, 100)];
-    supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
-    supervisorVew.preferredContentSize = CGSizeMake(100, 100);
-    
-//    [self presentViewController:supervisorVew animated:TRUE completion:^{
-//
-//    }];
+#pragma mark UI Model Popover
+-(UIModalPresentationStyle ) adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
+    return UIModalPresentationNone;
 }
 
+-(UIModalPresentationStyle ) adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection{
+    return UIModalPresentationNone;
+}
+
+#pragma mark Cell Delegate
 - (void)showComment:(NSString *)comment {
     
     UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

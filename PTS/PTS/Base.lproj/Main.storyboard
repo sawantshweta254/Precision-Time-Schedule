@@ -76,7 +76,7 @@
                                                     </constraints>
                                                     <state key="normal" image="drop_image"/>
                                                     <connections>
-                                                        <action selector="showSuperVisor:" destination="DF3-pa-Ngn" eventType="touchUpInside" id="59g-Iv-4eg"/>
+                                                        <segue destination="e93-C1-6BE" kind="presentation" identifier="SupervisorSegue" id="kQE-VF-TgJ"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THd-aC-w51">
@@ -154,42 +154,11 @@
                     <connections>
                         <outlet property="socketConnectedButton" destination="bKW-3V-7uL" id="fuP-l3-yAN"/>
                         <outlet property="tableView" destination="6h9-ok-naT" id="opY-5R-jfe"/>
-                        <segue destination="bcj-mG-CTm" kind="popoverPresentation" identifier="SupervisorSegue" popoverAnchorView="6h9-ok-naT" id="XFy-hP-kiv">
-                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xtI-Lb-QGD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-626" y="-600"/>
-        </scene>
-        <!--Supervisor View Controller-->
-        <scene sceneID="OBz-rG-Jhy">
-            <objects>
-                <viewController storyboardIdentifier="SupervisorViewController" id="bcj-mG-CTm" customClass="SupervisorViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3ie-eY-L4i">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Supervisor - " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dg-9n-FRw">
-                                <rect key="frame" x="10" y="333" width="355" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Vib-Zv-y0C" firstAttribute="trailing" secondItem="4dg-9n-FRw" secondAttribute="trailing" constant="10" id="RQv-k4-ogG"/>
-                            <constraint firstItem="4dg-9n-FRw" firstAttribute="leading" secondItem="Vib-Zv-y0C" secondAttribute="leading" constant="10" id="ZmK-hp-b1T"/>
-                            <constraint firstItem="4dg-9n-FRw" firstAttribute="centerY" secondItem="Vib-Zv-y0C" secondAttribute="centerY" id="zeG-KH-wXm"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="Vib-Zv-y0C"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cL5-4r-67A" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="33" y="-1427"/>
         </scene>
         <!--List View Controller-->
         <scene sceneID="EyT-pX-DQ6">
@@ -250,9 +219,6 @@
                                                 <constraint firstAttribute="width" secondItem="bgt-UR-0Vn" secondAttribute="height" multiplier="1:1" id="yeR-0a-rj9"/>
                                             </constraints>
                                             <state key="normal" image="drop_image"/>
-                                            <connections>
-                                                <action selector="showSuperVisor:" destination="nnO-fm-j2n" eventType="touchUpInside" id="F4L-mX-Tmb"/>
-                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu8-ya-BgW">
                                             <rect key="frame" x="349" y="21" width="0.0" height="0.0"/>
@@ -1078,6 +1044,34 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1416.8" y="-514.09295352323841"/>
+        </scene>
+        <!--Supervisor Table View Controller-->
+        <scene sceneID="6km-Ez-CBe">
+            <objects>
+                <tableViewController id="e93-C1-6BE" customClass="SupervisorTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Joq-gm-9lN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CallIdentifier" id="0TL-ZK-GP1">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0TL-ZK-GP1" id="2rA-Xq-upV">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="e93-C1-6BE" id="z51-w4-FfK"/>
+                            <outlet property="delegate" destination="e93-C1-6BE" id="PRU-dv-d7c"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5iq-xR-bKP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="285" y="-1344"/>
         </scene>
         <!--Login Controller-->
         <scene sceneID="3j1-xB-B6f">

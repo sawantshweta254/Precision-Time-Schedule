@@ -10,6 +10,6 @@
 #import "LoginController.h"
 #import "PTSListViewCell.h"
 
-@interface PTSListViewController : UIViewController <LoginViewDelegate, PTSListViewCellDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
+@interface PTSListViewController : UIViewController <LoginViewDelegate, PTSListViewCellDelegate, UISearchResultsUpdating, UISearchControllerDelegate, UIPopoverPresentationControllerDelegate>
 
 @end

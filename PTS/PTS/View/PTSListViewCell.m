@@ -165,11 +165,6 @@
 }
 
 #pragma mark Button Actions
-- (IBAction)showSuperVisor:(id)sender {
-    
-    [self.delegate showSupervisor];
-}
-
 - (IBAction)showComment:(id)sender {
     [self.delegate showComment:self.ptsItem.coment];
 }
