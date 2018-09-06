@@ -38,19 +38,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType == 3) {
-        return 1;
-    }
-    return 0;
+    return self.personDetailsToDisplay.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CallIdentifier" forIndexPath:indexPath];
-    
-    cell.textLabel.text = self.selectedItem.supervisorName;
-    
+    NSString *nameString = [self.personDetailsToDisplay objectAtIndex:indexPath.row];
+    cell.textLabel.text = nameString;
     return cell;
 }
 

@@ -9,6 +9,7 @@
 #import "PTSDetailListController.h"
 #import "PTSManager.h"
 #import "LoginManager.h"
+#import "CommentViewController.h"
 
 #define cellHeight 100
 
@@ -325,6 +326,8 @@
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = nil;
+        
+        [self showCompletionAlert];
     }
     
     [self.ptsSubTasksCollectionView reloadData];
@@ -456,6 +459,32 @@
 - (void)keyboardWillHide:(NSNotification *)notify {
     self.commentViewBottom.constant = 0;
     [self.view layoutIfNeeded];
+}
+
+#pragma mark Utility methods
+- (void) showCompletionAlert{
+    
+    NSTimeInterval timeInterval = fabs([self.ptsTask.ptsEndTime timeIntervalSinceDate:self.ptsTask.ptsStartTime]);
+    int ptsTaskTimeWindow = self.ptsTask.timeWindow * 60;
+    int duration = (int)timeInterval;
+    
+    if (duration > ptsTaskTimeWindow) {
+        [self showComment:@"Could have done better"];
+    }else{
+        [self showComment:@"Awesome. Keep it up!"];
+    }
+    
+}
+
+- (void)showComment:(NSString *)comment {
+    
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    CommentViewController *commentViewController = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([CommentViewController class])];
+    commentViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    commentViewController.comment = comment;
+    
+    [self.navigationController presentViewController:commentViewController animated:YES completion:nil];
 }
 
 @end

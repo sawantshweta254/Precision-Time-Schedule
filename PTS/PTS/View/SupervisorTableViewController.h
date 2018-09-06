@@ -10,5 +10,5 @@
 #import "PTSItem+CoreDataProperties.h"
 
 @interface SupervisorTableViewController : UITableViewController
-@property (nonatomic, strong) PTSItem *selectedItem;
+@property (nonatomic, strong) NSArray *personDetailsToDisplay;
 @end

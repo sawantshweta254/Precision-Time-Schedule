@@ -260,19 +260,36 @@
 
 #pragma mark - Navigation
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    UITableViewCell *selectedCell = (UITableViewCell*)sender;
-    NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
-    self.selectedPTSItem = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
-    
-    if (self.searchController.isActive) {
-        [self.searchController.searchBar setText:@""];
-        [self.searchController resignFirstResponder];
-        [self.searchController dismissViewControllerAnimated:YES completion:^{
-            [self performSegueWithIdentifier:identifier sender:sender];
-        }];
-        return FALSE;
-    }else{
+    if ([identifier isEqualToString:@"SupervisorSegue"]) {
+        
+        CGPoint center= ((UIButton *)sender).center;
+        CGPoint rootViewPoint = [((UIButton *)sender).superview convertPoint:center toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:rootViewPoint];
+        if ([[self personDetailsArray:[self.ptsTasksToLoad objectAtIndex:indexPath.row]] count] == 0) {
+            UIAlertController *notAssignedAlert = [UIAlertController alertControllerWithTitle:nil message:@"Not Assigned" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            
+            [notAssignedAlert addAction:actionOk];
+            [self presentViewController:notAssignedAlert animated:YES completion:nil];
+            return FALSE;
+        }
         return TRUE;
+    }else{
+        UITableViewCell *selectedCell = (UITableViewCell*)sender;
+        NSInteger selectedIndex = ((NSIndexPath *)[self.tableView indexPathForCell:selectedCell]).row;
+        self.selectedPTSItem = [self.ptsTasksToLoad objectAtIndex:selectedIndex];
+        
+        if (self.searchController.isActive) {
+            [self.searchController.searchBar setText:@""];
+            [self.searchController resignFirstResponder];
+            [self.searchController dismissViewControllerAnimated:YES completion:^{
+                [self performSegueWithIdentifier:identifier sender:sender];
+            }];
+            return FALSE;
+        }else{
+            return TRUE;
+        }
     }
 }
 
@@ -282,15 +299,15 @@
         supervisorVew.modalPresentationStyle = UIModalPresentationPopover;
         supervisorVew.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
-        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-        if (loggedInUser.empType == 3) {
-            supervisorVew.preferredContentSize = CGSizeMake(200, 50);
-        }else{
-            supervisorVew.preferredContentSize = CGSizeMake(200, 100);
-        }
+        CGPoint center= ((UIButton *)sender).center;
+        CGPoint rootViewPoint = [((UIButton *)sender).superview convertPoint:center toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:rootViewPoint];
+        
+        supervisorVew.personDetailsToDisplay = [self personDetailsArray:[self.ptsTasksToLoad objectAtIndex:indexPath.row]];
+        supervisorVew.preferredContentSize = CGSizeMake(200, supervisorVew.personDetailsToDisplay.count * 50);
         
         UIPopoverPresentationController *popOverController = [supervisorVew popoverPresentationController];
-        popOverController.sourceRect = ((UIButton *)sender).frame;
+        popOverController.sourceRect = CGRectMake(rootViewPoint.x, rootViewPoint.y - ((UIButton *)sender).frame.size.height/2, ((UIButton *)sender).frame.size.width, ((UIButton *)sender).frame.size.height) ;
         popOverController.sourceView = self.tableView;
         popOverController.delegate = self;
         popOverController.backgroundColor = [UIColor whiteColor];
@@ -304,6 +321,23 @@
 }
 
 #pragma mark Utility methods
+-(NSArray *) personDetailsArray:(PTSItem *) selectedItem{
+    NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 3) {
+        [namesArray addObject:selectedItem.supervisorName];
+    }else{
+        if (selectedItem.supervisorName.length > 0) {
+            [namesArray addObject:selectedItem.supervisorName];
+        }
+        for (RedCap *redCap in selectedItem.redCaps.allObjects) {
+            [namesArray addObject:[NSString stringWithFormat:@"RC - %@",redCap.redcapName]];
+        }
+    }
+    
+    return namesArray;
+}
+
 - (void) registerFlightsForUpdate{
     NSArray *ptsIdsArray = [self.ptsTasks valueForKey:@"flightId"];
     NSMutableDictionary *redCapDetailsDic = [[NSMutableDictionary alloc] init];
@@ -428,5 +462,14 @@
 
 -(void) willDismissSearchController:(UISearchController *)searchController{
     
+}
+
+#pragma mark button Actions
+- (IBAction)socketButtonTapped:(id)sender {
+    if ([self.taskUpdateClient isWebSocketConnected]) {
+        [self showComment:@"You are connected."];
+    }else{
+        [self showComment:@"You are not connected."];
+    }
 }
 @end
