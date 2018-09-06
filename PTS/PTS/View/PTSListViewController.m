@@ -304,7 +304,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:rootViewPoint];
         
         supervisorVew.personDetailsToDisplay = [self personDetailsArray:[self.ptsTasksToLoad objectAtIndex:indexPath.row]];
-        supervisorVew.preferredContentSize = CGSizeMake(200, supervisorVew.personDetailsToDisplay.count * 50);
+        supervisorVew.preferredContentSize = CGSizeMake(200, supervisorVew.personDetailsToDisplay.count * 52);
         
         UIPopoverPresentationController *popOverController = [supervisorVew popoverPresentationController];
         popOverController.sourceRect = CGRectMake(rootViewPoint.x, rootViewPoint.y - ((UIButton *)sender).frame.size.height/2, ((UIButton *)sender).frame.size.width, ((UIButton *)sender).frame.size.height) ;
@@ -327,8 +327,11 @@
     if (loggedInUser.empType == 3) {
         [namesArray addObject:selectedItem.supervisorName];
     }else{
+        if (selectedItem.dutyManagerName.length > 0) {
+            [namesArray addObject:[NSString stringWithFormat:@"DM - %@",selectedItem.dutyManagerName]];
+        }
         if (selectedItem.supervisorName.length > 0) {
-            [namesArray addObject:selectedItem.supervisorName];
+            [namesArray addObject:[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName]];
         }
         for (RedCap *redCap in selectedItem.redCaps.allObjects) {
             [namesArray addObject:[NSString stringWithFormat:@"RC - %@",redCap.redcapName]];
