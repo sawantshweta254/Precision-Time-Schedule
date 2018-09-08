@@ -76,7 +76,7 @@
     if (loggedInUser.empType != 3 || self.subTask.shouldBeInActive) {
         return;
     }
-    if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning == 1) {
+    if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning > 0) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
             self.subTask.current_time = [NSDate date];
             self.subTask.subactivityStartTime = [NSDate date];

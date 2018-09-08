@@ -76,39 +76,7 @@ static PTSManager *sharedInstance;
         }
         
         if (requestSuccessfull) {
-            
-            NSArray *fetchedList;
-            
-            if (user.empType != 3) {
-//               fetchedList = [self parsePTSListForAdmin:responseData existingPTSData:ptsIdsDBArray];
-//                if (fetchedList.count > 0) {
-//                    [finalPTSList addObjectsFromArray:fetchedList];
-//                }
-//                fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
-                
-                NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
-                    
-                    NSMutableArray *mutableExistingPTSIDs = [NSMutableArray arrayWithArray:ptsIdsDBArray];
-                    [mutableExistingPTSIDs removeObjectsInArray:fetchedPTSIDs];
-                    if (mutableExistingPTSIDs.count > 0) {
-                        NSMutableArray *itemsToDelete = [[NSMutableArray alloc] init];
-                        for (PTSItem *itemToDelete in finalPTSList) {
-                            if ([mutableExistingPTSIDs containsObject:[NSNumber numberWithInt:itemToDelete.flightId]]) {
-                                [itemsToDelete addObject:itemToDelete];
-                            }
-                        }
                         
-                        [finalPTSList removeObjectsInArray:itemsToDelete];
-                        [self fetchAndDeletePTSFromDB:mutableExistingPTSIDs];
-                        
-                    }
-                    if (parsedList.count > 0) {
-                        [finalPTSList addObjectsFromArray:parsedList];
-                    }
-                    fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
-                }];
-            }else if (user.empType == 3){
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
                 [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
                     
@@ -132,7 +100,6 @@ static PTSManager *sharedInstance;
                     }
                     fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);
                 }];
-            }
             
         }else{
             fetchPTSCompletionHandler(requestSuccessfull, finalPTSList, nil);

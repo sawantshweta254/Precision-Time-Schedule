@@ -325,7 +325,9 @@
     NSMutableArray *namesArray = [[NSMutableArray alloc] init];
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     if (loggedInUser.empType == 3) {
-        [namesArray addObject:selectedItem.supervisorName];
+        if (selectedItem.supervisorName.length > 0) {
+            [namesArray addObject:[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName]];
+        }
     }else{
         if (selectedItem.dutyManagerName.length > 0) {
             [namesArray addObject:[NSString stringWithFormat:@"DM - %@",selectedItem.dutyManagerName]];
