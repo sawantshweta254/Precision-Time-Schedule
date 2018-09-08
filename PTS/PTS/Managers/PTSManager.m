@@ -381,7 +381,8 @@ static PTSManager *sharedInstance;
 //        ptsSubTask.timerStopTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"timer_stop_time"]];
 //        ptsSubTask.timerExecutedTime = [dateFormatter dateFromString:[ptsSubItem objectForKey:@"time_execute_time"]];
         
-        ptsSubTask.userSubActFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
+        NSString *userFeedback = [ptsSubItem objectForKey:@"user_subact_feedback"];
+        ptsSubTask.userSubActFeedback =  ![userFeedback isKindOfClass:[NSNull class]] ? userFeedback : @"";
         ptsSubTask.isRunning = [[ptsSubItem objectForKey:@"is_running"] intValue];
         ptsSubTask.isComplete = [[ptsSubItem objectForKey:@"is_complete"] intValue];
         ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];

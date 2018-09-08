@@ -353,6 +353,11 @@
 
 - (void) logoutUser{
     
+    if (![self.taskUpdateClient isWebSocketConnected]) {
+        [self showComment:@"Please connect to internet and sync offline data"];
+        return;
+    }
+    
     self.ptsTasks = nil;
     self.ptsTasksToLoad = nil;
     [self loadListOnView];
