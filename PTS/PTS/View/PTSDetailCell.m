@@ -55,14 +55,14 @@
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
     }
     
-    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && self.ptsItem.isRunning == 1 && !self.labelSubTaskTimer.hidden) {
+    if (self.subTask.subactivityStartTime != nil && self.subTask.isRunning == 1 && !self.labelSubTaskTimer.hidden) {
         [self setTaskTime:fabs([self.subTask.subactivityStartTime timeIntervalSinceNow])];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerUpdated:) userInfo:nil repeats:YES];
     }else if (self.subTask.isRunning == 2 || (self.subTask.isRunning == 1 && self.ptsItem.isRunning != 1)){
         [self setTaskTime:fabs([self.subTask.subactivityEndTime timeIntervalSinceDate:self.subTask.subactivityStartTime])];
     }
     
-    if (self.ptsItem.isRunning != 1 && self.ptsTaskTimer != nil) {
+    if (self.subTask.isRunning != 1 && self.ptsTaskTimer != nil) {
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = nil;
     }
@@ -150,7 +150,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
-        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
+        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && !self.subTask.shouldBeInActive) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;

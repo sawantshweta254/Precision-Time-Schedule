@@ -203,6 +203,10 @@ static PTSManager *sharedInstance;
             }
             
             [self parsePTSFlightDetails:ptsItem storeIn:pts];
+            
+            NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
+            [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary];
+            
             if (jsonForPTSItem != nil) {
                 [self parseJsonForPTSRedCap:jsonForPTSItem storeIn:pts completionHandler:^(PTSItem *pts) {
                     NSError *error;
@@ -217,8 +221,8 @@ static PTSManager *sharedInstance;
                     }
                 }];
             }else{
-                NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
-                [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary];
+//                NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
+//                [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary];
                 NSError *error;
                 [moc save:&error];
                 if (!error) {

@@ -336,6 +336,9 @@
 
 -(void) stopAnySubtasksWhichAreRunning{
     for (PTSSubTask *subTask in self.ptsAWingSubItemList) {
+        if (subTask.shouldBeInActive) {
+            break;
+        }
         if (subTask.isRunning == 1) {
             subTask.isRunning = 2;
             subTask.isComplete = 1;
@@ -344,6 +347,9 @@
     }
     
     for (PTSSubTask *subTask in self.ptsBWingSubItemList) {
+        if (subTask.shouldBeInActive) {
+            break;
+        }
         if (subTask.isRunning == 1) {
             subTask.isRunning = 2;
             subTask.isComplete = 1;
