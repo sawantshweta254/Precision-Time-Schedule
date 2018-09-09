@@ -73,7 +73,7 @@
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType != 3 || self.subTask.shouldBeInActive) {
+    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive) {
         return;
     }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning > 0) {
@@ -150,7 +150,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
-        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && !self.subTask.shouldBeInActive) {
+        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && self.subTask.shouldBeActive) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;
@@ -229,7 +229,8 @@
             }
         }
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-        if (loggedInUser.empType == 3 && (self.subTask.shouldBeInActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0))) {
+        if (loggedInUser.empType == 3 && (!self.subTask.shouldBeActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0 && self.ptsItem.masterRedCap)))
+        {
             self.containerView.backgroundColor = [UIColor lightGrayColor];
         }
     });
@@ -270,10 +271,10 @@
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType != 3 || self.subTask.shouldBeInActive) {
+    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive) {
         return;
     }
-    if (self.ptsItem.isRunning == 1) {
+    if (self.ptsItem.isRunning > 0) {
         self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
         self.subTask.subactivityStartTime = [NSDate date];
         self.subTask.isRunning = 2;
@@ -304,7 +305,7 @@
 
 -(BOOL) shouldPerformAction{
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (self.subTask.isRunning == 0 || self.subTask.shouldBeInActive || loggedInUser.empType != 3){
+    if (self.subTask.isRunning == 0 || !self.subTask.shouldBeActive || loggedInUser.empType != 3){
         return FALSE;
     }
     return TRUE;

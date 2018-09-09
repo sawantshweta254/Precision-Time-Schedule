@@ -96,10 +96,16 @@
     
     NSMutableArray *wingSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in ptsItem.aboveWingActivities) {
+        if (!subTaskInAboveWing.shouldBeActive) {
+            break;
+        }
         [wingSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
     }
     NSMutableArray *wingBSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in ptsItem.belowWingActivities) {
+        if (!subTaskInAboveWing.shouldBeActive) {
+            break;
+        }
         [wingBSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
     }
     [messageDict setValue:wingSubTasks forKey:@"above_list"];

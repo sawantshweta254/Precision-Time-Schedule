@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 31/08/18.
+//  Created by Shweta Sawant on 08/09/18.
 //
 //
 
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t ptsTotalTime;
 @property (nonatomic) int16_t ptsWing;
 @property (nullable, nonatomic, copy) NSString *referenceTime;
-@property (nonatomic) BOOL shouldBeInActive;
+@property (nonatomic) BOOL shouldBeActive;
 @property (nonatomic) int16_t start;
 @property (nullable, nonatomic, copy) NSString *subactivity;
 @property (nullable, nonatomic, copy) NSDate *subactivityEndTime;

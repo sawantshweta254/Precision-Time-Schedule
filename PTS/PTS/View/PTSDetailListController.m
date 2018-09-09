@@ -142,7 +142,7 @@
 
 -(void) updateSocketConnectivity:(NSNotification *) notification{
     if ([notification.object boolValue]) {
-        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+        [self updateFlightPTS];
     }
 }
 
@@ -249,6 +249,7 @@
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     if (self.selectedWingIndex == 1 && loggedInUser.empType == 3) {
         self.commentViewHeight.constant = 50;
+        [self startChockOnSubActivity];
     }else{
         self.commentViewHeight.constant = 0;
     }
@@ -310,16 +311,15 @@
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
-        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+        [self updateFlightPTS];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
-        [self startChockOnSubActivity];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }else if (self.ptsTask.isRunning == 1){
         self.ptsTask.ptsEndTime = [NSDate date];
         self.ptsTask.isRunning = 2;
         [self stopAnySubtasksWhichAreRunning];
-        [self.taskUpdateClient updateFlightTask:self.ptsTask];
+        [self updateFlightPTS];
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
         [moc save:&error];
@@ -336,7 +336,7 @@
 
 -(void) stopAnySubtasksWhichAreRunning{
     for (PTSSubTask *subTask in self.ptsAWingSubItemList) {
-        if (subTask.shouldBeInActive) {
+        if (!subTask.shouldBeActive) {
             break;
         }
         if (subTask.isRunning == 1) {
@@ -347,7 +347,7 @@
     }
     
     for (PTSSubTask *subTask in self.ptsBWingSubItemList) {
-        if (subTask.shouldBeInActive) {
+        if (!subTask.shouldBeActive) {
             break;
         }
         if (subTask.isRunning == 1) {
@@ -401,18 +401,24 @@
 }
 
 -(void) startChockOnSubActivity{
+    
     PTSSubTask *chockOnSubTask = [self.ptsBWingSubItemList objectAtIndex:0];
-    chockOnSubTask.subactivityStartTime = [NSDate date];
-    chockOnSubTask.isRunning = 2;
-    chockOnSubTask.isComplete = 1;
-    chockOnSubTask.subactivityEndTime = [NSDate date];
     
-    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-    NSError *error;
-    [moc save:&error];
+    if (chockOnSubTask.isRunning == 0 && chockOnSubTask.shouldBeActive) {
+        chockOnSubTask.subactivityStartTime = [NSDate date];
+        chockOnSubTask.isRunning = 2;
+        chockOnSubTask.isComplete = 1;
+        chockOnSubTask.subactivityEndTime = [NSDate date];
+        
+        NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        NSError *error;
+        [moc save:&error];
+        
+//        [self.ptsSubTasksCollectionView reloadItemsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil]];
+        [self.ptsSubTasksCollectionView reloadData];
+        [self updateFlightPTS];
+    }
     
-    [self.ptsSubTasksCollectionView reloadItemsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil]];
-    [self.taskUpdateClient updateFlightTask:self.ptsTask];
 }
 
 -(void) updateTaskComment{
@@ -425,6 +431,11 @@
 
 #pragma mark Cell Delegate methods
 -(void) updateFlightPTS{
+    if (![self.taskUpdateClient isWebSocketConnected]) {
+        [self showComment:@"Please connect to internet and sync offline data"];
+        return;
+    }
+    
     [self.taskUpdateClient updateFlightTask:self.ptsTask];
 }
 
@@ -438,12 +449,12 @@
 
 #pragma mark AddRemarkView delegate methods
 -(void) updateSubTaskWithRemark{
-    [self.taskUpdateClient updateFlightTask:self.ptsTask];
+    [self updateFlightPTS];
 }
 
 #pragma mark SetTimeView delegate methods
 -(void) updateSubTaskTime{
-    [self.taskUpdateClient updateFlightTask:self.ptsTask];
+    [self updateFlightPTS];
     [self.ptsSubTasksCollectionView reloadData];
 }
 
@@ -469,7 +480,7 @@
 
 #pragma mark Utility methods
 - (void) showCompletionAlert{
-    
+
     NSTimeInterval timeInterval = fabs([self.ptsTask.ptsEndTime timeIntervalSinceDate:self.ptsTask.ptsStartTime]);
     int ptsTaskTimeWindow = self.ptsTask.timeWindow * 60;
     int duration = (int)timeInterval;
@@ -484,13 +495,17 @@
 
 - (void)showComment:(NSString *)comment {
     
-    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        CommentViewController *commentViewController = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([CommentViewController class])];
+        commentViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        commentViewController.comment = comment;
+        
+        [self presentViewController:commentViewController animated:YES completion:nil];
+    });
     
-    CommentViewController *commentViewController = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([CommentViewController class])];
-    commentViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    commentViewController.comment = comment;
     
-    [self.navigationController presentViewController:commentViewController animated:YES completion:nil];
 }
 
 @end

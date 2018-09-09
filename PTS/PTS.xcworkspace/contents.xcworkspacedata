@@ -2,16 +2,16 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:PTSSubTask+CoreDataProperties.h">
+      location = "group:User+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTSSubTask+CoreDataClass.h">
+      location = "group:User+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTSSubTask+CoreDataClass.m">
+      location = "group:User+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTSSubTask+CoreDataProperties.m">
+      location = "group:User+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:RedCap+CoreDataProperties.h">
@@ -26,16 +26,16 @@
       location = "group:RedCap+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.h">
+      location = "group:PTSSubTask+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.h">
+      location = "group:PTSSubTask+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.m">
+      location = "group:PTSSubTask+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.m">
+      location = "group:PTSSubTask+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTSItem+CoreDataProperties.h">
@@ -50,16 +50,16 @@
       location = "group:PTSItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:User+CoreDataProperties.h">
+      location = "group:RedCapSubtask+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:User+CoreDataClass.h">
+      location = "group:RedCapSubtask+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:User+CoreDataClass.m">
+      location = "group:RedCapSubtask+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:User+CoreDataProperties.m">
+      location = "group:RedCapSubtask+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS.xcodeproj">

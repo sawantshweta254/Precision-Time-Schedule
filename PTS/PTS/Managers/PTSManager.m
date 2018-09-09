@@ -370,7 +370,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.calculatedPTSFinalTime = abs(ptsSubTask.start - ptsSubTask.end) + 1;
         
         if ([assignedTaskIds containsObject:[NSNumber numberWithInt:ptsSubTask.subTaskId]]) {
-            ptsSubTask.shouldBeInActive = TRUE;
+            ptsSubTask.shouldBeActive = TRUE;
         }
         
         NSError *error;
@@ -386,6 +386,7 @@ static PTSManager *sharedInstance;
 -(void) parseRedCapData:(NSArray *) redcapsData forPTS:(PTSItem *)pts fromPTSData:(NSDictionary *) ptsDictionary tasksDictionary:(NSDictionary *) wingsTaskDictionary
 {
     NSMutableArray *tasksAssignedToRedCaps = [[NSMutableArray alloc] init];
+    NSMutableArray *tasksAssignedToSelf = [[NSMutableArray alloc] init];
     NSMutableArray *redCaps = [[NSMutableArray alloc] init];
     
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -411,6 +412,11 @@ static PTSManager *sharedInstance;
         
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
 
+        if (redCap.redCapId == loggedInUser.userId) {
+            [tasksAssignedToSelf addObjectsFromArray:[redCap.aboveWingSubTasks valueForKey:@"taskId"]];
+            [tasksAssignedToSelf addObjectsFromArray:[redCap.belowWingSubtask valueForKey:@"taskId"]];
+        }
+        
         if (redCap.redCapId != loggedInUser.userId) {
             [tasksAssignedToRedCaps addObjectsFromArray:[redCap.aboveWingSubTasks valueForKey:@"taskId"]];
             [tasksAssignedToRedCaps addObjectsFromArray:[redCap.belowWingSubtask valueForKey:@"taskId"]];
@@ -427,13 +433,25 @@ static PTSManager *sharedInstance;
         }
     }
     
+    [tasksAssignedToSelf removeObjectsInArray:tasksAssignedToRedCaps];
+    
     pts.redCaps = [NSSet setWithArray:redCaps];
     if (wingsTaskDictionary == nil) {
-        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
-        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
+        
+        NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"above_list"] storeIn:[pts.aboveWingActivities allObjects]]];
+        NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"below_list"] storeIn:[pts.belowWingActivities allObjects]]];
+        if (pts.aboveWingActivities.count == 0) {
+            pts.aboveWingActivities = aboveWingActivities;
+        }
+        if (pts.belowWingActivities.count == 0) {
+            pts.belowWingActivities = belowWingActivities;
+        }
+        
+//        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
+//        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[ptsDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
     }else{
-        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToRedCaps]];
-        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToRedCaps]];
+        pts.aboveWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"above_list"] forWing:1 alreadyAssignedIds:tasksAssignedToSelf]];
+        pts.belowWingActivities = [NSSet setWithArray:[self parseSubtaskForMasterRedCap:[wingsTaskDictionary objectForKey:@"below_list"] forWing:2 alreadyAssignedIds:tasksAssignedToSelf]];
     }
     
     pts.masterRedCap = isMaster;
@@ -580,6 +598,9 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
+        if (ptsSubTask.shouldBeActive) {
+            break;
+        }
         NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
         if (![cTime isEqualToString:@"0"]) {
             ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
