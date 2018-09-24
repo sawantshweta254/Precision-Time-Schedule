@@ -553,6 +553,7 @@ static PTSManager *sharedInstance;
     ptsItem.ptsSubTaskId = [[ptsTaskDictionary objectForKey:@"m_pts_id"] intValue];
     ptsItem.airlineName = [ptsTaskDictionary objectForKey:@"airline_name"];
     ptsItem.executionTime = [ptsTaskDictionary objectForKey:@"execute_time"];
+    ptsItem.coment = [ptsTaskDictionary objectForKey:@"comment"];
     
     NSString *currentTime = [ptsTaskDictionary objectForKey:@"current_time"];
     if (![currentTime isEqualToString:@"0"]) {
