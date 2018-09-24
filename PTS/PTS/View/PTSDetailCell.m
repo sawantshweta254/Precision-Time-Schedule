@@ -49,7 +49,7 @@
         UILongPressGestureRecognizer *tapGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(updatePtsSubTaskTimer:)];
         [self.labelSubTaskTimer addGestureRecognizer:tapGestureRecognizer];
         
-        self.labelSubTaskTimer.text = [NSString stringWithFormat:@" %@  ",[AppUtility getFormattedPTSTime: subTask.calculatedPTSFinalTime]];
+        self.labelSubTaskTimer.text = [NSString stringWithFormat:@" %@ ",[AppUtility getFormattedPTSTime: subTask.calculatedPTSFinalTime]];
         
         [self.labelSubTaskTimer setHidden:NO];
         self.labelSubTaskTimer.userInteractionEnabled = TRUE;
@@ -158,7 +158,7 @@
     
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"   %@%@    ",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
+        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@" %@%@ ",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && self.subTask.shouldBeActive) {
             self.subTask.negativeDataSendServer = TRUE;
@@ -235,7 +235,7 @@
             }else{
                 [self.taskTimerButton setHidden:YES];
                 [self.labelSubTaskTimer setHidden:NO];
-                self.labelSubTaskTimer.text = [NSString stringWithFormat:@" %@  ",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
+                self.labelSubTaskTimer.text = [NSString stringWithFormat:@" %@ ",[AppUtility getFormattedPTSTime: self.subTask.calculatedPTSFinalTime]];
             }
         }
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
