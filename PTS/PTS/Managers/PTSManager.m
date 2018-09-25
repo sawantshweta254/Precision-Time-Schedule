@@ -417,7 +417,7 @@ static PTSManager *sharedInstance;
             [tasksAssignedToSelf addObjectsFromArray:[redCap.belowWingSubtask valueForKey:@"taskId"]];
         }
         
-        if (redCap.redCapId != loggedInUser.userId) {
+        if (redCap.redCapId != loggedInUser.userId && !redCap.masterRedCap) {
             [tasksAssignedToRedCaps addObjectsFromArray:[redCap.aboveWingSubTasks valueForKey:@"taskId"]];
             [tasksAssignedToRedCaps addObjectsFromArray:[redCap.belowWingSubtask valueForKey:@"taskId"]];
         }
@@ -599,9 +599,9 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-        if (ptsSubTask.shouldBeActive) {
-            break;
-        }
+//        if (ptsSubTask.shouldBeActive) {
+//            break;
+//        }
         NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
         if (![cTime isEqualToString:@"0"]) {
             ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];

@@ -153,12 +153,9 @@
     [subTaskDictionary setValue:[NSString stringWithFormat:@"%.f", [ptsSubTask.current_time timeIntervalSince1970]*1000] forKey:@"current_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isRunning] forKey:@"is_running"];
     
+    [subTaskDictionary setValue:@"0" forKey:@"time_execute_time"];
     if (ptsSubTask.timerExecutedTime != nil) {
         [subTaskDictionary setValue:ptsSubTask.timerExecutedTime forKey:@"time_execute_time"];
-    }
-    
-    if (ptsSubTask.start - ptsSubTask.end == 0){
-        [subTaskDictionary setValue:@"0" forKey:@"time_execute_time"];
     }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

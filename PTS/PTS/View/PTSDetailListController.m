@@ -207,6 +207,22 @@
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType == 3) {
+        if (self.selectedWingIndex == 0 && self.ptsAWingSubItemList.count > 0) {
+            PTSSubTask *subTask = [self.ptsAWingSubItemList objectAtIndex:0];
+            if (!subTask.shouldBeActive) {
+                return 0;
+            }
+        }else if (self.ptsBWingSubItemList.count > 0){
+            PTSSubTask *subTask = [self.ptsBWingSubItemList objectAtIndex:0];
+            if (!subTask.shouldBeActive) {
+                return 0;
+            }
+        }
+    }
+
     if (self.selectedWingIndex == 0) {
         return self.ptsAWingSubItemList.count;
     }
