@@ -169,6 +169,7 @@
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
         [self showLoadingView];
+        [self updateAnyPendingTasks];
         [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             self.ptsTasksToLoad = self.ptsTasks;
@@ -178,6 +179,14 @@
         }];
     }else{
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"red"] forState:UIControlStateNormal];
+    }
+}
+
+-(void) updateAnyPendingTasks{
+    for (PTSItem *itemToUpdate in self.ptsTasks) {
+        if (itemToUpdate.isRunning) {
+            [self.taskUpdateClient updateFlightTask:itemToUpdate];
+        }
     }
 }
 

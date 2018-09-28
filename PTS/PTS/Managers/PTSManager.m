@@ -599,9 +599,9 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-//        if (ptsSubTask.shouldBeActive) {
-//            break;
-//        }
+        if (ptsSubTask.shouldBeActive) {
+            break;
+        }
         NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
         if (![cTime isEqualToString:@"0"]) {
             ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
