@@ -265,7 +265,9 @@
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     if (self.selectedWingIndex == 1 && loggedInUser.empType == 3) {
         self.commentViewHeight.constant = 50;
-        [self startChockOnSubActivity];
+        if (self.ptsTask.isRunning) {
+            [self startChockOnSubActivity];
+        }
     }else{
         self.commentViewHeight.constant = 0;
     }

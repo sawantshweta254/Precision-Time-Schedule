@@ -225,7 +225,7 @@
             self.containerView.backgroundColor = [UIColor colorWithRed:255/255.0 green:155/255.0 blue:16/255.0 alpha:1];
         }else if(self.subTask.isComplete){
             self.containerView.backgroundColor = [UIColor colorWithRed:144/255.0 green:192/255.0 blue:88/255.0 alpha:1];
-            [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
+            [self setFinishTitle];
         }else{
             self.containerView.backgroundColor = [UIColor whiteColor];
             if (self.isLessTimeTask) {
@@ -291,7 +291,7 @@
         self.subTask.isComplete = 1;
         self.subTask.subactivityEndTime = [NSDate date];
         self.subTask.timerExecutedTime = [NSString stringWithFormat:@"0"];
-        [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
+        [self setFinishTitle];
         
         [self setTimeLabels];
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -321,4 +321,8 @@
     return TRUE;
 }
 
+-(void) setFinishTitle{
+    [self.taskTimerButton setTitle:@"Finished" forState:UIControlStateNormal];
+    self.taskTimerButton.layer.borderWidth = 0.0;
+}
 @end

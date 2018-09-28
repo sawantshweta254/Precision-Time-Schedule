@@ -533,6 +533,9 @@
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ztu-JV-ueH">
                                                                     <rect key="frame" x="0.0" y="51" width="30" height="17"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="30" id="GbN-xo-OAZ"/>
+                                                                    </constraints>
                                                                     <state key="normal" image="remark"/>
                                                                     <connections>
                                                                         <action selector="addRemark:" destination="QFb-aP-jFb" eventType="touchUpInside" id="cE9-dS-w4C"/>
@@ -582,7 +585,7 @@
                                             <constraint firstItem="d72-hK-Wqj" firstAttribute="bottom" secondItem="g2u-ad-sQn" secondAttribute="bottom" id="3Yh-tI-5tw"/>
                                             <constraint firstItem="3hz-kx-jbV" firstAttribute="top" secondItem="QFb-aP-jFb" secondAttribute="top" constant="2" id="IAh-kA-atI"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="nE7-1b-PN5" secondAttribute="trailing" constant="5" id="IWD-OE-ipY"/>
-                                            <constraint firstItem="d72-hK-Wqj" firstAttribute="leading" secondItem="ztu-JV-ueH" secondAttribute="trailing" priority="250" constant="5" id="QJx-wB-VrW"/>
+                                            <constraint firstItem="d72-hK-Wqj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ztu-JV-ueH" secondAttribute="trailing" constant="2" id="QJx-wB-VrW"/>
                                             <constraint firstItem="nE7-1b-PN5" firstAttribute="bottom" secondItem="g2u-ad-sQn" secondAttribute="bottom" id="Sa5-CQ-HDl"/>
                                             <constraint firstAttribute="bottom" secondItem="3hz-kx-jbV" secondAttribute="bottom" constant="4" id="URv-pe-U6g"/>
                                             <constraint firstItem="3hz-kx-jbV" firstAttribute="leading" secondItem="QFb-aP-jFb" secondAttribute="leading" constant="4" id="fAr-2e-PrR"/>
