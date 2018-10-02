@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 08/09/18.
+//  Created by Shweta Sawant on 01/10/18.
 //
 //
 
@@ -24,6 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t port;
 @property (nonatomic) double userId;
 @property (nullable, nonatomic, copy) NSString *userName;
+@property (nonatomic) int64_t faqChecksum;
+@property (nullable, nonatomic, retain) NSSet<FAQ *> *faqs;
+
+@end
+
+@interface User (CoreDataGeneratedAccessors)
+
+- (void)addFaqsObject:(FAQ *)value;
+- (void)removeFaqsObject:(FAQ *)value;
+- (void)addFaqs:(NSSet<FAQ *> *)values;
+- (void)removeFaqs:(NSSet<FAQ *> *)values;
 
 @end
 

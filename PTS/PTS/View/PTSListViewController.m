@@ -22,6 +22,8 @@
 #import "SupervisorTableViewController.h"
 #import "CommentViewController.h"
 
+#import "FAQViewController.h"
+
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
 @property (nonatomic, retain) NSMutableArray *ptsTasks;
@@ -66,7 +68,9 @@
     UIBarButtonItem *reloadBarButton = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sync_data"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(reloadTaskList:)];
     UIBarButtonItem *logoutBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutUser)];
     [logoutBarButton setTintColor:[UIColor whiteColor]];
-    [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:reloadBarButton, logoutBarButton, nil]];
+    UIBarButtonItem *faqBarButton = [[UIBarButtonItem alloc] initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(loadFAQ)];
+    [faqBarButton setTintColor:[UIColor whiteColor]];
+    [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:reloadBarButton, logoutBarButton, faqBarButton, nil]];
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -408,6 +412,14 @@
     LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
     loginView.delegate = self;
     [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
+}
+
+-(void) loadFAQ{
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FAQViewController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([FAQViewController class])];
+    self.navigationItem.backBarButtonItem =  [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];//UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    self.navigationItem.backBarButtonItem.tintColor = [UIColor whiteColor];
+    [self.navigationController pushViewController:loginView animated:YES];
 }
 
 #pragma mark Login delegate methods

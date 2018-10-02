@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="FAQ" representedClassName="FAQ" syncable="YES" codeGenerationType="class">
+        <attribute name="creation_on" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="faq_a" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="faq_q" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="faq_status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="faqId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="updated_on" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <entity name="PTSItem" representedClassName="PTSItem" syncable="YES" codeGenerationType="class">
         <attribute name="airlineName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coment" optional="YES" attributeType="String" syncable="YES"/>
@@ -76,18 +84,21 @@
         <attribute name="airportId" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="apiStatus" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="empType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="faqChecksum" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="flightPTSInfo" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="gridViewSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userId" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="faqs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FAQ" syncable="YES"/>
     </entity>
     <elements>
+        <element name="FAQ" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="PTSItem" positionX="-54" positionY="54" width="128" height="465"/>
         <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="420"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="210"/>
     </elements>
 </model>

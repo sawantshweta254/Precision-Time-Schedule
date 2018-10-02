@@ -12,6 +12,7 @@
 #import "Login.h"
 #include <sys/sysctl.h>
 #import <UIKit/UIKit.h>
+#import "FAQ+CoreDataProperties.h"
 
 @implementation LoginManager
 
@@ -110,6 +111,38 @@ static LoginManager *sharedInstance;
     return deviceModel;
 }
 
+-(void) fetchFAQ{
+    [[WebApiManager sharedInstance] initiatePost:[self getRequestDataForLogin] completionHandler:^(BOOL requestSuccessfull, id responseData) {
+        if (requestSuccessfull) {
+            NSArray *faqsArray = [responseData objectForKey:@"faq_json"];
+            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+            for (NSDictionary *faqDic in faqsArray) {
+                NSEntityDescription *faqEntity = [NSEntityDescription entityForName:@"FAQ" inManagedObjectContext:moc];
+                FAQ *faq = (FAQ*)[[NSManagedObject alloc] initWithEntity:faqEntity insertIntoManagedObjectContext:moc];
+                faq.faqId = [[faqDic objectForKey:@"id"] intValue];
+                faq.faq_q = [faqDic objectForKey:@"faq_q"];
+                faq.faq_a = [faqDic objectForKey:@"faq_a"];
+                faq.faq_status = [[faqDic objectForKey:@"faq_status"] intValue];
+                faq.creation_on = [faqDic objectForKey:@""];
+                faq.updated_on = [faqDic objectForKey:@""];
+            }
+            NSError *error;
+            [moc save:&error];
+            
+        }else{
+        }
+        
+    }];
+}
+
+-(ApiRequestData *) getRequestDataForLogin{
+    ApiRequestData *requestData = [[ApiRequestData alloc] init];
+    
+    requestData.baseURL = @"http://techdew.co.in/pts1/faq_json/faq_json.txt?";
+    requestData.postData = [[NSDictionary alloc] init];
+    
+    return requestData;
+}
 #pragma mark DB methods
 
 -(User *)parseUserLoginResponse:(NSDictionary *)responseDictionary{
@@ -121,7 +154,7 @@ static LoginManager *sharedInstance;
     NSString *message = [responseDictionary objectForKey:@"msg"];
     NSArray *flightPTSInfo = [responseDictionary objectForKey:@"flight_pts_info"];
     NSInteger empType = [[responseDictionary objectForKey:@"emptype"] integerValue];
-    
+    long faqChecksum = [[responseDictionary objectForKey:@"faq_json"] longLongValue];
     
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSEntityDescription *userEntity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:moc];
@@ -134,7 +167,11 @@ static LoginManager *sharedInstance;
     user.port = port;
     user.message = message;
 //    user.flightPTSInfo = flightPTSInfo;
+    user.faqChecksum = faqChecksum;
+
     user.empType = empType;
+    
+    [self fetchFAQ];
     
     NSError *error;
     [moc save:&error];

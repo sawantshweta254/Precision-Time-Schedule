@@ -41,7 +41,7 @@ static WebApiManager *sharedInstance;
     NSString *finalUrl = [requestData.baseURL stringByAppendingString:postJsonString];
     NSString *encoded = [finalUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", nil];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/plain", nil];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     [manager POST:encoded parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData){

@@ -2,12 +2,14 @@
 //  User+CoreDataClass.h
 //  
 //
-//  Created by Shweta Sawant on 08/09/18.
+//  Created by Shweta Sawant on 01/10/18.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+
+@class FAQ;
 
 NS_ASSUME_NONNULL_BEGIN
 
