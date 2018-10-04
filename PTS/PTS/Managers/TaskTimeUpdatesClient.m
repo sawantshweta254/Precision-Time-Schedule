@@ -63,7 +63,7 @@
     NSDictionary *ptsJson = [NSJSONSerialization JSONObjectWithData:objectData
                                                             options:NSJSONReadingMutableContainers
                                                               error:&jsonError];
-    [[PTSManager sharedInstance] parsePTSUpdateReceivedForRedCap:ptsJson forInitialLogin:FALSE];
+    [[PTSManager sharedInstance] parsePTSUpdateReceivedForRedCap:ptsJson];
     
 //    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
 

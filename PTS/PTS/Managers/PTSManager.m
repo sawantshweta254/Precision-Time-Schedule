@@ -61,7 +61,7 @@ static PTSManager *sharedInstance;
 }
 
 
--(void) fetchPTSListForUser:(User*)user forLogin: (BOOL)initialLogin completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
+-(void) fetchPTSListForUser:(User*)user completionHandler:(void(^)(BOOL fetchComplete, NSArray *ptsTasks, NSError *error))fetchPTSCompletionHandler{
     
     [[WebApiManager sharedInstance] initiatePost:[self getRequestDataToFetchPTSList:user] completionHandler:^(BOOL requestSuccessfull, id responseData) {
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -78,7 +78,7 @@ static PTSManager *sharedInstance;
         if (requestSuccessfull) {
                         
                 NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
-            [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData forLogin:initialLogin didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
+                [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
                     
                     NSMutableArray *mutableExistingPTSIDs = [NSMutableArray arrayWithArray:ptsIdsDBArray];
                     [mutableExistingPTSIDs removeObjectsInArray:fetchedPTSIDs];
@@ -142,7 +142,7 @@ static PTSManager *sharedInstance;
 }
 
 #pragma mark PTS For Master Redcap
--(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData forLogin:(BOOL)initialLogin didParse:(void (^)(BOOL didParse, NSArray *parsedList, NSArray *fetchedIds))completionHandler{
+-(void) parsePTSListForMasterRedCap:(NSArray *)ptsList existingPTSData:(NSArray *)ptsTaskIds originalResponseData:(NSDictionary *)responseData didParse:(void (^)(BOOL didParse, NSArray *parsedList, NSArray *fetchedIds))completionHandler{
     
     NSMutableArray *ptsListToReturn = [[NSMutableArray alloc] init];
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -172,10 +172,10 @@ static PTSManager *sharedInstance;
             [self parsePTSFlightDetails:ptsItem storeIn:pts];
             
             NSDictionary *ptsTasksDictionary = [[responseData objectForKey:@"pts"] valueForKey:[NSString stringWithFormat:@"%d",pts.ptsSubTaskId]];
-            [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary forLogin:initialLogin];
+            [self parseRedCapData:[ptsItem objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsItem tasksDictionary:ptsTasksDictionary];
             
             if (jsonForPTSItem != nil) {
-                [self parseJsonForPTSRedCap:jsonForPTSItem storeIn:pts forLogin:initialLogin completionHandler:^(PTSItem *pts) {
+                [self parseJsonForPTSRedCap:jsonForPTSItem storeIn:pts completionHandler:^(PTSItem *pts) {
                     NSError *error;
                     [moc save:&error];
                     if (!error) {
@@ -316,10 +316,10 @@ static PTSManager *sharedInstance;
     
 }
 
--(void) parseJsonForPTSRedCap:(NSDictionary *)ptsJson storeIn:(PTSItem *)pts forLogin:(BOOL)initialLogin completionHandler:(void(^) (PTSItem *pts))ptsToReturn{
+-(void) parseJsonForPTSRedCap:(NSDictionary *)ptsJson storeIn:(PTSItem *)pts completionHandler:(void(^) (PTSItem *pts))ptsToReturn{
     
     [self parsePTSFlightDetailsFromJson:ptsJson storeIn:pts];
-    [self parseRedCapData:[ptsJson objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsJson tasksDictionary:nil forLogin:initialLogin];
+    [self parseRedCapData:[ptsJson objectForKey:@"redcaps"] forPTS:pts fromPTSData:ptsJson tasksDictionary:nil];
     
     ptsToReturn(pts);
     
@@ -383,7 +383,7 @@ static PTSManager *sharedInstance;
 }
 
 
--(void) parseRedCapData:(NSArray *) redcapsData forPTS:(PTSItem *)pts fromPTSData:(NSDictionary *) ptsDictionary tasksDictionary:(NSDictionary *) wingsTaskDictionary forLogin: (BOOL) initialLogin
+-(void) parseRedCapData:(NSArray *) redcapsData forPTS:(PTSItem *)pts fromPTSData:(NSDictionary *) ptsDictionary tasksDictionary:(NSDictionary *) wingsTaskDictionary
 {
     NSMutableArray *tasksAssignedToRedCaps = [[NSMutableArray alloc] init];
     NSMutableArray *tasksAssignedToSelf = [[NSMutableArray alloc] init];
@@ -438,8 +438,8 @@ static PTSManager *sharedInstance;
     pts.redCaps = [NSSet setWithArray:redCaps];
     if (wingsTaskDictionary == nil) {
         
-        NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"above_list"] storeIn:[pts.aboveWingActivities allObjects] forLogin:initialLogin]];
-        NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"below_list"] storeIn:[pts.belowWingActivities allObjects] forLogin:initialLogin]];
+        NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"above_list"] storeIn:[pts.aboveWingActivities allObjects]]];
+        NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsDictionary objectForKey:@"below_list"] storeIn:[pts.belowWingActivities allObjects]]];
         if (pts.aboveWingActivities.count == 0) {
             pts.aboveWingActivities = aboveWingActivities;
         }
@@ -484,7 +484,7 @@ static PTSManager *sharedInstance;
 }
 
 
--(void) parsePTSUpdateReceivedForRedCap:(NSDictionary *) updatedPtsData forInitialLogin:(BOOL) initialLogin{
+-(void) parsePTSUpdateReceivedForRedCap:(NSDictionary *) updatedPtsData{
     NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
     NSError *error;
@@ -495,7 +495,7 @@ static PTSManager *sharedInstance;
     
     if (ptsListForPTSId.count > 0) {
         PTSItem *ptsItemToEdit = [ptsListForPTSId objectAtIndex:0];
-        [self parsePTSItemForRedcap:updatedPtsData storeIn:ptsItemToEdit forLogin:initialLogin];
+        [self parsePTSItemForRedcap:updatedPtsData storeIn:ptsItemToEdit];
         
 //        [self parseJsonForPTSRedCap:updatedPtsData storeIn:ptsItemToEdit completionHandler:^(PTSItem *pts) {
 //
@@ -509,7 +509,7 @@ static PTSManager *sharedInstance;
     
 }
 
--(PTSItem *) parsePTSItemForRedcap:(NSDictionary *)ptsTaskDictionary storeIn:(PTSItem *) ptsItem forLogin:(BOOL) initialLogin{
+-(PTSItem *) parsePTSItemForRedcap:(NSDictionary *)ptsTaskDictionary storeIn:(PTSItem *) ptsItem{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
@@ -562,8 +562,8 @@ static PTSManager *sharedInstance;
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
 
     
-    NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"above_list"] storeIn:[ptsItem.aboveWingActivities allObjects] forLogin:initialLogin]];
-    NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"below_list"] storeIn:[ptsItem.belowWingActivities allObjects] forLogin:initialLogin]];
+    NSSet *aboveWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"above_list"] storeIn:[ptsItem.aboveWingActivities allObjects]]];
+    NSSet *belowWingActivities = [NSSet setWithArray:[self parseSubTaskForRedcap:[ptsTaskDictionary objectForKey:@"below_list"] storeIn:[ptsItem.belowWingActivities allObjects]]];
     if (ptsItem.aboveWingActivities.count == 0) {
         ptsItem.aboveWingActivities = aboveWingActivities;
     }
@@ -574,7 +574,7 @@ static PTSManager *sharedInstance;
     return ptsItem;
 }
 
--(NSArray *) parseSubTaskForRedcap:(NSDictionary *)subTaskListDictionary storeIn:(NSArray *) subTasks forLogin:(BOOL) initialLogin{
+-(NSArray *) parseSubTaskForRedcap:(NSDictionary *)subTaskListDictionary storeIn:(NSArray *) subTasks{
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -599,7 +599,7 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-        if (ptsSubTask.shouldBeActive && !initialLogin) {
+        if (ptsSubTask.shouldBeActive) {
             break;
         }
         NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];

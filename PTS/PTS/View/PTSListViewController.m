@@ -52,7 +52,7 @@
     }else{
         [self setSearchBar];
         [self showLoadingView];
-        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser forLogin:false completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             if (self.ptsTasks.count > 0) {
                 self.ptsTasksToLoad = self.ptsTasks;
@@ -174,7 +174,7 @@
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
         [self showLoadingView];
         [self updateAnyPendingTasks];
-        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser forLogin:false completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
             self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
             self.ptsTasksToLoad = self.ptsTasks;
             [self registerFlightsForUpdate];
@@ -247,10 +247,6 @@
 */
 #pragma mark Button Actions
 - (IBAction)reloadTaskList:(id)sender {
-    [self fetchPTSListAfterCall: FALSE];
-}
-
--(void) fetchPTSListAfterCall: (BOOL)initialLogin {
     [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
     }];
@@ -258,7 +254,7 @@
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     [self setViewTitle:loggedInUser.userName];
     [self showLoadingView];
-    [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser forLogin: initialLogin completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+    [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
         self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
         self.ptsTasksToLoad = self.ptsTasks;
         [self loadListOnView];
@@ -410,15 +406,7 @@
     [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCapSubtasks error:&deleteError];
     
     NSError *error;
-//    [theAppDelegate.persistentContainer.viewContext save:&error];
-    [theAppDelegate.persistentContainer.viewContext reset];
-    
-//    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-//    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
-//    NSArray *ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
-//    
-//    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
-//    ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
+    [theAppDelegate.persistentContainer.viewContext save:&error];
     
     UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
@@ -437,7 +425,7 @@
 #pragma mark Login delegate methods
 -(void) userDidLogin{
     [self setSearchBar];
-    [self fetchPTSListAfterCall:YES];
+    [self reloadTaskList:nil];
 }
 
 

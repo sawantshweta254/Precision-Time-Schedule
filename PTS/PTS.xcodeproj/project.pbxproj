@@ -519,7 +519,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -540,7 +540,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 33U9XKAZPK;
 				GCC_PREFIX_HEADER = "PTS/PTS-Prefix.pch";
 				INFOPLIST_FILE = PTS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
