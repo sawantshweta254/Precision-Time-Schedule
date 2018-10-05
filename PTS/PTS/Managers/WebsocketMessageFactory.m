@@ -86,7 +86,8 @@
     [messageDict setValue:[NSString stringWithFormat:@"%.f", [ptsItem.ptsStartTime timeIntervalSince1970]*1000] forKey:@"current_time"];
     [messageDict setValue:[self ptsTimesInString:ptsItem.timerStopTime] forKey:@"timer_stop_time"];
     
-    [messageDict setValue:[NSNumber numberWithBool:ptsItem.masterRedCap] forKey:@"master_redcap"];
+    [messageDict setValue:[NSNumber numberWithInt:ptsItem.masterRedCap] forKey:@"master_redcap"];
+    
     if (loggedInUser.empType == UserTypeRedCap) {
         [messageDict setValue:[NSNumber numberWithInteger:2] forKey:@"MsgType"];
     }
@@ -196,7 +197,7 @@
     [subTaskDictionary setValue:ptsSubTask.notations forKey:@"notations"];
     [subTaskDictionary setValue:[self ptsTimesInString:ptsSubTask.timerStopTime] forKey:@"timer_stop_time"];
     [subTaskDictionary setValue:ptsSubTask.userSubActFeedback forKey:@"user_subact_feedback"];
-    [subTaskDictionary setValue:[NSNumber numberWithBool:ptsSubTask.negativeDataSendServer] forKey:@"negativeData_SendServer"];
+    [subTaskDictionary setValue:[NSNumber numberWithInt:ptsSubTask.negativeDataSendServer] forKey:@"negativeData_SendServer"];
     
     return subTaskDictionary;
 }
@@ -216,7 +217,7 @@
         
         [redCapData setValue:[NSNumber numberWithInt:redCap.redCapId] forKey:@"redcap_id"];
         [redCapData setValue:redCap.redcapName forKey:@"name"];
-        [redCapData setValue:[NSNumber numberWithBool:redCap.masterRedCap] forKey:@"master_redcap"];
+        [redCapData setValue:[NSNumber numberWithInt:redCap.masterRedCap] forKey:@"master_redcap"];
         [redCapData setValue:[NSNumber numberWithInt:redCap.tableGroupId] forKey:@"tbl_group_id"];
         
         [redCapData setValue:[self getRedCapGroupJson:redCap] forKey:@"group_json"];

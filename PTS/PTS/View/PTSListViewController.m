@@ -372,6 +372,10 @@
 
 - (void) logoutUser{
     
+    if (![self.taskUpdateClient isWebSocketConnected]) {
+        [self showComment:@"Please connect to internet and sync offline data"];
+        return;
+    }
     
     UIAlertController *logoutConfirmationAlert = [UIAlertController alertControllerWithTitle:@"Message" message:@"Are you sure ?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -432,10 +436,6 @@
     [logoutConfirmationAlert addAction:actionYes];
     [self presentViewController:logoutConfirmationAlert animated:YES completion:nil];
 
-    if (![self.taskUpdateClient isWebSocketConnected]) {
-        [self showComment:@"Please connect to internet and sync offline data"];
-        return;
-    }
 }
 
 -(void) loadFAQ{
