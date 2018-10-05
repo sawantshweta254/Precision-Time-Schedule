@@ -37,6 +37,7 @@
     [self.tableViewFAQs reloadData];
     
     self.navigationItem.title = @"FAQ";
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
 }
 

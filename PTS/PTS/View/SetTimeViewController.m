@@ -39,6 +39,13 @@
         [self.buttonEndTime setHidden:YES];
     }
 
+    
+}
+
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    [self setUserDefinedTime];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,5 +112,19 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
     self.labelPickerViewTime.text = [dateFormatter stringFromDate:picker.date];
+}
+
+-(void) setUserDefinedTime{
+    if (self.subTask.userStartTime != nil) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm"];
+        [self.buttonStartTime.titleLabel setText:[NSString stringWithFormat:@"Start Time      %@",[dateFormatter stringFromDate:self.subTask.userStartTime]]];
+    }
+    
+    if (self.subTask.userEndTime != nil) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm"];
+        [self.buttonEndTime.titleLabel setText:[NSString stringWithFormat:@"End Time      %@",[dateFormatter stringFromDate:self.subTask.userEndTime]]];
+    }
 }
 @end

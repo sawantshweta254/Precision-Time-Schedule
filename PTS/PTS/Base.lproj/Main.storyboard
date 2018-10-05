@@ -371,7 +371,7 @@
         <!--View Controller-->
         <scene sceneID="dZM-PL-8cr">
             <objects>
-                <viewController storyboardIdentifier="FAQViewController" id="DuZ-iT-boS" customClass="FAQViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FAQViewController" automaticallyAdjustsScrollViewInsets="NO" id="DuZ-iT-boS" customClass="FAQViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sjt-wU-6sP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -661,6 +661,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="watch" translatesAutoresizingMaskIntoConstraints="NO" id="uof-aS-dAd">
+                                                    <rect key="frame" x="294" y="55" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="20" id="Xdf-mI-dml"/>
+                                                        <constraint firstAttribute="width" secondItem="uof-aS-dAd" secondAttribute="height" multiplier="1:1" id="vDX-Dp-hnL"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -670,8 +677,11 @@
                                             <constraint firstItem="3hz-kx-jbV" firstAttribute="top" secondItem="QFb-aP-jFb" secondAttribute="top" constant="2" id="IAh-kA-atI"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="nE7-1b-PN5" secondAttribute="trailing" constant="5" id="IWD-OE-ipY"/>
                                             <constraint firstItem="d72-hK-Wqj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ztu-JV-ueH" secondAttribute="trailing" constant="2" id="QJx-wB-VrW"/>
+                                            <constraint firstItem="d72-hK-Wqj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="X5p-UP-qMK" secondAttribute="trailing" constant="2" id="Rcs-q7-jIX"/>
                                             <constraint firstItem="nE7-1b-PN5" firstAttribute="bottom" secondItem="g2u-ad-sQn" secondAttribute="bottom" id="Sa5-CQ-HDl"/>
                                             <constraint firstAttribute="bottom" secondItem="3hz-kx-jbV" secondAttribute="bottom" constant="4" id="URv-pe-U6g"/>
+                                            <constraint firstItem="d72-hK-Wqj" firstAttribute="leading" secondItem="uof-aS-dAd" secondAttribute="trailing" constant="5" id="Wil-pd-x4O"/>
+                                            <constraint firstItem="uof-aS-dAd" firstAttribute="centerY" secondItem="d72-hK-Wqj" secondAttribute="centerY" id="ciE-eB-oaN"/>
                                             <constraint firstItem="3hz-kx-jbV" firstAttribute="leading" secondItem="QFb-aP-jFb" secondAttribute="leading" constant="4" id="fAr-2e-PrR"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="d72-hK-Wqj" secondAttribute="trailing" constant="5" id="xZW-XR-xhc"/>
                                         </constraints>
@@ -679,6 +689,7 @@
                                         <connections>
                                             <outlet property="containerView" destination="3hz-kx-jbV" id="q9r-7E-MiO"/>
                                             <outlet property="eidtTimeButton" destination="8Hz-2Q-jdA" id="4pY-0Z-3MN"/>
+                                            <outlet property="imageViewWatch" destination="uof-aS-dAd" id="gKr-5W-1JT"/>
                                             <outlet property="labelSubTaskTimer" destination="d72-hK-Wqj" id="m42-UY-kfR"/>
                                             <outlet property="labelUserTaskTime" destination="X5p-UP-qMK" id="uuC-Wh-EJe"/>
                                             <outlet property="remarkButton" destination="ztu-JV-ueH" id="vPn-wW-Nb1"/>
@@ -1371,5 +1382,6 @@
         <image name="red" width="352" height="577"/>
         <image name="remark" width="30" height="30"/>
         <image name="user_name" width="15" height="15"/>
+        <image name="watch" width="50" height="50"/>
     </resources>
 </document>

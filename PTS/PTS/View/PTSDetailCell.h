@@ -14,6 +14,7 @@
 -(void) updateRemarkForSubtask:(PTSSubTask *)subTask;
 -(void) updateUSerTimeForSubtask:(PTSSubTask *)subTask;
 -(void) updateFlightPTS;
+-(BOOL) shouldHideWatchIcon;
 @end
 
 @interface PTSDetailCell : UICollectionViewCell

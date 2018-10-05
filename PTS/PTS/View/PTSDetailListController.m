@@ -475,6 +475,10 @@
     [self performSegueWithIdentifier:@"SetTaskTime" sender:subTask];
 }
 
+-(BOOL) shouldHideWatchIcon{
+    return self.listTypeSegmentController.selectedSegmentIndex == 1 ;
+}
+
 #pragma mark AddRemarkView delegate methods
 -(void) updateSubTaskWithRemark{
     [self updateFlightPTS];

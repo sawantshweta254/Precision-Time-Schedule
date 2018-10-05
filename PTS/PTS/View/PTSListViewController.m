@@ -372,58 +372,70 @@
 
 - (void) logoutUser{
     
+    
+    UIAlertController *logoutConfirmationAlert = [UIAlertController alertControllerWithTitle:@"Message" message:@"Are you sure ?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        self.ptsTasks = nil;
+        self.ptsTasksToLoad = nil;
+        [self loadListOnView];
+        
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([User class])];
+        request.includesPropertyValues = TRUE;
+        NSBatchDeleteRequest *deleteUser = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        
+        NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSItem class])];
+        request1.includesPropertyValues = TRUE;
+        NSBatchDeleteRequest *deletePTSItem = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
+        
+        NSFetchRequest *request2 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSSubTask class])];
+        request2.includesPropertyValues = TRUE;
+        NSBatchDeleteRequest *deleteSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request2];
+        
+        NSFetchRequest *request3 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCap class])];
+        request3.includesPropertyValues = TRUE;
+        NSBatchDeleteRequest *deleteRedCap = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request3];
+        
+        NSFetchRequest *request4 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCapSubtask class])];
+        request4.includesPropertyValues = TRUE;
+        NSBatchDeleteRequest *deleteRedCapSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request4];
+        
+        
+        NSError *deleteError = nil;
+        [theAppDelegate.persistentContainer.viewContext executeRequest:deleteUser error:&deleteError];
+        [theAppDelegate.persistentContainer.viewContext executeRequest:deletePTSItem error:&deleteError];
+        [theAppDelegate.persistentContainer.viewContext executeRequest:deleteSubtasks error:&deleteError];
+        [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCap error:&deleteError];
+        [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCapSubtasks error:&deleteError];
+        
+        NSError *error;
+        //    [theAppDelegate.persistentContainer.viewContext save:&error];
+        [theAppDelegate.persistentContainer.viewContext reset];
+        
+        //    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
+        //    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
+        //    NSArray *ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
+        //
+        //    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
+        //    ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
+        
+        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
+        loginView.delegate = self;
+        [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
+    }];
+    
+    UIAlertAction *actionNo = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    [logoutConfirmationAlert addAction:actionNo];
+    [logoutConfirmationAlert addAction:actionYes];
+    [self presentViewController:logoutConfirmationAlert animated:YES completion:nil];
+
     if (![self.taskUpdateClient isWebSocketConnected]) {
         [self showComment:@"Please connect to internet and sync offline data"];
         return;
     }
-    
-    self.ptsTasks = nil;
-    self.ptsTasksToLoad = nil;
-    [self loadListOnView];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([User class])];
-    request.includesPropertyValues = TRUE;
-    NSBatchDeleteRequest *deleteUser = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-
-    NSFetchRequest *request1 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSItem class])];
-    request1.includesPropertyValues = TRUE;
-    NSBatchDeleteRequest *deletePTSItem = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request1];
-    
-    NSFetchRequest *request2 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([PTSSubTask class])];
-    request2.includesPropertyValues = TRUE;
-    NSBatchDeleteRequest *deleteSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request2];
-    
-    NSFetchRequest *request3 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCap class])];
-    request3.includesPropertyValues = TRUE;
-    NSBatchDeleteRequest *deleteRedCap = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request3];
-
-    NSFetchRequest *request4 = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RedCapSubtask class])];
-    request4.includesPropertyValues = TRUE;
-    NSBatchDeleteRequest *deleteRedCapSubtasks = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request4];
-
-    
-    NSError *deleteError = nil;
-    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteUser error:&deleteError];
-    [theAppDelegate.persistentContainer.viewContext executeRequest:deletePTSItem error:&deleteError];
-    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteSubtasks error:&deleteError];
-    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCap error:&deleteError];
-    [theAppDelegate.persistentContainer.viewContext executeRequest:deleteRedCapSubtasks error:&deleteError];
-    
-    NSError *error;
-//    [theAppDelegate.persistentContainer.viewContext save:&error];
-    [theAppDelegate.persistentContainer.viewContext reset];
-    
-//    NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-//    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
-//    NSArray *ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
-//    
-//    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"PTSItem"];
-//    ptsArray = [moc executeFetchRequest:fetchRequest error:&error];
-    
-    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginController *loginView = [mainStoryBoard instantiateViewControllerWithIdentifier:NSStringFromClass([LoginController class])];
-    loginView.delegate = self;
-    [self.navigationController presentViewController:loginView animated:F_TEST completion:nil];
 }
 
 -(void) loadFAQ{

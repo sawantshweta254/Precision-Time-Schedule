@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelSubTaskTimer;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UILabel *labelUserTaskTime;
+@property (weak, nonatomic) IBOutlet UIImageView *imageViewWatch;
 
 @property (nonatomic, strong) PTSSubTask *subTask;
 @property (nonatomic, strong) NSTimer *ptsTaskTimer;
@@ -41,6 +42,7 @@
         self.isLessTimeTask = TRUE;
     }
     
+    [self hideWatchIconIfNeeded];
     if (self.isLessTimeTask) {
         [self.labelSubTaskTimer setHidden:YES];
         [self.taskTimerButton setHidden:NO];
@@ -79,6 +81,24 @@
     self.taskTimerButton.layer.cornerRadius = 5;
     self.taskTimerButton.clipsToBounds = TRUE;
    
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if (loggedInUser.empType != 3) {
+        [self.eidtTimeButton setImage:nil forState:UIControlStateNormal];
+        if (self.subTask.userSubActFeedback.length == 0) {
+            [self.remarkButton setHidden:YES];
+        }else{
+            [self.remarkButton setHidden:NO];
+        }
+    }
+}
+
+-(void) hideWatchIconIfNeeded{
+    
+    if (self.isLessTimeTask || [self.delegate shouldHideWatchIcon]) {
+        [self.imageViewWatch setHidden:TRUE];
+    }else{
+        [self.imageViewWatch setHidden:NO];
+    }
 }
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
@@ -302,20 +322,22 @@
 }
 
 - (IBAction)addRemark:(id)sender {
-    if ([self shouldPerformAction]) {
+     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if ([self shouldPerformAction] || loggedInUser.empType != 3) {
         [self.delegate updateRemarkForSubtask:self.subTask];
     }
 }
 
 - (IBAction)addTime:(id)sender {
-    if ([self shouldPerformAction]) {
+    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+    if ([self shouldPerformAction] && loggedInUser.empType == 3) {
         [self.delegate updateUSerTimeForSubtask:self.subTask];
     }
 }
 
 -(BOOL) shouldPerformAction{
-    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (self.subTask.isRunning == 0 || !self.subTask.shouldBeActive || loggedInUser.empType != 3){
+    
+    if (self.subTask.isRunning == 0 || !self.subTask.shouldBeActive){
         return FALSE;
     }
     return TRUE;
