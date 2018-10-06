@@ -371,6 +371,8 @@
             subTask.isRunning = 2;
             subTask.isComplete = 1;
             subTask.subactivityEndTime = [NSDate date];
+        }else if (subTask.isRunning == 0){
+            subTask.isEnabled = false;
         }
     }
     
@@ -382,6 +384,8 @@
             subTask.isRunning = 2;
             subTask.isComplete = 1;
             subTask.subactivityEndTime = [NSDate date];
+        }else if (subTask.isRunning == 0){
+            subTask.isEnabled = false;
         }
     }
 }

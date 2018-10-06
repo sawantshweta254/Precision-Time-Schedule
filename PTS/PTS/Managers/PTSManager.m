@@ -369,6 +369,8 @@ static PTSManager *sharedInstance;
         ptsSubTask.ptsWing = wingType;
         ptsSubTask.calculatedPTSFinalTime = abs(ptsSubTask.start - ptsSubTask.end) + 1;
         
+//        ptsSubTask.isEnabled = [[ptsSubItem objectForKey:@"is_enable"] boolValue];
+        
         if ([assignedTaskIds containsObject:[NSNumber numberWithInt:ptsSubTask.subTaskId]]) {
             ptsSubTask.shouldBeActive = TRUE;
         }
@@ -636,6 +638,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];
         ptsSubTask.notations = [ptsSubItem objectForKey:@"notations"];
         //            ptsSubTask.ptsTotalTime = [ptsSubItem objectForKey:@"pts_time"];
+//        ptsSubTask.isEnabled = [[ptsSubItem objectForKey:@"is_enable"] boolValue];
         
         [subTaskList addObject:ptsSubTask];
         
@@ -1030,7 +1033,7 @@ static PTSManager *sharedInstance;
         ptsSubTask.negativeDataSendServer = [[ptsSubItem objectForKey:@"negativeData_SendServer"] boolValue];
         ptsSubTask.notations = [ptsSubItem objectForKey:@"notations"];
         //            ptsSubTask.ptsTotalTime = [ptsSubItem objectForKey:@"pts_time"];
-        
+//        ptsSubTask.isEnabled = [[ptsSubItem objectForKey:@"is_enable"] boolValue];
         [subTaskList addObject:ptsSubTask];
         
     }

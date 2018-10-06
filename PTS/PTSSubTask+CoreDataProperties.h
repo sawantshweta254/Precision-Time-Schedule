@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 01/10/18.
+//  Created by Shweta Sawant on 06/10/18.
 //
 //
 
@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSDate *userEndTime;
 @property (nullable, nonatomic, copy) NSDate *userStartTime;
 @property (nullable, nonatomic, copy) NSString *userSubActFeedback;
+@property (nonatomic) BOOL isEnabled;
 
 @end
 

@@ -199,6 +199,8 @@
     [subTaskDictionary setValue:ptsSubTask.userSubActFeedback forKey:@"user_subact_feedback"];
     [subTaskDictionary setValue:[NSNumber numberWithInt:ptsSubTask.negativeDataSendServer] forKey:@"negativeData_SendServer"];
     
+    [subTaskDictionary setValue:[NSNumber numberWithBool:ptsSubTask.isEnabled] forKey:@"is_enable"];
+    
     return subTaskDictionary;
 }
 

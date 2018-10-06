@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FAQ" representedClassName="FAQ" syncable="YES" codeGenerationType="class">
         <attribute name="creation_on" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="faq_a" optional="YES" attributeType="String" syncable="YES"/>
@@ -44,6 +44,7 @@
         <attribute name="end" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hasExceededTime" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isComplete" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isEnabled" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isRunning" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="mRefereceTimeId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="negativeDataSendServer" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -96,7 +97,7 @@
     <elements>
         <element name="FAQ" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="PTSItem" positionX="-54" positionY="54" width="128" height="465"/>
-        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="420"/>
+        <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="435"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="210"/>

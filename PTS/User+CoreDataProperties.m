@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 01/10/18.
+//  Created by Shweta Sawant on 06/10/18.
 //
 //
 
@@ -17,13 +17,13 @@
 @dynamic airportId;
 @dynamic apiStatus;
 @dynamic empType;
+@dynamic faqChecksum;
 @dynamic flightPTSInfo;
 @dynamic gridViewSelected;
 @dynamic message;
 @dynamic port;
 @dynamic userId;
 @dynamic userName;
-@dynamic faqChecksum;
 @dynamic faqs;
 
 @end

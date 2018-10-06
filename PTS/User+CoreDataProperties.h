@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 01/10/18.
+//  Created by Shweta Sawant on 06/10/18.
 //
 //
 
@@ -18,13 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) double airportId;
 @property (nonatomic) double apiStatus;
 @property (nonatomic) int16_t empType;
+@property (nonatomic) int64_t faqChecksum;
 @property (nullable, nonatomic, retain) NSData *flightPTSInfo;
 @property (nonatomic) BOOL gridViewSelected;
 @property (nullable, nonatomic, copy) NSString *message;
 @property (nonatomic) int16_t port;
 @property (nonatomic) double userId;
 @property (nullable, nonatomic, copy) NSString *userName;
-@property (nonatomic) int64_t faqChecksum;
 @property (nullable, nonatomic, retain) NSSet<FAQ *> *faqs;
 
 @end
