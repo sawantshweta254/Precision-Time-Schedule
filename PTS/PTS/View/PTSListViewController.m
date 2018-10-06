@@ -343,17 +343,17 @@
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
     if (loggedInUser.empType == 3) {
         if (selectedItem.supervisorName.length > 0) {
-            [namesArray addObject:[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName]];
+            [namesArray addObject:[[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName] uppercaseString]];
         }
     }else{
         if (selectedItem.dutyManagerName.length > 0) {
-            [namesArray addObject:[NSString stringWithFormat:@"DM - %@",selectedItem.dutyManagerName]];
+            [namesArray addObject:[[NSString stringWithFormat:@"DM - %@",selectedItem.dutyManagerName] uppercaseString]];
         }
         if (selectedItem.supervisorName.length > 0) {
-            [namesArray addObject:[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName]];
+            [namesArray addObject:[[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName] uppercaseString]];
         }
         for (RedCap *redCap in selectedItem.redCaps.allObjects) {
-            [namesArray addObject:[NSString stringWithFormat:@"RC - %@",redCap.redcapName]];
+            [namesArray addObject:[[NSString stringWithFormat:@"RC - %@",redCap.redcapName] uppercaseString]];
         }
     }
     
