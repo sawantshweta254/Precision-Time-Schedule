@@ -232,10 +232,14 @@ static PTSManager *sharedInstance;
     pts.flightType = [[ptsJson objectForKey:@"flight_type"] intValue];
     pts.timeWindow = [[ptsJson objectForKey:@"pts_time"] intValue];
     pts.flightTime = [ptsJson objectForKey:@"arr_dep_type"];
-    pts.isRunning = [[ptsJson objectForKey:@"is_running"] intValue];
     pts.masterRedCap = [[ptsJson objectForKey:@"master_redcap"] boolValue];
     pts.coment = [ptsJson objectForKey:@"comment"];
 
+    int isRunningValue = [[ptsJson objectForKey:@"is_running"] intValue];
+    if (pts.isRunning < isRunningValue) {
+        pts.isRunning = isRunningValue;
+    }
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 //    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -540,7 +544,11 @@ static PTSManager *sharedInstance;
     ptsItem.flightNo = [ptsTaskDictionary objectForKey:@"flight_num"];
     ptsItem.flightType = [[ptsTaskDictionary objectForKey:@"flight_type"] intValue];
     ptsItem.flightTime = [ptsTaskDictionary objectForKey:@"arr_dep_type"];
-    ptsItem.isRunning = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    
+    int isRunningValue = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    if (ptsItem.isRunning < isRunningValue) {
+        ptsItem.isRunning = isRunningValue;
+    }
     
     NSString *ptsStartTimeString = [ptsTaskDictionary objectForKey:@"pts_start_time"];
     NSString *ptsEndTimeString = [ptsTaskDictionary objectForKey:@"pts_end_time"];
@@ -953,7 +961,11 @@ static PTSManager *sharedInstance;
     ptsItem.flightNo = [ptsTaskDictionary objectForKey:@"flight_num"];
     ptsItem.flightType = [[ptsTaskDictionary objectForKey:@"flight_type"] intValue];
     ptsItem.flightTime = [ptsTaskDictionary objectForKey:@"arr_dep_type"];
-    ptsItem.isRunning = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    
+    int isRunningValue = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    if (ptsItem.isRunning < isRunningValue) {
+        ptsItem.isRunning = isRunningValue;
+    }
     
     ptsItem.ptsStartTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"pts_start_time"]];
     ptsItem.ptsEndTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"pts_end_time"]];
