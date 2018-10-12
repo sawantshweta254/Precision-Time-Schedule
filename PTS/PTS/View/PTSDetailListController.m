@@ -148,6 +148,7 @@
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
     }
     [self.ptsSubTasksCollectionView reloadData];
+    self.commentTextfield.text = self.ptsTask.coment;
 }
 
 -(void) updateSocketConnectivity:(NSNotification *) notification{

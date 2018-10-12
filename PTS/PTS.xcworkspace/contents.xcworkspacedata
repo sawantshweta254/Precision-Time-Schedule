@@ -26,6 +26,18 @@
       location = "group:FAQ+CoreDataProperties.m">
    </FileRef>
    <FileRef
+      location = "group:PTSItem+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTSItem+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:PTSItem+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:PTSItem+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:PTSSubTask+CoreDataProperties.h">
    </FileRef>
    <FileRef
@@ -36,18 +48,6 @@
    </FileRef>
    <FileRef
       location = "group:PTSSubTask+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:User+CoreDataProperties.h">
@@ -62,16 +62,16 @@
       location = "group:User+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:PTSItem+CoreDataProperties.h">
+      location = "group:RedCapSubtask+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:PTSItem+CoreDataClass.h">
+      location = "group:RedCapSubtask+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:PTSItem+CoreDataClass.m">
+      location = "group:RedCapSubtask+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:PTSItem+CoreDataProperties.m">
+      location = "group:RedCapSubtask+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS.xcodeproj">

@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 06/10/18.
+//  Created by Shweta Sawant on 09/10/18.
 //
 //
 
@@ -19,6 +19,7 @@
 @dynamic end;
 @dynamic hasExceededTime;
 @dynamic isComplete;
+@dynamic isEnabled;
 @dynamic isRunning;
 @dynamic mRefereceTimeId;
 @dynamic negativeDataSendServer;
@@ -39,6 +40,5 @@
 @dynamic userEndTime;
 @dynamic userStartTime;
 @dynamic userSubActFeedback;
-@dynamic isEnabled;
 
 @end

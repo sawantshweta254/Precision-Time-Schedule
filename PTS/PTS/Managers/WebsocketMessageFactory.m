@@ -10,7 +10,7 @@
 #import "LoginManager.h"
 #import "AppUtility.h"
 #import "RedCap+CoreDataProperties.h"
-#import "RedCapSubtask+CoreDataProperties.m"
+#import "RedCapSubtask+CoreDataProperties.h"
 
 @implementation WebsocketMessageFactory
 
@@ -200,6 +200,12 @@
     [subTaskDictionary setValue:[NSNumber numberWithInt:ptsSubTask.negativeDataSendServer] forKey:@"negativeData_SendServer"];
     
     [subTaskDictionary setValue:[NSNumber numberWithBool:ptsSubTask.isEnabled] forKey:@"is_enable"];
+    
+    [subTaskDictionary setValue:[NSNumber numberWithInt:1] forKey:@"subactivity_type"];
+    if (ptsSubTask.start - ptsSubTask.end == 0 || ptsSubTask.start - ptsSubTask.end == 1){
+        [subTaskDictionary setValue:[NSNumber numberWithInt:0] forKey:@"subactivity_type"];
+    }
+    
     
     return subTaskDictionary;
 }

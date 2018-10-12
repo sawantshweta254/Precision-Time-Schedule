@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 06/10/18.
+//  Created by Shweta Sawant on 09/10/18.
 //
 //
 
@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t end;
 @property (nonatomic) BOOL hasExceededTime;
 @property (nonatomic) int16_t isComplete;
+@property (nonatomic) BOOL isEnabled;
 @property (nonatomic) int16_t isRunning;
 @property (nonatomic) int16_t mRefereceTimeId;
 @property (nonatomic) BOOL negativeDataSendServer;
@@ -40,7 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSDate *userEndTime;
 @property (nullable, nonatomic, copy) NSDate *userStartTime;
 @property (nullable, nonatomic, copy) NSString *userSubActFeedback;
-@property (nonatomic) BOOL isEnabled;
 
 @end
 

@@ -103,7 +103,7 @@
 
 - (void)updatePtsSubTaskTimer:(UILongPressGestureRecognizer*)gesture {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive) {
+    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive || !self.subTask.isEnabled) {
         return;
     }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning > 0) {
@@ -259,7 +259,12 @@
             }
         }
         User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-        if (loggedInUser.empType == 3 && (!self.subTask.shouldBeActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0 && self.ptsItem.masterRedCap)))
+//        if (loggedInUser.empType == 3 && (!self.subTask.shouldBeActive || (self.ptsItem.isRunning == 2 && self.subTask.isRunning == 0 && self.ptsItem.masterRedCap)))
+//        {
+//            self.containerView.backgroundColor = [UIColor lightGrayColor];
+//        }
+        
+        if (loggedInUser.empType == 3 && (!self.subTask.shouldBeActive ||!self.subTask.isEnabled))
         {
             self.containerView.backgroundColor = [UIColor lightGrayColor];
         }
@@ -301,7 +306,7 @@
 #pragma mark Button Actions
 - (IBAction)timerTapped:(id)sender {
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive) {
+    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive || !self.subTask.isEnabled) {
         return;
     }
     if (self.ptsItem.isRunning > 0) {
