@@ -357,6 +357,7 @@
         }
     }
     
+    namesArray = [namesArray valueForKeyPath:@"@distinctUnionOfObjects.self"];
     return namesArray;
 }
 
