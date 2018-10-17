@@ -97,6 +97,8 @@
 - (void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [self startChockOnSubActivity];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
 }
@@ -341,6 +343,7 @@
         NSError *error;
         [moc save:&error];
         [self updateFlightPTS];
+        [self startChockOnSubActivity];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
         self.ptsTaskTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(setCallTime) userInfo:nil repeats:YES];
@@ -436,8 +439,7 @@
 -(void) startChockOnSubActivity{
     
     PTSSubTask *chockOnSubTask = [self.ptsBWingSubItemList objectAtIndex:0];
-    
-    if (chockOnSubTask.isRunning == 0 && chockOnSubTask.shouldBeActive) {
+    if (chockOnSubTask.isRunning == 0 && chockOnSubTask.shouldBeActive && self.ptsTask.isRunning) {
         chockOnSubTask.subactivityStartTime = [NSDate date];
         chockOnSubTask.isRunning = 2;
         chockOnSubTask.isComplete = 1;

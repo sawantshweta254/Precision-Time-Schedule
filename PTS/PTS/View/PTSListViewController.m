@@ -346,10 +346,10 @@
             [namesArray addObject:[[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName] uppercaseString]];
         }
     }else{
-        if (selectedItem.dutyManagerName.length > 0) {
+        if (selectedItem.dutyManagerName.length > 0 && ![selectedItem.dutyManagerName isEqualToString:loggedInUser.userName]) {
             [namesArray addObject:[[NSString stringWithFormat:@"DM - %@",selectedItem.dutyManagerName] uppercaseString]];
         }
-        if (selectedItem.supervisorName.length > 0) {
+        if (selectedItem.supervisorName.length > 0 && ![selectedItem.supervisorName isEqualToString:loggedInUser.userName]) {
             [namesArray addObject:[[NSString stringWithFormat:@"S - %@",selectedItem.supervisorName] uppercaseString]];
         }
         for (RedCap *redCap in selectedItem.redCaps.allObjects) {
@@ -377,7 +377,8 @@
         [self showComment:@"Please connect to internet and sync offline data"];
         return;
     }
-    
+
+    [self updateAnyPendingTasks];
     UIAlertController *logoutConfirmationAlert = [UIAlertController alertControllerWithTitle:@"Message" message:@"Are you sure ?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         self.ptsTasks = nil;
