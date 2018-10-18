@@ -46,6 +46,14 @@
         [messageDict setValue:@"" forKey:@"flight_id"];
     }
     
+//    NSString *messageToSend = [self translateToString:messageDict];
+    
+    
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    dateFormatter.dateFormat = @"YYYY-MM-dd HH:mm:ss";
+    
+//    NSLog(@"Shweta print data to register user %@ at time %@",messageToSend, [dateFormatter stringFromDate:[NSDate date]]);
+    
     
     return [self translateToString:messageDict];
 }
@@ -97,14 +105,14 @@
     
     NSMutableArray *wingSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in ptsItem.aboveWingActivities) {
-        if (!subTaskInAboveWing.shouldBeActive) {
+        if (!subTaskInAboveWing.shouldBeActive && !ptsItem.masterRedCap) {
             break;
         }
         [wingSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
     }
     NSMutableArray *wingBSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in ptsItem.belowWingActivities) {
-        if (!subTaskInAboveWing.shouldBeActive) {
+        if (!subTaskInAboveWing.shouldBeActive  && !ptsItem.masterRedCap) {
             break;
         }
         [wingBSubTasks addObject:[self getSubTaskUpdateDictionaryFor:subTaskInAboveWing forPTS:ptsItem]];
