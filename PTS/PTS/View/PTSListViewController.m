@@ -23,6 +23,7 @@
 #import "CommentViewController.h"
 
 #import "FAQViewController.h"
+#import "AFNetworkReachabilityManager.h"
 
 @interface PTSListViewController ()
 @property (nonatomic, retain) TaskTimeUpdatesClient *taskUpdateClient;
@@ -71,6 +72,24 @@
     UIBarButtonItem *faqBarButton = [[UIBarButtonItem alloc] initWithTitle:@"FAQ" style:UIBarButtonItemStylePlain target:self action:@selector(loadFAQ)];
     [faqBarButton setTintColor:[UIColor whiteColor]];
     [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:reloadBarButton, logoutBarButton, faqBarButton, nil]];
+    
+    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status)
+     {
+         switch (status) {
+             case AFNetworkReachabilityStatusReachableViaWWAN:
+             case AFNetworkReachabilityStatusReachableViaWiFi:
+                 NSLog(@"Reachability: %@", AFStringFromNetworkReachabilityStatus(status));
+                 [self networkConnected];
+                 break;
+             case AFNetworkReachabilityStatusUnknown:
+             case AFNetworkReachabilityStatusNotReachable:
+                 NSLog(@"Reachability: %@", AFStringFromNetworkReachabilityStatus(status));
+             default:
+                 break;
+         }
+     }];
+    
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
 }
 
 -(void) viewWillAppear:(BOOL)animated{
@@ -86,8 +105,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAnyPendingTasks) name:@"SendFlightDataToServerAgain" object:nil];
+    
 }
 
 -(void) setViewTitle: (NSString *) userName{
@@ -158,7 +177,7 @@
 }
 
 #pragma mark NSNotification methods
--(void)appDidBecomeActive:(NSNotification*)note
+-(void)networkConnected
 {
     [self setUpTaskClient];
 }
@@ -187,11 +206,18 @@
 }
 
 -(void) updateAnyPendingTasks{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *pendingTaskIds = [defaults objectForKey:@"PendingTasks"];
+    NSMutableArray *arrayToSave = [[NSMutableArray alloc] initWithArray:pendingTaskIds];
     for (PTSItem *itemToUpdate in self.ptsTasks) {
-        if (itemToUpdate.isRunning) {
+        if ([arrayToSave containsObject:[NSNumber numberWithInteger:itemToUpdate.flightId]]) {
+            NSLog(@"Shweta sent request for %d", itemToUpdate.flightId);
             [self.taskUpdateClient updateFlightTask:itemToUpdate];
+            [arrayToSave removeObject:[NSNumber numberWithInteger:itemToUpdate.flightId]];
         }
     }
+    
+    [defaults setObject:[arrayToSave copy] forKey:@"PendingTasks"];
 }
 
 #pragma mark - Table view data source
@@ -253,25 +279,25 @@
 -(void) fetchPTSListAfterCall: (BOOL)initialLogin {
     [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
         [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-    }];
-    
-    User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    [self setViewTitle:loggedInUser.userName];
-    [self showLoadingView];
-    [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser forLogin: initialLogin completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
-        self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
-        self.ptsTasksToLoad = self.ptsTasks;
-        [self loadListOnView];
-        [self setSearchBar];
-        if (self.taskUpdateClient == nil) {
-            self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
-            [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
-                [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-            }];
-        }
-        
-        [self registerFlightsForUpdate];
-
+        User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
+        [self setViewTitle:loggedInUser.userName];
+        [self showLoadingView];
+        [self updateAnyPendingTasks];
+        [[PTSManager sharedInstance] fetchPTSListForUser:loggedInUser forLogin: initialLogin completionHandler:^(BOOL fetchComplete, NSArray *ptsTasks, NSError *error) {
+            self.ptsTasks = [NSMutableArray arrayWithArray:ptsTasks];
+            self.ptsTasksToLoad = self.ptsTasks;
+            [self loadListOnView];
+            [self setSearchBar];
+            if (self.taskUpdateClient == nil) {
+                self.taskUpdateClient = [[TaskTimeUpdatesClient alloc] init];
+                [self.taskUpdateClient connectToWebSocket:^(BOOL isConnected) {
+                    [self.socketConnectedButton setImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+                }];
+            }
+            
+            [self registerFlightsForUpdate];
+            
+        }];
     }];
 }
 

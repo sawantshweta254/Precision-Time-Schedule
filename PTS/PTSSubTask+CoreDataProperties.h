@@ -2,7 +2,7 @@
 //  PTSSubTask+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 09/10/18.
+//  Created by Shweta Sawant on 21/10/18.
 //
 //
 
@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<PTSSubTask *> *)fetchRequest;
 
 @property (nonatomic) int16_t calculatedPTSFinalTime;
-@property (nullable, nonatomic, copy) NSDate *current_time;
+@property (nullable, nonatomic, copy) NSString *current_time;
 @property (nonatomic) int16_t end;
 @property (nonatomic) BOOL hasExceededTime;
 @property (nonatomic) int16_t isComplete;

@@ -31,7 +31,7 @@
     [self.remarkTextView setClipsToBounds: YES];
     
     User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if (loggedInUser.empType != 3) {
+    if (loggedInUser.empType != 3 || !self.subTask.shouldBeActive) {
         [self.remarkTextView setEditable:FALSE];
     }
     

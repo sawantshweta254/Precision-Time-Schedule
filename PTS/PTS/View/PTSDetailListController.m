@@ -100,7 +100,7 @@
     [self startChockOnSubActivity];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
 }
 
 -(void) viewWillDisappear:(BOOL)animated{
@@ -337,7 +337,7 @@
 {
     if (self.ptsTask.isRunning == 0) {
         self.ptsTask.ptsStartTime = [NSDate date];
-        self.ptsTask.currentTime = [NSDate date];
+        self.ptsTask.currentTime = [NSString stringWithFormat:@"%.f", [[NSDate date] timeIntervalSince1970]*1000];
         self.ptsTask.isRunning = 1;
         NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
         NSError *error;
@@ -375,6 +375,14 @@
             subTask.isRunning = 2;
             subTask.isComplete = 1;
             subTask.subactivityEndTime = [NSDate date];
+            
+            long ptsTaskTimeWindowInMilis = subTask.calculatedPTSFinalTime * 60 * 1000;
+            long remainingTimeToSend = ptsTaskTimeWindowInMilis + ([subTask.subactivityStartTime timeIntervalSince1970]*1000) - ([[NSDate date] timeIntervalSince1970]*1000);
+            
+            if (subTask.shouldBeActive && (subTask.start - subTask.end == 0 || subTask.start - subTask.end == 1)) {
+                subTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingTimeToSend];
+            }
+            
         }else if (subTask.isRunning == 0){
             subTask.isEnabled = false;
         }
@@ -467,6 +475,18 @@
 #pragma mark Cell Delegate methods
 -(void) updateFlightPTS{
     if (![self.taskUpdateClient isWebSocketConnected]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *pendingTaskIds = [defaults objectForKey:@"PendingTasks"];
+        NSMutableArray *arrayToSave = [[NSMutableArray alloc] initWithArray:pendingTaskIds];
+        if (arrayToSave.count == 0) {
+            arrayToSave = [[NSMutableArray alloc] init];
+        }
+        if (![arrayToSave containsObject:[NSNumber numberWithInteger:self.ptsTask.flightId]]) {
+            [arrayToSave addObject:[NSNumber numberWithInteger:self.ptsTask.flightId]];
+        }        
+        [defaults setObject:[arrayToSave copy] forKey:@"PendingTasks"];
+        [defaults synchronize];
+        
         [self showComment:@"Please connect to internet and sync offline data"];
         return;
     }

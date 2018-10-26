@@ -77,7 +77,7 @@ static PTSManager *sharedInstance;
         
         if (requestSuccessfull) {
                         
-                NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
+            NSArray *ptsList = [responseData objectForKey:@"flight_pts_info"];
             [self parsePTSListForMasterRedCap:ptsList existingPTSData:ptsIdsDBArray originalResponseData:responseData forLogin:initialLogin didParse:^(BOOL didParse, NSArray *parsedList, NSArray *fetchedPTSIDs) {
                     
                     NSMutableArray *mutableExistingPTSIDs = [NSMutableArray arrayWithArray:ptsIdsDBArray];
@@ -236,8 +236,22 @@ static PTSManager *sharedInstance;
     pts.coment = [ptsJson objectForKey:@"comment"];
 
     int isRunningValue = [[ptsJson objectForKey:@"is_running"] intValue];
+    BOOL shouldUpdateToServerAgain = false;
     if (pts.isRunning < isRunningValue) {
         pts.isRunning = isRunningValue;
+    }else if(pts.isRunning > isRunningValue) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *pendingTaskIds = [defaults objectForKey:@"PendingTasks"];
+        NSMutableArray *arrayToSave = [[NSMutableArray alloc] initWithArray:pendingTaskIds];
+        if (arrayToSave.count == 0) {
+            arrayToSave = [[NSMutableArray alloc] init];
+        }
+        if (![arrayToSave containsObject:[NSNumber numberWithInteger:pts.flightId]]) {
+            [arrayToSave addObject:[NSNumber numberWithInteger:pts.flightId]];
+        }
+        [defaults setObject:[arrayToSave copy] forKey:@"PendingTasks"];
+        [defaults synchronize];
+        shouldUpdateToServerAgain = true;
     }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -256,7 +270,8 @@ static PTSManager *sharedInstance;
     
     NSString *currentTime = [ptsJson objectForKey:@"current_time"];
     if (![currentTime isEqualToString:@"0"]) {
-        pts.currentTime = [dateFormatter dateFromString:currentTime];
+//        pts.currentTime = [dateFormatter dateFromString:currentTime];
+        pts.currentTime = currentTime;
     }
     
     NSString *timerStopTime = [ptsJson objectForKey:@"timer_stop_time"];
@@ -266,6 +281,9 @@ static PTSManager *sharedInstance;
     
     pts.executionTime = [ptsJson objectForKey:@"execute_time"]; //Change to date
     
+    if (shouldUpdateToServerAgain) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SendFlightDataToServerAgain" object:nil];
+    }
     // comment = "";
     //"device_id" = "";
     
@@ -310,7 +328,8 @@ static PTSManager *sharedInstance;
     
     NSString *currentTime = [ptsJson objectForKey:@"current_time"];
     if (![currentTime isEqualToString:@"0"]) {
-        pts.currentTime = [dateFormatter dateFromString:currentTime];
+//        pts.currentTime = [dateFormatter dateFromString:currentTime];
+        pts.currentTime = currentTime;
     }
     
     pts.executionTime = [ptsJson objectForKey:@"execute_time"]; //Change to date
@@ -546,8 +565,23 @@ static PTSManager *sharedInstance;
     ptsItem.flightTime = [ptsTaskDictionary objectForKey:@"arr_dep_type"];
     
     int isRunningValue = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    BOOL shoulUpdateToServerAgain = false;
     if (ptsItem.isRunning < isRunningValue) {
         ptsItem.isRunning = isRunningValue;
+    }else if (ptsItem.isRunning > isRunningValue) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *pendingTaskIds = [defaults objectForKey:@"PendingTasks"];
+        NSMutableArray *arrayToSave = [[NSMutableArray alloc] initWithArray:pendingTaskIds];
+        if (arrayToSave.count == 0) {
+            arrayToSave = [[NSMutableArray alloc] init];
+        }
+        if (![arrayToSave containsObject:[NSNumber numberWithInteger:ptsItem.flightId]]) {
+            [arrayToSave addObject:[NSNumber numberWithInteger:ptsItem.flightId]];
+        }
+        [defaults setObject:[arrayToSave copy] forKey:@"PendingTasks"];
+        [defaults synchronize];
+        
+        shoulUpdateToServerAgain = true;
     }
     
     NSString *ptsStartTimeString = [ptsTaskDictionary objectForKey:@"pts_start_time"];
@@ -570,7 +604,8 @@ static PTSManager *sharedInstance;
     
     NSString *currentTime = [ptsTaskDictionary objectForKey:@"current_time"];
     if (![currentTime isEqualToString:@"0"]) {
-        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+//        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+        ptsItem.currentTime = currentTime;
     }
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
 
@@ -584,6 +619,9 @@ static PTSManager *sharedInstance;
         ptsItem.belowWingActivities = belowWingActivities;
     }
     
+    if (shoulUpdateToServerAgain) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SendFlightDataToServerAgain" object:nil];
+    }
     return ptsItem;
 }
 
@@ -615,9 +653,11 @@ static PTSManager *sharedInstance;
         if (ptsSubTask.shouldBeActive && !initialLogin) {
             break;
         }
-        NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
-        if (![cTime isEqualToString:@"0"]) {
-            ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
+        
+        
+        NSString *cTime = [ptsSubItem objectForKey:@"current_time"];
+        if (cTime != nil) {
+            ptsSubTask.current_time = cTime;
         }
         ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"sub_activity_id"] intValue];
         //            ptsSubTask.mRefereceTimeId = [[ptsSubItem objectForKey:@"m_ref_time_id"] intValue];
@@ -963,8 +1003,22 @@ static PTSManager *sharedInstance;
     ptsItem.flightTime = [ptsTaskDictionary objectForKey:@"arr_dep_type"];
     
     int isRunningValue = [[ptsTaskDictionary objectForKey:@"is_running"] intValue];
+    BOOL shouldUpdateToServerAgain = false;
     if (ptsItem.isRunning < isRunningValue) {
         ptsItem.isRunning = isRunningValue;
+    }else if(ptsItem.isRunning > isRunningValue) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *pendingTaskIds = [defaults objectForKey:@"PendingTasks"];
+        NSMutableArray *arrayToSave = [[NSMutableArray alloc] initWithArray:pendingTaskIds];
+        if (arrayToSave.count == 0) {
+            arrayToSave = [[NSMutableArray alloc] init];
+        }
+        if (![arrayToSave containsObject:[NSNumber numberWithInteger:ptsItem.flightId]]) {
+            [arrayToSave addObject:[NSNumber numberWithInteger:ptsItem.flightId]];
+        }
+        [defaults setObject:[arrayToSave copy] forKey:@"PendingTasks"];
+        [defaults synchronize];
+        shouldUpdateToServerAgain = TRUE;
     }
     
     ptsItem.ptsStartTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"pts_start_time"]];
@@ -977,7 +1031,8 @@ static PTSManager *sharedInstance;
     ptsItem.executionTime = [ptsTaskDictionary objectForKey:@"execute_time"];
     NSString *currentTime = [ptsTaskDictionary objectForKey:@"current_time"];
     if (![currentTime isEqualToString:@"0"]) {
-        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+//        ptsItem.currentTime = [dateFormatter dateFromString:currentTime];
+        ptsItem.currentTime = currentTime;
     }
 
     ptsItem.timerStopTime = [dateFormatter dateFromString:[ptsTaskDictionary objectForKey:@"timer_stop_time"]];
@@ -993,6 +1048,10 @@ static PTSManager *sharedInstance;
     }
     if (ptsItem.belowWingActivities.count == 0) {
         ptsItem.belowWingActivities = belowWingActivities;
+    }
+    
+    if (shouldUpdateToServerAgain) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SendFlightDataToServerAgain" object:nil];
     }
     
     return ptsItem;
@@ -1019,9 +1078,10 @@ static PTSManager *sharedInstance;
         //            "type_id": "2",
         //            "current_time": "0",
         
-        NSString *cTime = [ptsSubItem objectForKey:@"currentTime"];
-        if (![cTime isEqualToString:@"0"]) {
-            ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
+        NSString *cTime = [ptsSubItem objectForKey:@"current_time"];
+        if (cTime != nil) {
+//            ptsSubTask.current_time = [[NSDate alloc] initWithTimeIntervalSince1970:cTime.doubleValue];
+            ptsSubTask.current_time = cTime;
         }
         
         ptsSubTask.subTaskId = [[ptsSubItem objectForKey:@"sub_activity_id"] intValue];

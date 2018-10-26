@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FAQ" representedClassName="FAQ" syncable="YES" codeGenerationType="class">
         <attribute name="creation_on" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="faq_a" optional="YES" attributeType="String" syncable="YES"/>
@@ -11,7 +11,7 @@
     <entity name="PTSItem" representedClassName="PTSItem" syncable="YES" codeGenerationType="class">
         <attribute name="airlineName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coment" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="currentTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="currentTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dutyManagerId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="dutyManagerName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="executionTime" optional="YES" attributeType="String" syncable="YES"/>
@@ -40,7 +40,7 @@
     </entity>
     <entity name="PTSSubTask" representedClassName="PTSSubTask" syncable="YES" codeGenerationType="class">
         <attribute name="calculatedPTSFinalTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="current_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="current_time" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="end" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hasExceededTime" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="isComplete" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>

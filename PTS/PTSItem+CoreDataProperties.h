@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 09/10/18.
+//  Created by Shweta Sawant on 21/10/18.
 //
 //
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *airlineName;
 @property (nullable, nonatomic, copy) NSString *coment;
-@property (nullable, nonatomic, copy) NSDate *currentTime;
+@property (nullable, nonatomic, copy) NSString *currentTime;
 @property (nonatomic) int16_t dutyManagerId;
 @property (nullable, nonatomic, copy) NSString *dutyManagerName;
 @property (nullable, nonatomic, copy) NSString *executionTime;

@@ -2,6 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:RedCapSubtask+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:RedCapSubtask+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:RedCap+CoreDataProperties.h">
    </FileRef>
    <FileRef
@@ -12,30 +24,6 @@
    </FileRef>
    <FileRef
       location = "group:RedCap+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
-      location = "group:FAQ+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:FAQ+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:FAQ+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:FAQ+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:PTSItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTSSubTask+CoreDataProperties.h">
@@ -62,16 +50,28 @@
       location = "group:User+CoreDataProperties.m">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.h">
+      location = "group:PTSItem+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.h">
+      location = "group:PTSItem+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataClass.m">
+      location = "group:PTSItem+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:RedCapSubtask+CoreDataProperties.m">
+      location = "group:PTSItem+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
+      location = "group:FAQ+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:FAQ+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:FAQ+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:FAQ+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:PTS.xcodeproj">

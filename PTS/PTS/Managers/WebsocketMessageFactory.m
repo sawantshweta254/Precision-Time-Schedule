@@ -159,19 +159,19 @@
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.end] forKey:@"end_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInt:abs(ptsSubTask.start - ptsSubTask.end) + 1] forKey:@"pts_time"]; //// total time
     [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.subActivityType] forKey:@"subactivity_type"];// 2mins or more mins
-    [subTaskDictionary setValue:[NSString stringWithFormat:@"%.f", [ptsSubTask.current_time timeIntervalSince1970]*1000] forKey:@"current_time"];
-    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isRunning] forKey:@"is_running"];
     
-    [subTaskDictionary setValue:@"0" forKey:@"time_execute_time"];
-    if (ptsSubTask.timerExecutedTime != nil) {
-        [subTaskDictionary setValue:ptsSubTask.timerExecutedTime forKey:@"time_execute_time"];
+    [subTaskDictionary setValue:@"0" forKey:@"current_time"];
+    if (ptsSubTask.current_time != nil) {
+        [subTaskDictionary setValue:ptsSubTask.current_time forKey:@"current_time"];
     }
+
+    [subTaskDictionary setValue:[NSNumber numberWithInteger:ptsSubTask.isRunning] forKey:@"is_running"];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"mm:ss"];
+    [dateFormatter1 setDateFormat:@"HH:mm:ss"];
     
 //    [subTaskDictionary setValue:@"0" forKey:@"subactivity_start_time"];
 //     [subTaskDictionary setValue:@"0" forKey:@"subactivity_end_time"];
@@ -209,9 +209,12 @@
     
     [subTaskDictionary setValue:[NSNumber numberWithBool:ptsSubTask.isEnabled] forKey:@"is_enable"];
     
+    [subTaskDictionary setValue:@"0" forKey:@"time_execute_time"];
     [subTaskDictionary setValue:[NSNumber numberWithInt:1] forKey:@"subactivity_type"];
     if (ptsSubTask.start - ptsSubTask.end == 0 || ptsSubTask.start - ptsSubTask.end == 1){
         [subTaskDictionary setValue:[NSNumber numberWithInt:0] forKey:@"subactivity_type"];
+    }else if (ptsSubTask.timerExecutedTime != nil) {
+        [subTaskDictionary setValue:ptsSubTask.timerExecutedTime forKey:@"time_execute_time"];
     }
     
     

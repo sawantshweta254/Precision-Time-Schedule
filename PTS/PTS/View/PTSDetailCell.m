@@ -108,7 +108,8 @@
     }
     if (gesture.state == UIGestureRecognizerStateEnded && self.ptsItem.isRunning > 0) {
         if (self.subTask.subactivityStartTime == nil && self.subTask.isRunning == 0) {
-            self.subTask.current_time = [NSDate date];
+//             self.subTask.current_time = [NSDate date];
+            self.subTask.current_time = [NSString stringWithFormat:@"%.f", [[NSDate date] timeIntervalSince1970]*1000];
             self.subTask.subactivityStartTime = [NSDate date];
             self.subTask.isRunning = 1;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -121,6 +122,14 @@
             self.subTask.subactivityEndTime = [NSDate date];
             self.subTask.isRunning = 2;
             self.subTask.isComplete = 1;
+            
+            long ptsTaskTimeWindowInMilis = self.subTask.calculatedPTSFinalTime * 60 * 1000;
+            long remainingTimeToSend = ptsTaskTimeWindowInMilis + ([self.subTask.subactivityStartTime timeIntervalSince1970]*1000) - ([[NSDate date] timeIntervalSince1970]*1000);
+            
+            if (self.subTask.shouldBeActive) {
+                self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingTimeToSend];
+            }
+            
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
             NSError *error;
             [moc save:&error];
@@ -179,7 +188,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@" %@%@ ",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
-        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
+//        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && self.subTask.shouldBeActive) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -328,7 +337,7 @@
 
 - (IBAction)addRemark:(id)sender {
      User *loggedInUser = [[LoginManager sharedInstance] getLoggedInUser];
-    if ([self shouldPerformAction] || loggedInUser.empType != 3) {
+    if ([self shouldPerformAction] || loggedInUser.empType != 3 || self.ptsItem.masterRedCap) {
         [self.delegate updateRemarkForSubtask:self.subTask];
     }
 }

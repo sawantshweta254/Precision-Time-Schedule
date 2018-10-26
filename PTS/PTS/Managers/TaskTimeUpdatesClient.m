@@ -37,6 +37,8 @@
         self.webSocketClient.delegate = self;
         self.socketConnectedCompletion = socketConnected;
         [self.webSocketClient open];
+    }else{
+        socketConnected(TRUE);
     }
 }
 
