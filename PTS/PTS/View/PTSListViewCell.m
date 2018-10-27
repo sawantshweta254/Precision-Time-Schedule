@@ -49,7 +49,7 @@
         [self.flightTypeIcon setImage:[UIImage imageNamed:@"departure_flight"]];
     }
     
-    self.labelPTSTime.text = [NSString stringWithFormat:@"PTS Time %d", ptsItem.timeWindow];
+    self.labelPTSTime.text = [NSString stringWithFormat:@"TAT Time %d", ptsItem.timeWindow];
     self.labelPTSDay.text = [self getTimeInStringFormat:ptsItem.flightDate];
     
     [self.labelPtsTimer setHidden:FALSE];

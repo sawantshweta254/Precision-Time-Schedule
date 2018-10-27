@@ -121,7 +121,7 @@
 -(void) setFlightDetails{
     
     self.labelFlightName.text = self.ptsTask.flightNo;
-    self.labelPtsTime.text = [NSString stringWithFormat:@"PTS Time %d", self.ptsTask.timeWindow];
+    self.labelPtsTime.text = [NSString stringWithFormat:@"TAT Time %d", self.ptsTask.timeWindow];
     
     if (self.ptsTask.flightType == ArrivalType) {
         self.labelArrivalTime.text = [NSString stringWithFormat:@"Arrival at %@", self.ptsTask.flightTime];
@@ -396,6 +396,14 @@
             subTask.isRunning = 2;
             subTask.isComplete = 1;
             subTask.subactivityEndTime = [NSDate date];
+            
+            long ptsTaskTimeWindowInMilis = subTask.calculatedPTSFinalTime * 60 * 1000;
+            long remainingTimeToSend = ptsTaskTimeWindowInMilis + ([subTask.subactivityStartTime timeIntervalSince1970]*1000) - ([[NSDate date] timeIntervalSince1970]*1000);
+            
+            if (subTask.shouldBeActive && (subTask.start - subTask.end == 0 || subTask.start - subTask.end == 1)) {
+                subTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingTimeToSend];
+            }
+            
         }else if (subTask.isRunning == 0){
             subTask.isEnabled = false;
         }

@@ -142,7 +142,9 @@
 -(void) loadListOnView{
     [self.tableView reloadData];
     if (self.ptsTasksToLoad.count > 0) {
-        self.tableView.backgroundView = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.tableView.backgroundView = nil;
+        });
     }else if(!self.searchController.isActive){
         UILabel *noDataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
         [noDataLabel setFont:[UIFont systemFontOfSize:25]];
