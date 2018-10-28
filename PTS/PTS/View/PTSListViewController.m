@@ -106,6 +106,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChangesForPTS:) name:@"PTSListUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSocketConnectivity:) name:@"SocketConnectionUpdated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAnyPendingTasks) name:@"SendFlightDataToServerAgain" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
 }
 
@@ -179,6 +180,11 @@
 }
 
 #pragma mark NSNotification methods
+-(void)appDidBecomeActive:(NSNotification*)note
+{
+    [self setUpTaskClient];
+}
+
 -(void)networkConnected
 {
     [self setUpTaskClient];

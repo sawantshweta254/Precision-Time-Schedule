@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define SERVICE_API_URL @"http://techdew.co.in/pts1/webapi/"
+//#define SERVICE_API_URL @"http://techdew.co.in/pts1/webapi/"
+#define SERVICE_API_URL @"http://13.251.75.155/TAT/webapi/"
 
 @interface ApiRequestData : NSObject
 

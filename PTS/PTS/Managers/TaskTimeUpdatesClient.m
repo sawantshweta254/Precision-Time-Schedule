@@ -31,8 +31,8 @@
 - (void)connectToWebSocket:(void (^)(BOOL isConnected))socketConnected
 {
     if (self.webSocketClient == nil || self.webSocketClient.readyState == SR_CLOSED) {
-        
-        NSURL *clientURL = [NSURL URLWithString:[@"ws://techdew.co.in:10005" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+        NSURL *clientURL = [NSURL URLWithString:[@"ws://13.251.75.155:10001" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+//        NSURL *clientURL = [NSURL URLWithString:[@"ws://techdew.co.in:10005" stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
         self.webSocketClient = [[SRWebSocket alloc] initWithURL:clientURL];
         self.webSocketClient.delegate = self;
         self.socketConnectedCompletion = socketConnected;

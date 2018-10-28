@@ -138,7 +138,8 @@ static LoginManager *sharedInstance;
 -(ApiRequestData *) getRequestDataForLogin{
     ApiRequestData *requestData = [[ApiRequestData alloc] init];
     
-    requestData.baseURL = @"http://techdew.co.in/pts1/faq_json/faq_json.txt?";
+//    requestData.baseURL = @"http://techdew.co.in/pts1/faq_json/faq_json.txt?";
+    requestData.baseURL = @"http://13.251.75.155/TAT/faq_json/faq_json.txt?";
     requestData.postData = [[NSDictionary alloc] init];
     
     return requestData;
