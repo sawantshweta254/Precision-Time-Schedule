@@ -102,6 +102,7 @@
     
     [messageDict setValue:loggedInUser.userName forKey:@"user_name"];
     [messageDict setValue:[NSNumber numberWithInteger:loggedInUser.empType] forKey:@"user_type"];
+    [messageDict setValue:ptsItem.timerExecutedTime forKey:@"time_execute_time"];
     
     NSMutableArray *wingSubTasks = [[NSMutableArray alloc] init];
     for (PTSSubTask *subTaskInAboveWing in ptsItem.aboveWingActivities) {

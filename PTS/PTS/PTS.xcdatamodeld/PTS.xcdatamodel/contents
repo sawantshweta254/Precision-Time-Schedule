@@ -32,6 +32,7 @@
         <attribute name="remarks" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="supervisorId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="supervisorName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timerExecutedTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timerStopTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timeWindow" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="aboveWingActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PTSSubTask" syncable="YES"/>
@@ -96,7 +97,7 @@
     </entity>
     <elements>
         <element name="FAQ" positionX="-45" positionY="135" width="128" height="135"/>
-        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="465"/>
+        <element name="PTSItem" positionX="-54" positionY="54" width="128" height="480"/>
         <element name="PTSSubTask" positionX="-54" positionY="135" width="128" height="435"/>
         <element name="RedCap" positionX="-45" positionY="135" width="128" height="135"/>
         <element name="RedCapSubtask" positionX="-36" positionY="144" width="128" height="120"/>

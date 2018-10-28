@@ -298,7 +298,7 @@
     if (((UILongPressGestureRecognizer*)sender).state == UIGestureRecognizerStateEnded ) {
         
         if (self.ptsTask.isRunning == 0) {
-            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to start PTS for flight %@", self.ptsTask.flightNo];
+            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to start TAT for flight %@", self.ptsTask.flightNo];
             UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:@"Message" message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self startPTSTimer];
@@ -311,7 +311,7 @@
             
             [self presentViewController:updateTimerAlert animated:YES completion:nil];
         }else  if (self.ptsTask.isRunning == 1){
-            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to stop PTS for flight %@", self.ptsTask.flightNo];
+            NSString *message = [NSString stringWithFormat:@"Please confirm if you want to stop TAT for flight %@", self.ptsTask.flightNo];
             UIAlertController *updateTimerAlert = [UIAlertController alertControllerWithTitle:@"Message" message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *actionYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self startPTSTimer];
@@ -357,6 +357,8 @@
         [moc save:&error];
         self.ptsSubTasksCollectionView.userInteractionEnabled = YES;
         [self.ptsTaskTimer invalidate];
+        long remainingFinishedToSend = fabs([[NSDate date] timeIntervalSinceDate:self.ptsTask.ptsStartTime]);
+        self.ptsTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingFinishedToSend];
         self.ptsTaskTimer = nil;
         
         [self showCompletionAlert];
@@ -379,7 +381,7 @@
             long ptsTaskTimeWindowInMilis = subTask.calculatedPTSFinalTime * 60 * 1000;
             long remainingTimeToSend = ptsTaskTimeWindowInMilis + ([subTask.subactivityStartTime timeIntervalSince1970]*1000) - ([[NSDate date] timeIntervalSince1970]*1000);
             
-            if (subTask.shouldBeActive && (subTask.start - subTask.end == 0 || subTask.start - subTask.end == 1)) {
+            if (subTask.start - subTask.end != 0 && subTask.start - subTask.end != 1) {
                 subTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingTimeToSend];
             }
             
@@ -400,7 +402,7 @@
             long ptsTaskTimeWindowInMilis = subTask.calculatedPTSFinalTime * 60 * 1000;
             long remainingTimeToSend = ptsTaskTimeWindowInMilis + ([subTask.subactivityStartTime timeIntervalSince1970]*1000) - ([[NSDate date] timeIntervalSince1970]*1000);
             
-            if (subTask.shouldBeActive && (subTask.start - subTask.end == 0 || subTask.start - subTask.end == 1)) {
+            if (subTask.start - subTask.end != 0 && subTask.start - subTask.end != 1) {
                 subTask.timerExecutedTime = [NSString stringWithFormat:@"%ld", remainingTimeToSend];
             }
             

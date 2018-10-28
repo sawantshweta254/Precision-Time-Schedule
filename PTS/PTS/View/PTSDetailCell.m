@@ -188,7 +188,6 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.labelSubTaskTimer setText:[NSString stringWithFormat:@" %@%@ ",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
-//        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", ptsTaskTimeWindow - duration];
         if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden && self.subTask.shouldBeActive) {
             self.subTask.negativeDataSendServer = TRUE;
             NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
@@ -199,47 +198,6 @@
         }
     });
 }
-//-(void) setTaskTime1:(id)nsTimer{
-//    NSTimeInterval timeInterval = fabs([self.subTask.subactivityStartTime timeIntervalSinceNow]);
-//    int ptsTaskTimeWindow = self.subTask.calculatedPTSFinalTime * 60;
-//    int duration = (int)timeInterval;
-//    NSDateComponentsFormatter *timeFormatter = [[NSDateComponentsFormatter alloc] init];
-//    timeFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
-//    if (duration > 3600) {
-//        timeFormatter.allowedUnits = NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
-//    }else{
-//        timeFormatter.allowedUnits = NSCalendarUnitMinute|NSCalendarUnitSecond;
-//    }
-//
-//    int timeElapsed;
-//    NSString *minusSign = @"";
-//    if (duration > ptsTaskTimeWindow) {
-//        timeElapsed = duration - ptsTaskTimeWindow;
-//        minusSign = @"-";
-//    }else{
-//        timeElapsed = ptsTaskTimeWindow - duration;
-//    }
-//
-//
-//    if (self.subTask.isRunning == 2) {
-//        [nsTimer invalidate];
-//        nsTimer = nil;
-//        return;
-//    }
-//
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.labelSubTaskTimer setText:[NSString stringWithFormat:@"%@%@",minusSign, [timeFormatter stringFromTimeInterval:timeElapsed]]];
-//        self.subTask.timerExecutedTime = [NSString stringWithFormat:@"%d", timeElapsed];
-//        if (duration > ptsTaskTimeWindow && !self.subTask.negativeDataSendServer && !self.labelSubTaskTimer.hidden) {
-//            self.subTask.negativeDataSendServer = TRUE;
-//            NSManagedObjectContext *moc = theAppDelegate.persistentContainer.viewContext;
-//            NSError *error;
-//            [moc save:&error];
-//            [self setContainerViewBackground];
-//            [self.delegate updateFlightPTS];
-//        }
-//    });
-//}
 
 -(void) setContainerViewBackground
 {

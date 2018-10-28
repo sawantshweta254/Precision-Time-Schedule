@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.h
 //  
 //
-//  Created by Shweta Sawant on 21/10/18.
+//  Created by Shweta Sawant on 27/10/18.
 //
 //
 
@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *supervisorName;
 @property (nullable, nonatomic, copy) NSDate *timerStopTime;
 @property (nonatomic) int16_t timeWindow;
+@property (nullable, nonatomic, copy) NSString *timerExecutedTime;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *aboveWingActivities;
 @property (nullable, nonatomic, retain) NSSet<PTSSubTask *> *belowWingActivities;
 @property (nullable, nonatomic, retain) NSSet<RedCap *> *redCaps;

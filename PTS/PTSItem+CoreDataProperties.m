@@ -2,7 +2,7 @@
 //  PTSItem+CoreDataProperties.m
 //  
 //
-//  Created by Shweta Sawant on 21/10/18.
+//  Created by Shweta Sawant on 27/10/18.
 //
 //
 
@@ -39,6 +39,7 @@
 @dynamic supervisorName;
 @dynamic timerStopTime;
 @dynamic timeWindow;
+@dynamic timerExecutedTime;
 @dynamic aboveWingActivities;
 @dynamic belowWingActivities;
 @dynamic redCaps;
